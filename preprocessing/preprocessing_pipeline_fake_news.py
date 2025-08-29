@@ -14,8 +14,6 @@ DATASETS = [
 COLUMNAS_TEXTO = [c.lower() for c in ["TEXT", "texto", "Descripcion", "Text"]]
 COLUMNAS_CLASE = [c.lower() for c in ["CATEGORY", "clase", "Label", "class"]]
 
-dataframes_procesados = []
-
 
 def unir_datasets(rutas):
     """
@@ -83,6 +81,28 @@ def guardar_parquet(dataframe, ruta):
     print(f"✅ Datos guardados en {ruta}")
 
 
+def normalizar_dataframe(df):
+    """
+    Aplica limpieza y normalización a un DataFrame.
+    """
+    # Eliminar valores nulos
+    df = df.dropna(subset=["texto", "clase"])
+    # Eliminar duplicados
+    df = df.drop_duplicates(subset=["texto"])
+    # Eliminar registros con texto vacío
+    df = df[df["texto"].str.strip() != ""]
+    # Estandarización de codificación UTF-8
+    df["texto"] = df["texto"].apply(
+        lambda x: x.encode("utf-8", "ignore").decode("utf-8", "ignore")
+    )
+    print(f"✅ Registros después de la normalización: {len(df)}")
+    return df
+
+
 if __name__ == "__main__":
     df_unificado = unir_datasets(DATASETS)
     guardar_parquet(df_unificado, "data/raw/fake_news_unificado.parquet")
+
+    # Normalizar el df ya cargado en memoria
+    df_normalizado = normalizar_dataframe(df_unificado)
+    guardar_parquet(df_normalizado, "data/processed/fake_news_normalizado.parquet")
