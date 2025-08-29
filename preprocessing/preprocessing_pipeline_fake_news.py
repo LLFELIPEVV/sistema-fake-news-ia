@@ -81,17 +81,17 @@ def guardar_parquet(dataframe, ruta):
     print(f"✅ Datos guardados en {ruta}")
 
 
-def normalizar_dataframe(df):
+def normalizar_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Aplica limpieza y normalización a un DataFrame.
+    Aplica limpieza y normalización inicial a un DataFrame.
+
+    - Elimina valores nulos y duplicados
+    - Elimina textos vacíos
+    - Estandariza codificación a UTF-8
     """
-    # Eliminar valores nulos
     df = df.dropna(subset=["texto", "clase"])
-    # Eliminar duplicados
     df = df.drop_duplicates(subset=["texto"])
-    # Eliminar registros con texto vacío
     df = df[df["texto"].str.strip() != ""]
-    # Estandarización de codificación UTF-8
     df["texto"] = df["texto"].apply(
         lambda x: x.encode("utf-8", "ignore").decode("utf-8", "ignore")
     )
@@ -99,10 +99,47 @@ def normalizar_dataframe(df):
     return df
 
 
+def estandarizar_texto(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Aplica estandarización del texto:
+
+    - Conversión a minúsculas
+    - Eliminación de caracteres especiales
+    - Reducción de espacios múltiples a uno solo
+    - Normalización de tildes (sin acentos)
+    - Eliminación de etiquetas HTML
+    - Sustitución de URLs, menciones, hashtags, emojis y números por tokens especiales
+    - Filtrado de textos con menos de 3 palabras
+    """
+    df = df.copy()
+    df["texto"] = df["texto"].str.lower()
+    df["texto"] = df["texto"].str.replace(r"[^\w\s]", "", regex=True)
+    df["texto"] = df["texto"].str.replace(r"\s+", " ", regex=True).str.strip()
+    df["texto"] = (
+        df["texto"]
+        .str.normalize("NFKD")
+        .str.encode("ascii", errors="ignore")
+        .str.decode("utf-8")
+    )
+    df["texto"] = df["texto"].str.replace(r"<.*?>", "", regex=True)
+    df["texto"] = df["texto"].str.replace(r"http\S+|www\S+", " <URL> ", regex=True)
+    df["texto"] = df["texto"].str.replace(r"@\w+", " <USER> ", regex=True)
+    df["texto"] = df["texto"].str.replace(r"#\w+", " <HASHTAG> ", regex=True)
+    df["texto"] = df["texto"].str.replace(r"[^\x00-\x7F]+", " <EMOJI> ", regex=True)
+    df["texto"] = df["texto"].str.replace(r"\d+", " <NUM> ", regex=True)
+    # Filtrar textos demasiado cortos
+    df = df[df["texto"].str.split().str.len() > 2]
+
+    print(f"✅ Registros después de la estandarización: {len(df)}")
+    print("✅ Registros por clase después de la estandarización:")
+    print(df["clase"].value_counts(normalize=True))
+    return df
+
+
 if __name__ == "__main__":
     df_unificado = unir_datasets(DATASETS)
     guardar_parquet(df_unificado, "data/raw/fake_news_unificado.parquet")
 
-    # Normalizar el df ya cargado en memoria
     df_normalizado = normalizar_dataframe(df_unificado)
-    guardar_parquet(df_normalizado, "data/processed/fake_news_normalizado.parquet")
+    df_estandarizado = estandarizar_texto(df_normalizado)
+    guardar_parquet(df_estandarizado, "data/processed/fake_news_estandarizado.parquet")
