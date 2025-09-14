@@ -76,7 +76,7 @@ def optimize_logreg(X_train, y_train):
     random_search = RandomizedSearchCV(
         pipeline,
         param_distributions=param_distributions,
-        n_iter=50,
+        n_iter=25,
         cv=3,
         scoring="f1_weighted",
         n_jobs=-1,
@@ -231,12 +231,19 @@ if __name__ == "__main__":
     comp_df = pd.DataFrame(
         [valid_metrics, test_metrics], index=["Validación", "Prueba"]
     )
+
     fig, ax = plt.subplots(figsize=(8, 6))
     comp_df.plot(kind="bar", colormap="viridis", ax=ax)
+
     ax.set_title("Comparación de métricas entre Validación y Prueba")
     ax.set_ylabel("Valor")
     ax.set_ylim(0, 1)
     plt.xticks(rotation=0)
+
+    # === Etiquetas encima de cada barra ===
+    for container in ax.containers:
+        ax.bar_label(container, fmt="%.2f", label_type="edge", fontsize=10)
+
     save_figure(fig, "logreg_comparison_valid_test.png")
     plt.close(fig)
 
