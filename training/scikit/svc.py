@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import stopwordsiso as stopwords
 
-from sklearn.svm import SVC
+from sklearn.svm import LinearSVC
 from scipy.stats import loguniform
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MaxAbsScaler
@@ -35,8 +35,8 @@ def build_pipeline():
             ("scaler", MaxAbsScaler()),  # Normaliza TF-IDF para SVM
             (
                 "clf",
-                SVC(
-                    probability=True,
+                LinearSVC(
+                    max_iter=5000,
                     class_weight="balanced",
                     random_state=42,
                 ),
@@ -51,17 +51,15 @@ def optimize_svc(X_train, y_train):
     pipeline = build_pipeline()
 
     param_distributions = {
-        "clf__C": loguniform(1e-3, 1e2),
-        "clf__gamma": loguniform(1e-4, 1e1),
-        "clf__kernel": ["linear", "rbf"],
+        "clf__C": loguniform(1e-3, 1e1),
         "tfidf__max_features": [20000, 50000],
-        "tfidf__ngram_range": [(1, 1), (1, 2), (1, 3)],
+        "tfidf__ngram_range": [(1, 1), (1, 2)],
     }
 
     random_search = RandomizedSearchCV(
         pipeline,
         param_distributions=param_distributions,
-        n_iter=25,
+        n_iter=75,
         cv=3,
         scoring="f1_weighted",
         n_jobs=-1,
@@ -138,4 +136,4 @@ if __name__ == "__main__":
     plt.close(fig)
 
     # Resultados de RandomizedSearch
-    plot_grid_search_results(grid, "svc_random_search_results.png", "param_clf__gamma")
+    plot_grid_search_results(grid, "svc_random_search_results.png", "param_clf__C")
