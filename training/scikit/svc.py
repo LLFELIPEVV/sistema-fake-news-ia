@@ -3,10 +3,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import stopwordsiso as stopwords
 
+from sklearn.svm import SVC
+from scipy.stats import loguniform
 from sklearn.pipeline import Pipeline
-from scipy.stats import loguniform, uniform
+from sklearn.preprocessing import MaxAbsScaler
 from sklearn.metrics import classification_report
-from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.feature_extraction.text import TfidfVectorizer
 from utils import (
@@ -22,23 +23,22 @@ from utils import (
 # Stopwords en español
 SPANISH_STOPWORDS = list(stopwords.stopwords("es"))
 
-BEST_MODEL_PATH = os.path.join(MODEL_DIR, "logistic_regression_best_model.pkl")
-BEST_SCORE_PATH = os.path.join(MODEL_DIR, "logistic_regression_best_score.txt")
+BEST_MODEL_PATH = os.path.join(MODEL_DIR, "svc_best_model.pkl")
+BEST_SCORE_PATH = os.path.join(MODEL_DIR, "svc_best_score.txt")
 
 
 def build_pipeline():
-    """Construye un pipeline con TF-IDF y Regresión Logística."""
+    """Construye un pipeline con TF-IDF, escalado y SVC."""
     return Pipeline(
         steps=[
             ("tfidf", TfidfVectorizer(stop_words=SPANISH_STOPWORDS)),
+            ("scaler", MaxAbsScaler()),  # Normaliza TF-IDF para SVM
             (
                 "clf",
-                LogisticRegression(
-                    max_iter=5000,
-                    tol=1e-4,
-                    random_state=42,
+                SVC(
+                    probability=True,
                     class_weight="balanced",
-                    n_jobs=-1,
+                    random_state=42,
                 ),
             ),
         ],
@@ -46,17 +46,16 @@ def build_pipeline():
     )
 
 
-def optimize_logreg(X_train, y_train):
-    """Optimiza hiperparámetros de Regresión Logística con RandomizedSearchCV."""
+def optimize_svc(X_train, y_train):
+    """Optimiza hiperparámetros de SVC con RandomizedSearchCV."""
     pipeline = build_pipeline()
 
     param_distributions = {
-        "clf__penalty": ["l2", "elasticnet"],
-        "clf__l1_ratio": uniform(0, 1),
-        "clf__C": loguniform(1e-3, 1e1),
-        "clf__solver": ["saga"],
+        "clf__C": loguniform(1e-3, 1e2),
+        "clf__gamma": loguniform(1e-4, 1e1),
+        "clf__kernel": ["linear", "rbf"],
         "tfidf__max_features": [20000, 50000],
-        "tfidf__ngram_range": [(1, 1), (1, 2)],
+        "tfidf__ngram_range": [(1, 1), (1, 2), (1, 3)],
     }
 
     random_search = RandomizedSearchCV(
@@ -83,8 +82,8 @@ if __name__ == "__main__":
     X_test, y_test = test_df["texto"], test_df["clase"]
 
     # Optimizar modelo
-    print("=== Buscando mejores hiperparámetros... ===")
-    grid = optimize_logreg(X_train, y_train)
+    print("=== Buscando mejores hiperparámetros (SVC)... ===")
+    grid = optimize_svc(X_train, y_train)
 
     print("\n=== Mejores parámetros encontrados ===")
     print(grid.best_params_)
@@ -103,10 +102,10 @@ if __name__ == "__main__":
         y_valid,
         y_valid_pred,
         "Matriz de confusión - Validación",
-        "logreg_confusion_valid.png",
+        "svc_confusion_valid.png",
     )
     valid_metrics = plot_metrics(
-        y_valid, y_valid_pred, "Validación", "logreg_metrics_valid.png"
+        y_valid, y_valid_pred, "Validación", "svc_metrics_valid.png"
     )
 
     # Evaluación en prueba
@@ -114,11 +113,9 @@ if __name__ == "__main__":
     print("\n=== Reporte de Prueba ===")
     print(classification_report(y_test, y_test_pred))
     plot_confusion_matrix(
-        y_test, y_test_pred, "Matriz de confusión - Prueba", "logreg_confusion_test.png"
+        y_test, y_test_pred, "Matriz de confusión - Prueba", "svc_confusion_test.png"
     )
-    test_metrics = plot_metrics(
-        y_test, y_test_pred, "Prueba", "logreg_metrics_test.png"
-    )
+    test_metrics = plot_metrics(y_test, y_test_pred, "Prueba", "svc_metrics_test.png")
 
     # Comparación de métricas entre validación y prueba
     comp_df = pd.DataFrame(
@@ -128,7 +125,7 @@ if __name__ == "__main__":
     fig, ax = plt.subplots(figsize=(8, 6))
     comp_df.plot(kind="bar", colormap="viridis", ax=ax)
 
-    ax.set_title("Comparación de métricas entre Validación y Prueba")
+    ax.set_title("Comparación de métricas entre Validación y Prueba (SVC)")
     ax.set_ylabel("Valor")
     ax.set_ylim(0, 1)
     plt.xticks(rotation=0)
@@ -137,8 +134,8 @@ if __name__ == "__main__":
     for container in ax.containers:
         ax.bar_label(container, fmt="%.2f", label_type="edge", fontsize=10)
 
-    save_figure(fig, "logreg_comparison_valid_test.png")
+    save_figure(fig, "svc_comparison_valid_test.png")
     plt.close(fig)
 
     # Resultados de RandomizedSearch
-    plot_grid_search_results(grid, "logreg_random_search_results.png", "param_clf__C")
+    plot_grid_search_results(grid, "svc_random_search_results.png", "param_clf__gamma")
