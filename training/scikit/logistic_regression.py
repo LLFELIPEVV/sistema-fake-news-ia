@@ -9,14 +9,16 @@ from sklearn.metrics import classification_report
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.feature_extraction.text import TfidfVectorizer
-from utils import (
-    load_datasets,
+from training.utils_common import (
     MODEL_DIR,
-    save_figure,
+    load_datasets,
     plot_confusion_matrix,
     plot_metrics,
+)
+from training.scikit.utils_scikit import (
+    save_figure,
     plot_grid_search_results,
-    save_best_model,
+    save_best_model_sklearn,
 )
 
 # Stopwords en español
@@ -93,7 +95,9 @@ if __name__ == "__main__":
     best_model = grid.best_estimator_
 
     # Guardar modelo si es mejor
-    save_best_model(best_model, grid.best_score_, BEST_SCORE_PATH, BEST_MODEL_PATH)
+    save_best_model_sklearn(
+        best_model, grid.best_score_, BEST_SCORE_PATH, BEST_MODEL_PATH
+    )
 
     # Evaluación en validación
     y_valid_pred = best_model.predict(X_valid)
