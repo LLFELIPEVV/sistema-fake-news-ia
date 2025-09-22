@@ -1,6 +1,8 @@
 import os
 import numpy as np
+import pandas as pd
 import tensorflow as tf
+import matplotlib.pyplot as plt
 
 from keras.optimizers import Adam
 from keras.models import Sequential
@@ -24,6 +26,7 @@ from training.utils_common import (
     plot_confusion_matrix,
     plot_metrics,
     MODEL_DIR,
+    save_figure,
 )
 
 # Configuración de hardware
@@ -267,6 +270,41 @@ if __name__ == "__main__":
         dataset_name="Prueba (BiLSTM)",
         filename="bilstm_metrics_test.png",
     )
+
+    # Comparación de métricas entre Validación y Prueba
+    print("[INFO] Comparando métricas entre Validación y Prueba...")
+
+    valid_metrics = plot_metrics(
+        y_valid,
+        y_valid_pred,
+        dataset_name="Validación (BiLSTM)",
+        filename="bilstm_metrics_valid.png",
+    )
+    test_metrics = plot_metrics(
+        y_test,
+        y_test_pred,
+        dataset_name="Prueba (BiLSTM)",
+        filename="bilstm_metrics_test.png",
+    )
+
+    comp_df = pd.DataFrame(
+        [valid_metrics, test_metrics], index=["Validación", "Prueba"]
+    )
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    comp_df.plot(kind="bar", colormap="viridis", ax=ax)
+
+    ax.set_title("Comparación de métricas entre Validación y Prueba (BiLSTM)")
+    ax.set_ylabel("Valor")
+    ax.set_ylim(0, 1)
+    plt.xticks(rotation=0)
+
+    # Etiquetas encima de cada barra
+    for container in ax.containers:
+        ax.bar_label(container, fmt="%.2f", label_type="edge", fontsize=10)
+
+    save_figure(fig, "bilstm_comparison_valid_test.png")
+    plt.close(fig)
 
     print("[INFO] Proceso terminado.")
     print(f"[INFO] F1 Score Final - Validación: {f1_valid:.4f}, Prueba: {f1_test:.4f}")
