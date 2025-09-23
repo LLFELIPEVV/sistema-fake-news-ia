@@ -239,7 +239,7 @@ if __name__ == "__main__":
     callbacks = [
         EarlyStopping(
             monitor="val_loss",
-            patience=8,
+            patience=14,
             restore_best_weights=True,
             verbose=1,
             mode="min",
