@@ -98,17 +98,17 @@ def build_gru_model_sequential(
                 mask_zero=True,
                 name="embedding",
             ),
-            SpatialDropout1D(0.25, name="spatial_dropout"),
+            SpatialDropout1D(0.4, name="spatial_dropout"),
             GRU(
                 gru_units,
                 dropout=dropout_rate,
-                recurrent_dropout=0.25,
+                recurrent_dropout=0.4,
                 return_sequences=False,
                 name="gru_main",
             ),
             BatchNormalization(name="batch_norm"),
             Dense(64, activation="relu", name="dense_hidden"),
-            Dropout(0.35, name="dropout_hidden"),
+            Dropout(0.5, name="dropout_hidden"),
             Dense(1, activation="sigmoid", name="output"),
         ]
     )
@@ -195,7 +195,7 @@ if __name__ == "__main__":
         embedding_dim=128,
         sequence_length=SEQ_LEN,
         gru_units=128,
-        dropout_rate=0.35,
+        dropout_rate=0.5,
     )
 
     sample_batch = next(iter(train_ds.take(1)))
