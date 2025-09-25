@@ -21,7 +21,7 @@ from keras.layers import (
     GlobalAveragePooling1D,
     Dropout,
     BatchNormalization,
-    Attention,
+    MultiHeadAttention,
     Input,
     Concatenate,
 )
@@ -127,7 +127,7 @@ def build_hybrid_model(
         input_dim=vocab_size,
         output_dim=embedding_dim,
         input_length=sequence_length,
-        mask_zero=True,
+        mask_zero=False,
         name="embedding",
     )(inputs)
 
@@ -188,10 +188,12 @@ def build_hybrid_model(
     # Batch normalization después de GRU
     gru_out = BatchNormalization(name="bn_gru")(gru_out)
 
-    # La salida del GRU se usa como query, key y value (self-attention)
-    attention_out = Attention(name="keras_attention")([gru_out, gru_out])
+    # La salida del GRU se usa como query, key y value
+    attention_out = MultiHeadAttention(
+        num_heads=4, key_dim=gru_units, dropout=0.1, name="self_attention"
+    )(query=gru_out, value=gru_out, key=gru_out)
 
-    # Aplicar pooling global para reducir dimensionalidad temporal
+    # Pooling global para resumir
     attention_pooled = GlobalAveragePooling1D(name="attention_pooled")(attention_out)
 
     # También obtener representación mediante pooling global del GRU
