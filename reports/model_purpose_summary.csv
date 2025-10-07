@@ -1,0 +1,11 @@
+Categoría,Modelo,Descripción
+Detección de Fake News,Random Forest,"Posee el mejor Recall en test, ideal para detectar noticias falsas sin omitir casos importantes."
+Detección de Real News,Hibrido,"Alcanza la mayor Precisión, reduciendo falsos positivos. Perfecto para validar contenido legítimo."
+Modelo más equilibrado,Random Forest,"Presenta consistencia entre validación y prueba, indicando buena estabilidad y generalización."
+Modelo más robusto,Random Forest,Tiene el menor sobreajuste. Ideal para entornos con datos no vistos o cambiantes.
+Más rápido en predicción,Naive Bayes,Tiempo de inferencia más bajo. Ideal para sistemas en tiempo real o móviles.
+Más eficiente en entrenamiento,Naive Bayes,Entrena en menos tiempo. Útil cuando se requieren actualizaciones frecuentes del modelo.
+Mayor capacidad de discriminación (AUC),Hibrido,Excelente balance entre sensibilidad y especificidad. Distingue claramente entre clases.
+Modelo más consistente,Hibrido,"Mantiene equilibrio entre métricas clave (Precision, Recall, F1). Ideal para decisiones balanceadas."
+Rendimiento global (F1),CNN,"Obtiene el mayor F1, ofreciendo el mejor rendimiento global en clasificación."
+Ideal para interpretación y explicación,Decision Tree,Permite entender las decisiones internas. Recomendado para auditorías o explicación de resultados.

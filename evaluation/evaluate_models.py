@@ -290,6 +290,177 @@ class AdvancedModelEvaluator:
         else:
             return "Bajo"
 
+    def interpret_model_purposes(self):
+        """
+        Analiza los resultados globales y sugiere para qué tipo de tarea
+        destaca cada modelo, según métricas clave y comportamiento general.
+        Muestra las 10 categorías aunque no haya un modelo ganador.
+        """
+
+        if not hasattr(self, "results") or not self.results:
+            print("⚠️ No hay resultados para analizar.")
+            return
+
+        df = pd.DataFrame(self.results)
+        df.columns = [c.replace(" ", "_") for c in df.columns]
+
+        print("\n" + "=" * 120)
+        print("🧩 INTERPRETACIÓN AVANZADA DE LOS MODELOS")
+        print("=" * 120 + "\n")
+
+        interpretaciones = {}
+
+        def add_interpretacion(categoria, modelo=None, descripcion=None):
+            """Agrega interpretación o marca como no detectada."""
+            if modelo is not None:
+                interpretaciones[categoria] = (modelo, descripcion)
+            else:
+                interpretaciones[categoria] = (
+                    "⚠️ Sin modelo destacado",
+                    "No se detectó un modelo sobresaliente en esta categoría.",
+                )
+
+        # 1️⃣ Mejor para detectar Fake News → Recall más alto
+        if "Test_Recall" in df:
+            mejor_fake = df.loc[df["Test_Recall"].idxmax(), "Modelo"]
+            add_interpretacion(
+                "Detección de Fake News",
+                mejor_fake,
+                "Posee el mejor Recall en test, ideal para detectar noticias falsas sin omitir casos importantes.",
+            )
+        else:
+            add_interpretacion("Detección de Fake News")
+
+        # 2️⃣ Mejor para detectar Real News → Precisión más alta
+        if "Test_Precision" in df:
+            mejor_real = df.loc[df["Test_Precision"].idxmax(), "Modelo"]
+            add_interpretacion(
+                "Detección de Real News",
+                mejor_real,
+                "Alcanza la mayor Precisión, reduciendo falsos positivos. Perfecto para validar contenido legítimo.",
+            )
+        else:
+            add_interpretacion("Detección de Real News")
+
+        # 3️⃣ Modelo más equilibrado entre validación y prueba
+        if "Validation_F1" in df and "Test_F1" in df:
+            idx = (df["Validation_F1"] - df["Test_F1"]).abs().idxmin()
+            mejor_equilibrado = df.loc[idx, "Modelo"]
+            add_interpretacion(
+                "Modelo más equilibrado",
+                mejor_equilibrado,
+                "Presenta consistencia entre validación y prueba, indicando buena estabilidad y generalización.",
+            )
+        else:
+            add_interpretacion("Modelo más equilibrado")
+
+        # 4️⃣ Modelo más robusto (menos overfitting)
+        if "Overfitting_F1" in df:
+            mejor_general = df.loc[df["Overfitting_F1"].abs().idxmin(), "Modelo"]
+            add_interpretacion(
+                "Modelo más robusto",
+                mejor_general,
+                "Tiene el menor sobreajuste. Ideal para entornos con datos no vistos o cambiantes.",
+            )
+        else:
+            add_interpretacion("Modelo más robusto")
+
+        # 5️⃣ Modelo más rápido en predicción
+        if "Test_Time" in df:
+            mejor_rapido_pred = df.loc[df["Test_Time"].idxmin(), "Modelo"]
+            add_interpretacion(
+                "Más rápido en predicción",
+                mejor_rapido_pred,
+                "Tiempo de inferencia más bajo. Ideal para sistemas en tiempo real o móviles.",
+            )
+        else:
+            add_interpretacion("Más rápido en predicción")
+
+        # 6️⃣ Modelo más eficiente en entrenamiento
+        if "Train_Time" in df:
+            mejor_entrenamiento = df.loc[df["Train_Time"].idxmin(), "Modelo"]
+            add_interpretacion(
+                "Más eficiente en entrenamiento",
+                mejor_entrenamiento,
+                "Entrena en menos tiempo. Útil cuando se requieren actualizaciones frecuentes del modelo.",
+            )
+        else:
+            add_interpretacion("Más eficiente en entrenamiento")
+
+        # 7️⃣ Modelo con mejor AUC (discriminación)
+        if "Test_ROC_AUC" in df:
+            mejor_auc = df.loc[df["Test_ROC_AUC"].idxmax(), "Modelo"]
+            add_interpretacion(
+                "Mayor capacidad de discriminación (AUC)",
+                mejor_auc,
+                "Excelente balance entre sensibilidad y especificidad. Distingue claramente entre clases.",
+            )
+        else:
+            add_interpretacion("Mayor capacidad de discriminación (AUC)")
+
+        # 8️⃣ Modelo más consistente (menor desviación entre métricas)
+        posibles = [c for c in ["Test_F1", "Test_Precision", "Test_Recall"] if c in df]
+        if posibles:
+            df["Consistency_Score"] = df[posibles].std(axis=1)
+            idx = df["Consistency_Score"].idxmin()
+            consistente = df.loc[idx, "Modelo"]
+            add_interpretacion(
+                "Modelo más consistente",
+                consistente,
+                "Mantiene equilibrio entre métricas clave (Precision, Recall, F1). Ideal para decisiones balanceadas.",
+            )
+        else:
+            add_interpretacion("Modelo más consistente")
+
+        # 9️⃣ Modelo con mejor rendimiento global (F1)
+        if "Test_F1" in df:
+            mejor_f1 = df.loc[df["Test_F1"].idxmax(), "Modelo"]
+            add_interpretacion(
+                "Rendimiento global (F1)",
+                mejor_f1,
+                "Obtiene el mayor F1, ofreciendo el mejor rendimiento global en clasificación.",
+            )
+        else:
+            add_interpretacion("Rendimiento global (F1)")
+
+        # 🔟 Modelo más interpretable
+        if any(df["Modelo"].str.contains("Decision", case=False)):
+            add_interpretacion(
+                "Ideal para interpretación y explicación",
+                "Decision Tree",
+                "Permite entender las decisiones internas. Recomendado para auditorías o explicación de resultados.",
+            )
+        else:
+            add_interpretacion("Ideal para interpretación y explicación")
+
+        # ───────────────────────────────────────────────
+        # 💬 Mostrar resultados
+        print("🧠 Interpretaciones de modelos detectadas:\n")
+        for categoria, (modelo, descripcion) in interpretaciones.items():
+            print(f" • 🏷️ {categoria}:")
+            print(f"    → **{modelo}** → {descripcion}\n")
+
+        print("=" * 120)
+        print("💡 Sugerencia general de uso:")
+        print("   - Usa el modelo más equilibrado como predeterminado.")
+        print("   - Ofrece al usuario seleccionar según su objetivo:")
+        print("       • Precisión alta → Detección de Real News")
+        print("       • Recall alto → Detección de Fake News")
+        print("       • Estabilidad → Modelo más equilibrado")
+        print("       • Velocidad → Predicción o entrenamiento rápido")
+        print("       • Interpretabilidad → Árbol de decisión")
+        print("=" * 120 + "\n")
+
+        resumen = pd.DataFrame(
+            [
+                {"Categoría": k, "Modelo": v[0], "Descripción": v[1]}
+                for k, v in interpretaciones.items()
+            ]
+        )
+        resumen.to_csv("reports/model_purpose_summary.csv", index=False)
+
+        return interpretaciones
+
     # ==================== VISUALIZACIONES MEJORADAS ====================
 
     def plot_comprehensive_comparison(self, save_fig=False):
@@ -1367,6 +1538,12 @@ def main():
     df_results = evaluator.generate_comprehensive_report()
     df_results.to_csv("reports/model_results_summary.csv", index=False)
 
+    # Interpretación avanzada de modelos
+    print("\n" + "=" * 120)
+    print("🧠 INTERPRETANDO RESULTADOS Y PROPÓSITOS DE LOS MODELOS")
+    print("=" * 120)
+    evaluator.interpret_model_purposes()
+
     # Generar todas las visualizaciones
     print("\n" + "=" * 100)
     print("📈 GENERANDO VISUALIZACIONES AVANZADAS...")
@@ -1401,13 +1578,6 @@ def main():
     print("\n📁 Archivos generados:")
     print("   • Figuras guardadas en: ./figures/")
     print("   • Reportes guardados en: ./reports/")
-    print("\n💡 Utiliza estos análisis para tu proyecto de grado:\n")
-    print("   1. Tablas comparativas de métricas")
-    print("   2. Análisis de overfitting/underfitting")
-    print("   3. Matrices de confusión por modelo")
-    print("   4. Gráficos de rendimiento multidimensional")
-    print("   5. Análisis estadístico de significancia")
-    print("   6. Recomendaciones basadas en datos")
     print("\n" + "=" * 100 + "\n")
 
 
