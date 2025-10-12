@@ -20,7 +20,11 @@ from keras.layers import (
 )
 from sklearn.metrics import classification_report, f1_score
 from sklearn.utils.class_weight import compute_class_weight
-from training.tensorflow.utils_keras import save_best_model_keras, plot_training_history
+from training.tensorflow.utils_keras import (
+    save_best_model_keras,
+    plot_training_history,
+    load_best_model_keras,
+)
 from training.utils_common import (
     load_datasets,
     plot_confusion_matrix,
@@ -266,6 +270,13 @@ if __name__ == "__main__":
     )
 
     save_best_model_keras(model, f1_valid, BEST_SCORE_PATH, BEST_MODEL_PATH)
+    best_model = load_best_model_keras(BEST_MODEL_PATH)
+    y_valid_pred, y_valid_proba, f1_valid = evaluate_model(
+        best_model, valid_ds, y_valid, "Validación"
+    )
+    y_test_pred, y_test_proba, f1_test = evaluate_model(
+        best_model, test_ds, y_test, "Prueba"
+    )
 
     print("[INFO] Generando visualizaciones...")
     plot_confusion_matrix(

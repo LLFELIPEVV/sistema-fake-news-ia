@@ -1,4 +1,5 @@
 import os
+import joblib
 import pandas as pd
 import matplotlib.pyplot as plt
 import stopwordsiso as stopwords
@@ -95,9 +96,11 @@ if __name__ == "__main__":
     save_best_model_sklearn(
         best_model, grid.best_score_, BEST_SCORE_PATH, BEST_MODEL_PATH
     )
+    print("\n🔄 Cargando modelo guardado desde disco...")
+    loaded_best_model = joblib.load(BEST_MODEL_PATH)
 
     # Evaluación en validación
-    y_valid_pred = best_model.predict(X_valid)
+    y_valid_pred = loaded_best_model.predict(X_valid)
     print("\n=== Reporte de Validación ===")
     print(classification_report(y_valid, y_valid_pred))
     plot_confusion_matrix(
@@ -111,7 +114,7 @@ if __name__ == "__main__":
     )
 
     # Evaluación en prueba
-    y_test_pred = best_model.predict(X_test)
+    y_test_pred = loaded_best_model.predict(X_test)
     print("\n=== Reporte de Prueba ===")
     print(classification_report(y_test, y_test_pred))
     plot_confusion_matrix(

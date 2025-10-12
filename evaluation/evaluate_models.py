@@ -461,7 +461,7 @@ class AdvancedModelEvaluator:
 
         return interpretaciones
 
-    # ==================== VISUALIZACIONES MEJORADAS ====================
+    # ==================== VISUALIZACIONES ====================
 
     def plot_comprehensive_comparison(self, save_fig=False):
         """Comparación exhaustiva de todos los modelos"""

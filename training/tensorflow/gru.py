@@ -19,7 +19,11 @@ from keras.layers import (
 )
 from sklearn.metrics import classification_report, f1_score
 from sklearn.utils.class_weight import compute_class_weight
-from training.tensorflow.utils_keras import save_best_model_keras, plot_training_history
+from training.tensorflow.utils_keras import (
+    save_best_model_keras,
+    plot_training_history,
+    load_best_model_keras,
+)
 from training.utils_common import (
     load_datasets,
     plot_confusion_matrix,
@@ -248,6 +252,7 @@ if __name__ == "__main__":
     )
 
     save_best_model_keras(model, f1_valid, BEST_SCORE_PATH, BEST_MODEL_PATH)
+    
 
     # Confusion matrices
     plot_confusion_matrix(

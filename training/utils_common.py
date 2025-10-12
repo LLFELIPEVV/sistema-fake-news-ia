@@ -35,15 +35,15 @@ def save_figure(fig, filename):
 
 def plot_confusion_matrix(y_true, y_pred, title="Matriz de confusión", filename=None):
     """Muestra y guarda matriz de confusión normalizada con Seaborn."""
-    cm = confusion_matrix(y_true, y_pred, normalize="true")
+    cm = confusion_matrix(y_true, y_pred, labels=[0, 1], normalize="true")
     fig, ax = plt.subplots(figsize=(6, 5))
     sns.heatmap(
         cm,
         annot=True,
         fmt=".2f",
         cmap="Blues",
-        xticklabels=["No Fake", "Fake"],
-        yticklabels=["No Fake", "Fake"],
+        xticklabels=["Fake", "No Fake"],
+        yticklabels=["Fake", "No Fake"],
         ax=ax,
     )
     ax.set_title(title)
