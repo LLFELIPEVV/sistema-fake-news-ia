@@ -26,17 +26,33 @@ from training.utils_common import (
 )
 
 # Configuración de hardware
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(f"[INFO] Usando dispositivo: {device}")
+try:
+    import torch_directml
+
+    dml_available = True
+except ImportError:
+    dml_available = False
 
 if torch.cuda.is_available():
-    print(f"[INFO] GPU detectada: {torch.cuda.get_device_name(0)}")
+    device = torch.device("cuda")
+    print(f"[INFO] GPU CUDA detectada: {torch.cuda.get_device_name(0)}")
+    BATCH_SIZE = 16
+elif hasattr(torch, "hip") and torch.version.hip:  # ROCm backend
+    device = torch.device("cuda")  # En ROCm, el device se llama igual
+    print("[INFO] GPU AMD (ROCm) detectada.")
+    BATCH_SIZE = 16
+elif dml_available:
+    device = torch_directml.device()
+    print("[INFO] GPU AMD detectada mediante DirectML.")
     BATCH_SIZE = 16
 else:
-    print("[INFO] No se detectó GPU, usando CPU")
+    device = torch.device("cpu")
+    print("[INFO] No se detectó GPU, usando CPU.")
     BATCH_SIZE = 8
 
+print(f"[INFO] Usando dispositivo: {device}")
 print(f"[INFO] Usando batch_size = {BATCH_SIZE}")
+
 
 # Configuración general
 BEST_MODEL_PATH = os.path.join(MODEL_DIR, "mbert_pytorch_best_model.pt")
