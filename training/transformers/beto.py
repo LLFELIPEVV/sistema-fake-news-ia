@@ -55,8 +55,8 @@ print(f"[INFO] Usando batch_size = {BATCH_SIZE}")
 
 
 # Configuración general
-BEST_MODEL_PATH = os.path.join(MODEL_DIR, "mbert_pytorch_best_model.pt")
-BEST_SCORE_PATH = os.path.join(MODEL_DIR, "mbert_pytorch_best_score.txt")
+BEST_MODEL_PATH = os.path.join(MODEL_DIR, "beto_pytorch_best_model.pt")
+BEST_SCORE_PATH = os.path.join(MODEL_DIR, "beto_pytorch_best_score.txt")
 
 SEED = 42
 torch.manual_seed(SEED)
@@ -65,7 +65,7 @@ if torch.cuda.is_available():
     torch.cuda.manual_seed_all(SEED)
 
 # Configuración del modelo
-MODEL_NAME = "bert-base-multilingual-cased"
+MODEL_NAME = "dccuchile/bert-base-spanish-wwm-cased"
 MAX_LENGTH = 128
 
 
@@ -100,11 +100,11 @@ class TextDataset(Dataset):
         }
 
 
-class mBERTClassifier(nn.Module):
-    """Modelo de clasificación basado en mBERT."""
+class BETOClassifier(nn.Module):
+    """Modelo de clasificación basado en BETO (BERT en español)."""
 
     def __init__(self, model_name, dropout_rate=0.3):
-        super(mBERTClassifier, self).__init__()
+        super(BETOClassifier, self).__init__()
         self.bert = AutoModel.from_pretrained(model_name)
         self.dropout = nn.Dropout(dropout_rate)
         self.fc1 = nn.Linear(self.bert.config.hidden_size, 128)
@@ -306,8 +306,8 @@ if __name__ == "__main__":
     test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
     # Construir modelo
-    print("[INFO] Construyendo modelo mBERT...")
-    model = mBERTClassifier(MODEL_NAME, dropout_rate=0.3).to(device)
+    print("[INFO] Construyendo modelo BETO...")
+    model = BETOClassifier(MODEL_NAME, dropout_rate=0.3).to(device)
 
     # Calcular class weights
     pos_weight = compute_class_weights(y_train)
@@ -380,7 +380,7 @@ if __name__ == "__main__":
             break
 
     # Graficar historial
-    plot_training_history(history, "mbert_training_history.png")
+    plot_training_history(history, "beto_training_history.png")
 
     # Cargar mejor modelo
     print("\n[INFO] Cargando mejor modelo...")
@@ -399,27 +399,27 @@ if __name__ == "__main__":
     plot_confusion_matrix(
         y_valid,
         y_valid_pred,
-        title="Matriz de confusión - Validación (mBERT)",
-        filename="mbert_confusion_valid.png",
+        title="Matriz de confusión - Validación (BETO)",
+        filename="beto_confusion_valid.png",
     )
     plot_confusion_matrix(
         y_test,
         y_test_pred,
-        title="Matriz de confusión - Prueba (mBERT)",
-        filename="mbert_confusion_test.png",
+        title="Matriz de confusión - Prueba (BETO)",
+        filename="beto_confusion_test.png",
     )
 
     valid_metrics = plot_metrics(
         y_valid,
         y_valid_pred,
-        dataset_name="Validación (mBERT)",
-        filename="mbert_metrics_valid.png",
+        dataset_name="Validación (BETO)",
+        filename="beto_metrics_valid.png",
     )
     test_metrics = plot_metrics(
         y_test,
         y_test_pred,
-        dataset_name="Prueba (mBERT)",
-        filename="mbert_metrics_test.png",
+        dataset_name="Prueba (BETO)",
+        filename="beto_metrics_test.png",
     )
 
     # Comparación de métricas
@@ -428,13 +428,13 @@ if __name__ == "__main__":
     )
     fig, ax = plt.subplots(figsize=(8, 6))
     comp_df.plot(kind="bar", colormap="viridis", ax=ax)
-    ax.set_title("Comparación de métricas entre Validación y Prueba (mBERT)")
+    ax.set_title("Comparación de métricas entre Validación y Prueba (BETO)")
     ax.set_ylabel("Valor")
     ax.set_ylim(0, 1)
     plt.xticks(rotation=0)
     for container in ax.containers:
         ax.bar_label(container, fmt="%.2f", label_type="edge", fontsize=10)
-    save_figure(fig, "mbert_comparison_valid_test.png")
+    save_figure(fig, "beto_comparison_valid_test.png")
     plt.close(fig)
 
     print("\n[INFO] Proceso terminado.")
