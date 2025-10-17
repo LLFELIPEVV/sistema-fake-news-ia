@@ -252,7 +252,13 @@ if __name__ == "__main__":
     )
 
     save_best_model_keras(model, f1_valid, BEST_SCORE_PATH, BEST_MODEL_PATH)
-    
+    best_model = load_best_model_keras(BEST_MODEL_PATH)
+    y_valid_pred, y_valid_proba, f1_valid = evaluate_model(
+        best_model, valid_ds, y_valid, "Validación"
+    )
+    y_test_pred, y_test_proba, f1_test = evaluate_model(
+        best_model, test_ds, y_test, "Prueba"
+    )
 
     # Confusion matrices
     plot_confusion_matrix(

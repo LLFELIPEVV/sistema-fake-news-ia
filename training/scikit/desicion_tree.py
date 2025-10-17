@@ -62,7 +62,7 @@ def optimize_decision_tree(X_train, y_train):
     random_search = RandomizedSearchCV(
         pipeline,
         param_distributions=param_distributions,
-        n_iter=25,
+        n_iter=75,
         cv=3,
         scoring="f1_weighted",
         n_jobs=-1,
