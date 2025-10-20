@@ -1,0 +1,27 @@
+📂 Procesando conjunto: Train (35511 muestras)
+   Batch 1110/1110...
+   ✅ Train completado en 1920.74s
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_models.py", line 2115, in <module>
+    main()
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_models.py", line 2055, in main
+    evaluator.evaluate_torch_model_complete(
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_models.py", line 633, in evaluate_torch_model_complete
+    metrics = self._calculate_extended_metrics(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_models.py", line 668, in _calculate_extended_metrics
+    "Accuracy": accuracy_score(y_true, y_pred),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\sklearn\utils\_param_validation.py", line 218, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\sklearn\metrics\_classification.py", line 359, in accuracy_score
+    y_type, y_true, y_pred = _check_targets(y_true, y_pred)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\sklearn\metrics\_classification.py", line 97, in _check_targets
+    check_consistent_length(y_true, y_pred)
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\sklearn\utils\validation.py", line 473, in check_consistent_length
+    raise ValueError(
+ValueError: Found input variables with inconsistent numbers of samples: [35511, 1110]
