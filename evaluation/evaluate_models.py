@@ -490,18 +490,26 @@ class AdvancedModelEvaluator:
             y_pred_list, y_proba_list = [], []
             start_time = time.time()
 
-            total_batches = (len(X) + batch_size - 1) // batch_size
+            _ = (len(X) + batch_size - 1) // batch_size
             current_batch_size = batch_size
 
             batch_idx = 0
+            processed_samples = 0
+
             while batch_idx < len(X):
                 try:
-                    current_batch = (batch_idx // current_batch_size) + 1
-                    if current_batch % 10 == 0:
-                        print(f"   Batch {current_batch}/{total_batches}...", end="\r")
+                    # Calcular el tamaño real del batch actual
+                    actual_batch_size = min(current_batch_size, len(X) - batch_idx)
+                    current_batch_num = (processed_samples // batch_size) + 1
+
+                    if current_batch_num % 10 == 0:
+                        print(
+                            f"   Procesadas: {processed_samples}/{len(X)} muestras...",
+                            end="\r",
+                        )
 
                     texts_batch = to_text_list(
-                        X[batch_idx : batch_idx + current_batch_size]
+                        X[batch_idx : batch_idx + actual_batch_size]
                     )
 
                     inputs = tokenizer(
@@ -515,7 +523,7 @@ class AdvancedModelEvaluator:
                     inputs = {k: v.to(device_obj) for k, v in inputs.items()}
 
                     # Verificar si el modelo acepta token_type_ids
-                    if "token_type_ids" in inputs:
+                    if "token_type_ids" in inputs and batch_idx == 0:
                         try:
                             with torch.no_grad():
                                 _ = model(
@@ -547,7 +555,10 @@ class AdvancedModelEvaluator:
                     y_proba_list.extend(probs)
 
                     del inputs, outputs, logits
-                    batch_idx += current_batch_size
+
+                    # Avanzar el índice correctamente
+                    batch_idx += actual_batch_size
+                    processed_samples += actual_batch_size
 
                 except RuntimeError as e:
                     if (
@@ -555,17 +566,16 @@ class AdvancedModelEvaluator:
                         or "could not allocate" in str(e).lower()
                     ):
                         print(
-                            f"\n⚠️ Error de memoria en batch {current_batch}, reduciendo batch size"
+                            f"\n⚠️ Error de memoria, reduciendo batch size de {current_batch_size} a {max(1, current_batch_size // 2)}"
                         )
 
                         current_batch_size = max(1, current_batch_size // 2)
-                        print(f"   Nuevo batch_size: {current_batch_size}")
 
                         gc.collect()
                         if device_str.startswith("cuda"):
                             torch.cuda.empty_cache()
 
-                        # Continuar con el mismo batch_idx (reintentar)
+                        # NO avanzar batch_idx, reintentar con el mismo lote
                         continue
                     else:
                         raise e
@@ -580,6 +590,19 @@ class AdvancedModelEvaluator:
             y_pred = np.array(y_pred_list)
             y_proba = np.array(y_proba_list)
             y_true = np.array(y_true)
+
+            # Verificar que tenemos el número correcto de predicciones
+            print(
+                f"   🔍 Verificación: {len(y_pred)} predicciones para {len(y_true)} muestras"
+            )
+
+            if len(y_pred) != len(y_true):
+                print("   ⚠️ ERROR: Inconsistencia detectada!")
+                print(f"      - Esperadas: {len(y_true)} muestras")
+                print(f"      - Procesadas: {len(y_pred)} predicciones")
+                raise ValueError(
+                    f"Inconsistencia en el procesamiento: {len(y_pred)} != {len(y_true)}"
+                )
 
             metrics = self._calculate_extended_metrics(
                 y_true, y_pred, y_proba, prediction_time
