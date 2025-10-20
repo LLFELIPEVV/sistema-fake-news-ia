@@ -1,17 +1,25 @@
 import os
+import gc
 import time
+import torch
+import psutil
 import joblib
 import warnings
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import tensorflow as tf
+import torch_directml_native
 import matplotlib.pyplot as plt
 
 
 from scipy import stats
 from keras.models import load_model
+from transformers import AutoTokenizer
 from keras.layers import TextVectorization
 from training.utils_common import load_datasets
+from training.transformers.beto import BETOClassifier
+from training.transformers.mbert import mBERTClassifier
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
@@ -31,6 +39,42 @@ plt.style.use("seaborn-v0_8")
 sns.set_palette("husl")
 plt.rcParams["figure.dpi"] = 100
 plt.rcParams["savefig.dpi"] = 600
+
+# ===============================
+# CONFIGURACIONES DE RENDIMIENTO
+# ===============================
+num_threads = max(4, psutil.cpu_count(logical=True))
+os.environ["OMP_NUM_THREADS"] = str(num_threads)
+os.environ["TF_NUM_INTRAOP_THREADS"] = str(num_threads)
+os.environ["TF_NUM_INTEROP_THREADS"] = str(num_threads)
+os.environ["TOKENIZERS_PARALLELISM"] = "true"
+
+tf.config.threading.set_intra_op_parallelism_threads(num_threads)
+tf.config.threading.set_inter_op_parallelism_threads(num_threads)
+
+print(f"🧩 CPU optimizado: usando {num_threads} threads paralelos")
+
+
+# --- Función auxiliar para estimar RAM disponible ---
+def available_memory_gb():
+    return psutil.virtual_memory().available / (1024**3)
+
+
+# --- Liberar todo lo posible entre frameworks ---
+def clear_memory(full=True):
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+        torch.cuda.ipc_collect()
+    if full:
+        tf.keras.backend.clear_session()
+    gc.collect()
+
+
+def to_text_list(batch):
+    if isinstance(batch, (pd.Series, np.ndarray)):
+        batch = batch.tolist()
+    return [str(x) for x in batch]
 
 
 class AdvancedModelEvaluator:
@@ -88,6 +132,9 @@ class AdvancedModelEvaluator:
                     "y_proba": y_proba,
                 }
 
+        del X, y, y_pred, y_proba
+        gc.collect()
+
         self.confusion_matrices[name] = cm_dict
 
         # Indicadores avanzados
@@ -96,6 +143,7 @@ class AdvancedModelEvaluator:
 
         self.results.append(model_results)
         print(f"✅ {name} evaluado")
+        clear_memory()
         return model
 
     @staticmethod
@@ -135,7 +183,14 @@ class AdvancedModelEvaluator:
             X_vec = vectorizer(np.array(X)).numpy()
 
             start_time = time.time()
-            y_proba = model.predict(X_vec, verbose=0, batch_size=512).flatten()
+            # Lote dinámico para no saturar RAM/GPU
+            adaptive_batch = min(
+                256, max(32, int(len(X_vec) / (available_memory_gb() * 50 + 1)))
+            )
+            y_proba = model.predict(
+                X_vec, verbose=0, batch_size=adaptive_batch
+            ).flatten()
+
             y_pred = (y_proba > 0.5).astype(int)
             prediction_time = time.time() - start_time
 
@@ -155,6 +210,10 @@ class AdvancedModelEvaluator:
                     "y_proba": y_proba,
                 }
 
+        gc.collect()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+
         self.confusion_matrices[name] = cm_dict
 
         advanced_indicators = self._calculate_advanced_indicators(model_results)
@@ -162,7 +221,446 @@ class AdvancedModelEvaluator:
 
         self.results.append(model_results)
         print(f"✅ {name} evaluado")
+        clear_memory()
         return model
+
+    @staticmethod
+    def get_best_device(run_benchmark=True):
+        """
+        Compara todos los dispositivos disponibles y selecciona el mejor.
+        Si run_benchmark=True, hace pruebas de velocidad reales.
+        Retorna: (device_string, device_object, memoria_disponible_gb)
+        """
+        devices_info = []
+
+        # ====== CONFIGURACIÓN CRÍTICA PARA CPU ======
+        cpu_threads = psutil.cpu_count(logical=True)  # Usa hilos lógicos (4 en tu caso)
+        cpu_cores_physical = psutil.cpu_count(logical=False) or cpu_threads
+
+        print(f"💻 CPU detectado: {cpu_cores_physical} núcleos físicos, {cpu_threads} hilos lógicos")
+
+        # Configurar threads de PyTorch para máximo rendimiento
+        # Configurar threads de PyTorch para máximo rendimiento
+        torch.set_num_threads(cpu_threads)
+        torch.set_num_interop_threads(cpu_threads)
+
+        # Configurar OpenMP/MKL si está disponible
+        os.environ['OMP_NUM_THREADS'] = str(cpu_threads)
+        os.environ['MKL_NUM_THREADS'] = str(cpu_threads)
+        os.environ['NUMEXPR_NUM_THREADS'] = str(cpu_threads)
+
+        print(f"🔧 CPU configurado para usar {cpu_threads} hilos (threads)")
+        print(f"   - torch.get_num_threads(): {torch.get_num_threads()}")
+        print(f"   - torch.get_num_interop_threads(): {torch.get_num_interop_threads()}")
+
+        # --- 1. Revisar CUDA (NVIDIA GPUs) ---
+        if torch.cuda.is_available():
+            for i in range(torch.cuda.device_count()):
+                props = torch.cuda.get_device_properties(i)
+                total_mem = props.total_memory / (1024**3)
+
+                torch.cuda.set_device(i)
+                torch.cuda.empty_cache()
+                free_mem = (props.total_memory - torch.cuda.memory_allocated(i)) / (
+                    1024**3
+                )
+
+                tflops_estimate = (
+                    props.multi_processor_count * props.major * 100
+                ) / 1000
+
+                devices_info.append(
+                    {
+                        "type": "cuda",
+                        "id": i,
+                        "name": props.name,
+                        "device_str": f"cuda:{i}",
+                        "device_obj": torch.device(f"cuda:{i}"),
+                        "total_memory_gb": total_mem,
+                        "free_memory_gb": free_mem,
+                        "compute_capability": props.major + props.minor * 0.1,
+                        "tflops_estimate": tflops_estimate,
+                        "cores": props.multi_processor_count * 128,
+                        "score": 0,
+                    }
+                )
+                print(f"🎮 GPU {i}: {props.name}")
+                print(f"   Memoria: {free_mem:.2f}GB libre / {total_mem:.2f}GB total")
+                print(
+                    f"   Compute Capability: {props.major}.{props.minor} | ~{tflops_estimate:.1f} TFLOPS"
+                )
+
+        # --- 2. Revisar DirectML (AMD/Intel GPUs en Windows) ---
+        try:
+            dml_device = torch_directml_native.device()
+
+            devices_info.append(
+                {
+                    "type": "dml",
+                    "id": 0,
+                    "name": "DirectML Device",
+                    "device_str": "dml",
+                    "device_obj": dml_device,
+                    "total_memory_gb": 4.0,
+                    "free_memory_gb": 3.0,
+                    "compute_capability": 5.0,
+                    "tflops_estimate": 2.0,
+                    "cores": 1024,
+                    "score": 0,
+                }
+            )
+            print("🎮 DirectML Device detectado")
+            print("   Memoria estimada: 3GB | ~2 TFLOPS (estimado)")
+        except (ImportError, Exception):
+            pass
+
+        # --- 3. CPU siempre disponible ---
+        cpu_ram = psutil.virtual_memory().available / (1024**3)
+        cpu_freq = psutil.cpu_freq()
+        cpu_freq_ghz = cpu_freq.max / 1000 if cpu_freq else 3.0
+
+        cpu_gflops = cpu_threads * cpu_freq_ghz * 32
+
+        devices_info.append(
+            {
+                "type": "cpu",
+                "id": 0,
+                "name": f"CPU ({cpu_cores_physical} cores, {cpu_threads} threads @ {cpu_freq_ghz:.1f}GHz)",
+                "device_str": "cpu",
+                "device_obj": torch.device("cpu"),
+                "total_memory_gb": cpu_ram,
+                "free_memory_gb": cpu_ram,
+                "compute_capability": 1.0,
+                "tflops_estimate": cpu_gflops / 1000,
+                "cores": cpu_threads,
+                "num_workers": max(2, cpu_threads // 2),
+                "score": 0,
+            }
+        )
+        print(f"💻 CPU: {cpu_threads} threads @ {cpu_freq_ghz:.1f}GHz")
+        print(f"   RAM disponible: {cpu_ram:.2f}GB | ~{cpu_gflops:.0f} GFLOPS")
+
+        # --- 4. Benchmark real si se solicita ---
+        if run_benchmark and len(devices_info) > 1:
+            print("\n🏃 Ejecutando benchmark rápido en cada dispositivo...")
+
+            for dev_info in devices_info:
+                try:
+                    device = dev_info["device_obj"]
+
+                    size = 1024
+                    torch.manual_seed(42)
+                    a = torch.randn(size, size)
+                    b = torch.randn(size, size)
+
+                    a_dev = a.to(device)
+                    b_dev = b.to(device)
+
+                    _ = torch.matmul(a_dev, b_dev)
+
+                    if dev_info["type"] == "cuda":
+                        torch.cuda.synchronize()
+
+                    start = time.perf_counter()
+                    for _ in range(10):
+                        _ = torch.matmul(a_dev, b_dev)
+
+                    if dev_info["type"] == "cuda":
+                        torch.cuda.synchronize()
+
+                    elapsed = time.perf_counter() - start
+                    ops_per_sec = (10 * 2 * size**3) / elapsed / 1e9
+
+                    dev_info["benchmark_gflops"] = ops_per_sec
+                    print(
+                        f"   {dev_info['device_str']}: {ops_per_sec:.1f} GFLOPS (real)"
+                    )
+
+                    del a_dev, b_dev
+                    if dev_info["type"] == "cuda":
+                        torch.cuda.empty_cache()
+
+                except Exception as e:
+                    print(f"   {dev_info['device_str']}: Benchmark falló ({e})")
+                    dev_info["benchmark_gflops"] = 0
+
+        # --- 5. Calcular scores finales ---
+        print("\n📊 Calculando scores finales...")
+
+        for dev_info in devices_info:
+            memory_score = dev_info["free_memory_gb"] * 100
+
+            if run_benchmark and "benchmark_gflops" in dev_info:
+                compute_score = dev_info["benchmark_gflops"] * 5
+            else:
+                compute_score = dev_info["tflops_estimate"] * 1000 * 3
+
+            type_bonus = {
+                "cuda": 500,
+                "dml": 200,
+                "cpu": 0,
+            }
+
+            dev_info["score"] = (
+                memory_score + compute_score + type_bonus[dev_info["type"]]
+            )
+
+            print(
+                f"   {dev_info['device_str']}: Score = {dev_info['score']:.0f} "
+                + f"(mem:{memory_score:.0f} + compute:{compute_score:.0f} + bonus:{type_bonus[dev_info['type']]})"
+            )
+
+        # --- 6. Seleccionar el mejor ---
+        if not devices_info:
+            cpu_threads = psutil.cpu_count(logical=True)
+            return "cpu", torch.device("cpu"), cpu_ram, max(2, cpu_threads // 2)
+
+        best = max(devices_info, key=lambda x: x["score"])
+
+        print(f"\n✅ MEJOR DISPOSITIVO: {best['name']} ({best['device_str']})")
+        print(f"   Memoria disponible: {best['free_memory_gb']:.2f}GB")
+        if "benchmark_gflops" in best:
+            print(f"   Rendimiento medido: {best['benchmark_gflops']:.1f} GFLOPS")
+
+        num_workers = best.get("num_workers", 0)
+        return best["device_str"], best["device_obj"], best["free_memory_gb"], num_workers
+
+    @staticmethod
+    def calculate_optimal_batch_size(
+        device_str, available_memory_gb, model_type="bert"
+    ):
+        """
+        Calcula el batch size óptimo según el dispositivo y memoria disponible.
+        """
+        if model_type.lower() in ["mbert", "bert", "beto"]:
+            memory_per_sample_gb = 0.05
+        else:
+            memory_per_sample_gb = 0.03
+
+        safety_factors = {
+            "cuda": 0.7,
+            "dml": 0.4,
+            "cpu": 0.8,
+        }
+
+        device_type = device_str.split(":")[0] if ":" in device_str else device_str
+        safety = safety_factors.get(device_type, 0.5)
+
+        max_batch = int((available_memory_gb * safety) / memory_per_sample_gb)
+
+        if device_type == "cuda":
+            batch_size = max(4, min(max_batch, 64))
+        elif device_type == "dml":
+            batch_size = max(2, min(max_batch, 16))
+        else:
+            batch_size = max(8, min(max_batch, 32))
+
+        print(f"📊 Batch size calculado: {batch_size}")
+        return batch_size
+
+    def evaluate_torch_model_complete(
+        self,
+        name,
+        model_path,
+        tokenizer_name,
+        max_len=128,
+        batch_size=None,
+        device=None,
+    ):
+        """
+        Evalúa modelos de Transformers con selección automática del mejor dispositivo.
+        """
+        print(f"\n{'=' * 60}")
+        print(f"⏳ Evaluando {name}...")
+        print(f"{'=' * 60}")
+
+        # --- Selección inteligente de dispositivo ---
+        if device:
+            device_str = device
+            device_obj = torch.device(device)
+            available_mem = 4.0
+            num_workers = 4 
+            print(f"🖥️ Usando dispositivo especificado: {device_str}")
+        else:
+            device_str, device_obj, available_mem, num_workers = self.get_best_device(
+                run_benchmark=True
+            )
+
+        # --- Calcular batch size óptimo ---
+        if batch_size is None:
+            batch_size = self.calculate_optimal_batch_size(
+                device_str,
+                available_mem,
+                model_type="mbert" if "mbert" in name.lower() else "bert",
+            )
+        else:
+            print(f"📊 Usando batch size especificado: {batch_size}")
+
+        # --- Cargar tokenizer ---
+        print(f"📚 Cargando tokenizer: {tokenizer_name}")
+        tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
+
+        # --- Cargar modelo ---
+        print(f"🤖 Cargando modelo desde: {model_path}")
+        if "beto" in name.lower():
+            model = BETOClassifier(tokenizer_name)
+        else:
+            model = mBERTClassifier(tokenizer_name)
+
+        state_dict = torch.load(model_path, map_location="cpu")
+        model.load_state_dict(state_dict)
+
+        # --- Mover modelo al dispositivo seleccionado ---
+        print(f"🚀 Moviendo modelo a {device_str}...")
+        model.to(device_obj)
+        model.eval()
+
+        # --- Configuración de optimización ---
+        if hasattr(torch.backends, "cudnn"):
+            torch.backends.cudnn.benchmark = False
+
+        if device_str == "dml" or available_mem < 4:
+            max_len = min(max_len, 64)
+            print(f"⚠️ max_len reducido a {max_len} por memoria limitada")
+
+        # --- Datasets ---
+        datasets = {
+            "Train": (self.x_train, self.y_train),
+            "Validation": (self.x_val, self.y_val),
+            "Test": (self.x_test, self.y_test),
+        }
+
+        model_results = {"Modelo": name, "Tipo": "torch", "Dispositivo": device_str}
+        cm_dict = {}
+
+        # --- Evaluación por conjunto ---
+        for dataset_name, (X, y_true) in datasets.items():
+            print(f"\n📂 Procesando conjunto: {dataset_name} ({len(X)} muestras)")
+            y_pred_list, y_proba_list = [], []
+            start_time = time.time()
+
+            total_batches = (len(X) + batch_size - 1) // batch_size
+            current_batch_size = batch_size
+
+            batch_idx = 0
+            while batch_idx < len(X):
+                try:
+                    current_batch = (batch_idx // current_batch_size) + 1
+                    if current_batch % 10 == 0:
+                        print(f"   Batch {current_batch}/{total_batches}...", end="\r")
+
+                    texts_batch = to_text_list(
+                        X[batch_idx : batch_idx + current_batch_size]
+                    )
+
+                    inputs = tokenizer(
+                        texts_batch,
+                        padding=True,
+                        truncation=True,
+                        max_length=max_len,
+                        return_tensors="pt",
+                    )
+
+                    inputs = {k: v.to(device_obj) for k, v in inputs.items()}
+
+                    # Verificar si el modelo acepta token_type_ids
+                    if "token_type_ids" in inputs:
+                        try:
+                            with torch.no_grad():
+                                _ = model(
+                                    input_ids=inputs["input_ids"][:1],
+                                    attention_mask=inputs["attention_mask"][:1],
+                                )
+                            del inputs["token_type_ids"]
+                        except TypeError:
+                            pass
+
+                    # --- Inferencia ---
+                    with torch.no_grad():
+                        outputs = model(**inputs)
+
+                        logits = (
+                            outputs.logits if hasattr(outputs, "logits") else outputs[0]
+                        )
+
+                        logits = logits.view(logits.size(0), -1)
+
+                        if logits.shape[1] == 1:
+                            probs = torch.sigmoid(logits).cpu().numpy().flatten()
+                        else:
+                            probs = torch.softmax(logits, dim=1)[:, 1].cpu().numpy()
+
+                        preds = (probs > 0.5).astype(int)
+
+                    y_pred_list.extend(preds)
+                    y_proba_list.extend(probs)
+
+                    del inputs, outputs, logits
+                    batch_idx += current_batch_size
+
+                except RuntimeError as e:
+                    if (
+                        "out of memory" in str(e).lower()
+                        or "could not allocate" in str(e).lower()
+                    ):
+                        print(
+                            f"\n⚠️ Error de memoria en batch {current_batch}, reduciendo batch size"
+                        )
+
+                        current_batch_size = max(1, current_batch_size // 2)
+                        print(f"   Nuevo batch_size: {current_batch_size}")
+
+                        gc.collect()
+                        if device_str.startswith("cuda"):
+                            torch.cuda.empty_cache()
+
+                        # Continuar con el mismo batch_idx (reintentar)
+                        continue
+                    else:
+                        raise e
+
+            print(
+                f"\n   ✅ {dataset_name} completado en {time.time() - start_time:.2f}s"
+            )
+
+            prediction_time = time.time() - start_time
+
+            # --- Calcular métricas ---
+            y_pred = np.array(y_pred_list)
+            y_proba = np.array(y_proba_list)
+            y_true = np.array(y_true)
+
+            metrics = self._calculate_extended_metrics(
+                y_true, y_pred, y_proba, prediction_time
+            )
+            for metric, value in metrics.items():
+                model_results[f"{dataset_name}_{metric}"] = value
+
+            cm_dict[dataset_name] = confusion_matrix(y_true, y_pred)
+
+            if dataset_name == "Test":
+                self.predictions[name] = {
+                    "y_true": y_true,
+                    "y_pred": y_pred,
+                    "y_proba": y_proba,
+                }
+
+        # --- Limpieza final ---
+        del model
+        gc.collect()
+        if device_str.startswith("cuda"):
+            torch.cuda.empty_cache()
+
+        # --- Resultados finales ---
+        self.confusion_matrices[name] = cm_dict
+        advanced_indicators = self._calculate_advanced_indicators(model_results)
+        model_results.update(advanced_indicators)
+
+        self.results.append(model_results)
+        print(f"\n✅ {name} evaluado correctamente en {device_str}")
+        print(f"{'=' * 60}\n")
+
+        return None
 
     def _calculate_extended_metrics(self, y_true, y_pred, y_proba, prediction_time):
         """Calcula conjunto extendido de métricas"""
@@ -1511,6 +2009,17 @@ def main():
         ),
     }
 
+    torch_models = {
+        "MBERT": {
+            "path": os.path.join(models_dir, "mbert_pytorch_best_model.pt"),
+            "tokenizer": "bert-base-multilingual-cased",
+        },
+        "BETO": {
+            "path": os.path.join(models_dir, "beto_pytorch_best_model.pt"),
+            "tokenizer": "dccuchile/bert-base-spanish-wwm-cased",
+        },
+    }
+
     # Evaluar modelos
     print("\n" + "=" * 100)
     print("🔍 EVALUANDO MODELOS...")
@@ -1523,12 +2032,33 @@ def main():
         else:
             print(f"⚠️  Modelo no encontrado: {path}")
 
+    # Pausa ligera para liberar CPU
+    time.sleep(2)
+    clear_memory()
+
     # Evaluar keras models
     for name, path in keras_models.items():
         if os.path.exists(path):
             evaluator.evaluate_keras_model_complete(name, path)
         else:
             print(f"⚠️  Modelo no encontrado: {path}")
+
+    # Pausa ligera para liberar CPU
+    time.sleep(2)
+    clear_memory()
+
+    # Evaluar pytorch models
+    for name, info in torch_models.items():
+        path = info["path"]
+        tokenizer = info["tokenizer"]
+        if os.path.exists(path):
+            evaluator.evaluate_torch_model_complete(
+                name,
+                path,
+                tokenizer,
+            )
+        else:
+            print(f"⚠️ Modelo no encontrado: {path}")
 
     # Generar reporte completo
     print("\n" + "=" * 100)

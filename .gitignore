@@ -209,3 +209,7 @@ __marimo__/
 # Datasets
 datasets/
 data/
+
+# Modelos pesados
+models/beto_pytorch_best_model.pt
+models/mbert_pytorch_best_model.pt
