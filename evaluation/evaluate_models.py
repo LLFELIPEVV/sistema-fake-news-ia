@@ -9,7 +9,6 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import tensorflow as tf
-import torch_directml_native
 import matplotlib.pyplot as plt
 
 
@@ -227,47 +226,36 @@ class AdvancedModelEvaluator:
     @staticmethod
     def get_best_device(run_benchmark=True):
         """
-        Compara todos los dispositivos disponibles y selecciona el mejor.
-        Si run_benchmark=True, hace pruebas de velocidad reales.
-        Retorna: (device_string, device_object, memoria_disponible_gb)
+        Detecta CUDA, DirectML o CPU y selecciona el mejor.
+        Retorna: (device_string, device_object, memoria_disponible_gb, num_workers)
         """
         devices_info = []
 
-        # ====== CONFIGURACIÓN CRÍTICA PARA CPU ======
-        cpu_threads = psutil.cpu_count(logical=True)  # Usa hilos lógicos (4 en tu caso)
+        # ====== CPU CONFIG ======
+        cpu_threads = psutil.cpu_count(logical=True)
         cpu_cores_physical = psutil.cpu_count(logical=False) or cpu_threads
+        print(
+            f"💻 CPU detectado: {cpu_cores_physical} núcleos físicos, {cpu_threads} hilos lógicos"
+        )
 
-        print(f"💻 CPU detectado: {cpu_cores_physical} núcleos físicos, {cpu_threads} hilos lógicos")
-
-        # Configurar threads de PyTorch para máximo rendimiento
-        # Configurar threads de PyTorch para máximo rendimiento
         torch.set_num_threads(cpu_threads)
         torch.set_num_interop_threads(cpu_threads)
+        os.environ["OMP_NUM_THREADS"] = str(cpu_threads)
+        os.environ["MKL_NUM_THREADS"] = str(cpu_threads)
+        os.environ["NUMEXPR_NUM_THREADS"] = str(cpu_threads)
+        print(f"🔧 CPU configurado para usar {cpu_threads} hilos")
 
-        # Configurar OpenMP/MKL si está disponible
-        os.environ['OMP_NUM_THREADS'] = str(cpu_threads)
-        os.environ['MKL_NUM_THREADS'] = str(cpu_threads)
-        os.environ['NUMEXPR_NUM_THREADS'] = str(cpu_threads)
-
-        print(f"🔧 CPU configurado para usar {cpu_threads} hilos (threads)")
-        print(f"   - torch.get_num_threads(): {torch.get_num_threads()}")
-        print(f"   - torch.get_num_interop_threads(): {torch.get_num_interop_threads()}")
-
-        # --- 1. Revisar CUDA (NVIDIA GPUs) ---
+        # ====== 1. CUDA (NVIDIA) ======
         if torch.cuda.is_available():
             for i in range(torch.cuda.device_count()):
                 props = torch.cuda.get_device_properties(i)
                 total_mem = props.total_memory / (1024**3)
-
                 torch.cuda.set_device(i)
                 torch.cuda.empty_cache()
                 free_mem = (props.total_memory - torch.cuda.memory_allocated(i)) / (
                     1024**3
                 )
-
-                tflops_estimate = (
-                    props.multi_processor_count * props.major * 100
-                ) / 1000
+                tflops_estimate = props.multi_processor_count * props.major / 10
 
                 devices_info.append(
                     {
@@ -278,152 +266,115 @@ class AdvancedModelEvaluator:
                         "device_obj": torch.device(f"cuda:{i}"),
                         "total_memory_gb": total_mem,
                         "free_memory_gb": free_mem,
-                        "compute_capability": props.major + props.minor * 0.1,
                         "tflops_estimate": tflops_estimate,
-                        "cores": props.multi_processor_count * 128,
                         "score": 0,
                     }
                 )
-                print(f"🎮 GPU {i}: {props.name}")
-                print(f"   Memoria: {free_mem:.2f}GB libre / {total_mem:.2f}GB total")
                 print(
-                    f"   Compute Capability: {props.major}.{props.minor} | ~{tflops_estimate:.1f} TFLOPS"
+                    f"🎮 GPU {i}: {props.name} ({free_mem:.2f}/{total_mem:.2f} GB libres)"
                 )
 
-        # --- 2. Revisar DirectML (AMD/Intel GPUs en Windows) ---
+        # ====== 2. DirectML (AMD / Intel / Microsoft GPU) ======
         try:
-            dml_device = torch_directml_native.device()
+            import torch_directml
+
+            dml_device = torch_directml.device()
+            print("🎮 DirectML detectado correctamente (torch_directml)")
 
             devices_info.append(
                 {
                     "type": "dml",
                     "id": 0,
-                    "name": "DirectML Device",
+                    "name": "DirectML (Intel/AMD GPU)",
                     "device_str": "dml",
                     "device_obj": dml_device,
                     "total_memory_gb": 4.0,
                     "free_memory_gb": 3.0,
-                    "compute_capability": 5.0,
                     "tflops_estimate": 2.0,
-                    "cores": 1024,
                     "score": 0,
                 }
             )
-            print("🎮 DirectML Device detectado")
-            print("   Memoria estimada: 3GB | ~2 TFLOPS (estimado)")
-        except (ImportError, Exception):
-            pass
+        except ImportError:
+            print("⚠️ DirectML no está instalado o no se detectó.")
+        except Exception as e:
+            print(f"⚠️ Error al inicializar DirectML: {e}")
 
-        # --- 3. CPU siempre disponible ---
+        # ====== 3. CPU siempre disponible ======
         cpu_ram = psutil.virtual_memory().available / (1024**3)
         cpu_freq = psutil.cpu_freq()
         cpu_freq_ghz = cpu_freq.max / 1000 if cpu_freq else 3.0
-
         cpu_gflops = cpu_threads * cpu_freq_ghz * 32
 
         devices_info.append(
             {
                 "type": "cpu",
                 "id": 0,
-                "name": f"CPU ({cpu_cores_physical} cores, {cpu_threads} threads @ {cpu_freq_ghz:.1f}GHz)",
+                "name": f"CPU ({cpu_threads} hilos @ {cpu_freq_ghz:.1f}GHz)",
                 "device_str": "cpu",
                 "device_obj": torch.device("cpu"),
                 "total_memory_gb": cpu_ram,
                 "free_memory_gb": cpu_ram,
-                "compute_capability": 1.0,
                 "tflops_estimate": cpu_gflops / 1000,
-                "cores": cpu_threads,
-                "num_workers": max(2, cpu_threads // 2),
                 "score": 0,
+                "num_workers": max(2, cpu_threads // 2),
             }
         )
-        print(f"💻 CPU: {cpu_threads} threads @ {cpu_freq_ghz:.1f}GHz")
-        print(f"   RAM disponible: {cpu_ram:.2f}GB | ~{cpu_gflops:.0f} GFLOPS")
+        print(
+            f"💻 CPU disponible con {cpu_ram:.1f}GB RAM libre (~{cpu_gflops:.0f} GFLOPS teóricos)"
+        )
 
-        # --- 4. Benchmark real si se solicita ---
+        # ====== 4. Benchmark real ======
         if run_benchmark and len(devices_info) > 1:
-            print("\n🏃 Ejecutando benchmark rápido en cada dispositivo...")
-
-            for dev_info in devices_info:
+            print("\n🏃 Ejecutando benchmark rápido (matmul 1024x1024)...")
+            for dev in devices_info:
                 try:
-                    device = dev_info["device_obj"]
-
+                    device = dev["device_obj"]
                     size = 1024
-                    torch.manual_seed(42)
                     a = torch.randn(size, size)
                     b = torch.randn(size, size)
-
                     a_dev = a.to(device)
                     b_dev = b.to(device)
 
+                    # warmup
                     _ = torch.matmul(a_dev, b_dev)
-
-                    if dev_info["type"] == "cuda":
+                    if dev["type"] == "cuda":
                         torch.cuda.synchronize()
 
                     start = time.perf_counter()
-                    for _ in range(10):
+                    for _ in range(5):
                         _ = torch.matmul(a_dev, b_dev)
-
-                    if dev_info["type"] == "cuda":
+                    if dev["type"] == "cuda":
                         torch.cuda.synchronize()
 
                     elapsed = time.perf_counter() - start
-                    ops_per_sec = (10 * 2 * size**3) / elapsed / 1e9
-
-                    dev_info["benchmark_gflops"] = ops_per_sec
-                    print(
-                        f"   {dev_info['device_str']}: {ops_per_sec:.1f} GFLOPS (real)"
-                    )
-
-                    del a_dev, b_dev
-                    if dev_info["type"] == "cuda":
-                        torch.cuda.empty_cache()
+                    gflops = (5 * 2 * size**3) / elapsed / 1e9
+                    dev["benchmark_gflops"] = gflops
+                    print(f"   {dev['device_str']}: {gflops:.1f} GFLOPS (real)")
 
                 except Exception as e:
-                    print(f"   {dev_info['device_str']}: Benchmark falló ({e})")
-                    dev_info["benchmark_gflops"] = 0
+                    print(f"   {dev['device_str']}: Benchmark falló ({e})")
+                    dev["benchmark_gflops"] = 0
 
-        # --- 5. Calcular scores finales ---
-        print("\n📊 Calculando scores finales...")
-
-        for dev_info in devices_info:
-            memory_score = dev_info["free_memory_gb"] * 100
-
-            if run_benchmark and "benchmark_gflops" in dev_info:
-                compute_score = dev_info["benchmark_gflops"] * 5
-            else:
-                compute_score = dev_info["tflops_estimate"] * 1000 * 3
-
-            type_bonus = {
-                "cuda": 500,
-                "dml": 200,
-                "cpu": 0,
-            }
-
-            dev_info["score"] = (
-                memory_score + compute_score + type_bonus[dev_info["type"]]
+        # ====== 5. Calcular score ======
+        print("\n📊 Calculando scores...")
+        for dev in devices_info:
+            mem_score = dev["free_memory_gb"] * 100
+            compute_score = (
+                dev.get("benchmark_gflops", dev["tflops_estimate"] * 1000) * 3
             )
+            type_bonus = {"cuda": 500, "dml": 200, "cpu": 0}
+            dev["score"] = mem_score + compute_score + type_bonus[dev["type"]]
+            print(f"   {dev['device_str']}: Score = {dev['score']:.0f}")
 
-            print(
-                f"   {dev_info['device_str']}: Score = {dev_info['score']:.0f} "
-                + f"(mem:{memory_score:.0f} + compute:{compute_score:.0f} + bonus:{type_bonus[dev_info['type']]})"
-            )
-
-        # --- 6. Seleccionar el mejor ---
-        if not devices_info:
-            cpu_threads = psutil.cpu_count(logical=True)
-            return "cpu", torch.device("cpu"), cpu_ram, max(2, cpu_threads // 2)
-
-        best = max(devices_info, key=lambda x: x["score"])
-
-        print(f"\n✅ MEJOR DISPOSITIVO: {best['name']} ({best['device_str']})")
-        print(f"   Memoria disponible: {best['free_memory_gb']:.2f}GB")
-        if "benchmark_gflops" in best:
-            print(f"   Rendimiento medido: {best['benchmark_gflops']:.1f} GFLOPS")
-
-        num_workers = best.get("num_workers", 0)
-        return best["device_str"], best["device_obj"], best["free_memory_gb"], num_workers
+        # ====== 6. Seleccionar mejor ======
+        best = max(devices_info, key=lambda d: d["score"])
+        print(f"\n✅ Mejor dispositivo: {best['name']} ({best['device_str']})")
+        return (
+            best["device_str"],
+            best["device_obj"],
+            best["free_memory_gb"],
+            best.get("num_workers", 0),
+        )
 
     @staticmethod
     def calculate_optimal_batch_size(
@@ -479,7 +430,7 @@ class AdvancedModelEvaluator:
             device_str = device
             device_obj = torch.device(device)
             available_mem = 4.0
-            num_workers = 4 
+            num_workers = 4
             print(f"🖥️ Usando dispositivo especificado: {device_str}")
         else:
             device_str, device_obj, available_mem, num_workers = self.get_best_device(
