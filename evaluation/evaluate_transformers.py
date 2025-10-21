@@ -357,6 +357,7 @@ class AdvancedModelEvaluator:
             for start in range(0, total_samples, batch_size):
                 end = min(start + batch_size, total_samples)
                 texts_batch = to_text_list(X[start:end])
+
                 if not texts_batch:
                     continue
 
@@ -368,16 +369,17 @@ class AdvancedModelEvaluator:
                     return_tensors="pt",
                 )
 
-                # Mover tensores al dispositivo correcto
-                inputs = {
-                    k: v.to(device_obj) for k, v in inputs.items() if v is not None
-                }
+                # Mover tensores al dispositivo
+                if device_str == "dml":
+                    inputs = {k: v.to(dml_device) for k, v in inputs.items()}
+                else:
+                    inputs = {k: v.to(device_obj) for k, v in inputs.items()}
 
-                # --- Inferencia ---
                 with torch.no_grad():
                     try:
                         outputs = model(**inputs)
                     except TypeError:
+                        # Algunos modelos no aceptan token_type_ids
                         inputs.pop("token_type_ids", None)
                         outputs = model(**inputs)
 
@@ -395,26 +397,24 @@ class AdvancedModelEvaluator:
                 y_pred_list.extend(preds.tolist())
                 y_proba_list.extend(probs.tolist())
 
-            # --- Asegurar igualdad de longitudes ---
+            # --- Validación de tamaño ---
             if len(y_pred_list) != len(y_true):
                 print(
-                    f"⚠️ Ajustando tamaño de predicciones: {len(y_pred_list)} → {len(y_true)}"
+                    f"⚠️ Ajustando tamaño de predicciones: {len(y_pred_list)} -> {len(y_true)}"
                 )
                 y_pred_list = y_pred_list[: len(y_true)]
                 y_proba_list = y_proba_list[: len(y_true)]
 
-            elapsed = time.time() - start_time
-            print(f"   ✅ {dataset_name} completado en {elapsed:.2f}s")
+            print(f"   ✅ {dataset_name} completado en {time.time() - start_time:.2f}s")
 
             metrics = self._calculate_extended_metrics(
                 np.array(y_true),
                 np.array(y_pred_list),
                 np.array(y_proba_list),
-                elapsed,
+                time.time() - start_time,
             )
             for metric, value in metrics.items():
                 model_results[f"{dataset_name}_{metric}"] = value
-
             cm_dict[dataset_name] = confusion_matrix(y_true, y_pred_list)
 
             if dataset_name == "Test":
