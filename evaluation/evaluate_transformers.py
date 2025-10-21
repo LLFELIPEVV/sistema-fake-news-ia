@@ -355,19 +355,25 @@ class AdvancedModelEvaluator:
                         inputs.pop("token_type_ids", None)
                         outputs = model(**inputs)
 
-                    logits = (
-                        outputs.logits if hasattr(outputs, "logits") else outputs[0]
-                    )
+                    # El modelo devuelve logits directamente (no tiene atributo .logits)
+                    logits = outputs.squeeze()
 
-                    if logits.ndim == 1 or logits.shape[-1] == 1:
-                        probs = torch.sigmoid(logits).cpu().numpy().flatten()
-                    else:
-                        probs = torch.softmax(logits, dim=1)[:, 1].cpu().numpy()
+                    # Calcular probabilidades
+                    probs = torch.sigmoid(logits).cpu().numpy()
 
+                    # Asegurar que probs es un array 1D
+                    if probs.ndim == 0:
+                        probs = np.array([probs])
+
+                    # Predicciones binarias
                     preds = (probs > 0.5).astype(int)
 
-                y_pred_list.extend(preds.tolist())
-                y_proba_list.extend(probs.tolist())
+                y_pred_list.extend(
+                    preds.tolist() if isinstance(preds, np.ndarray) else [preds]
+                )
+                y_proba_list.extend(
+                    probs.tolist() if isinstance(probs, np.ndarray) else [probs]
+                )
 
             # --- Validación de tamaño ---
             if len(y_pred_list) != len(y_true):
