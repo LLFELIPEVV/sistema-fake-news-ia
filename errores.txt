@@ -1,5 +1,3 @@
-[INFO] GPU AMD detectada mediante DirectML.
-[INFO] Usando dispositivo: privateuseone:0
 [INFO] Usando batch_size = 16
 [INFO] GPU AMD detectada mediante DirectML.
 [INFO] Usando dispositivo: privateuseone:0
@@ -25,29 +23,51 @@
 ⚙️ Batch size ajustado a: 128
 
 📂 Procesando conjunto: Train (35511 muestras)
-⚠️ Ajustando tamaño de predicciones: 278 -> 35511
-   ✅ Train completado en 304.09s
+   ✅ Train completado en 335.24s
+
+📂 Procesando conjunto: Validation (7610 muestras)
+   ✅ Validation completado en 71.56s
+
+📂 Procesando conjunto: Test (7610 muestras)
+   ✅ Test completado en 71.76s
+
+✅ MBERT evaluado correctamente en dml
+============================================================
+
+
+============================================================
+⏳ Evaluando BETO...
+============================================================
+🖥️ Usando dispositivo: dml (4.0 GB disponibles)
+⚙️ Batch size ajustado a: 128
 Traceback (most recent call last):
   File "<frozen runpy>", line 198, in _run_module_as_main
   File "<frozen runpy>", line 88, in _run_code
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1266, in <module>
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1244, in <module>
     main()
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1206, in main
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1184, in main
     evaluator.evaluate_torch_model_complete(
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 410, in evaluate_torch_model_complete
-    metrics = self._calculate_extended_metrics(
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 442, in _calculate_extended_metrics
-    "Accuracy": accuracy_score(y_true, y_pred),
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\sklearn\utils\_param_validation.py", line 218, in wrapper
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 298, in evaluate_torch_model_complete
+    model = BETOClassifier(tokenizer_name)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\training\transformers\beto.py", line 108, in __init__
+    self.bert = AutoModel.from_pretrained(model_name)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\transformers\models\auto\auto_factory.py", line 604, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\transformers\modeling_utils.py", line 288, in _wrapper
     return func(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\sklearn\metrics\_classification.py", line 359, in accuracy_score  
-    y_type, y_true, y_pred = _check_targets(y_true, y_pred)
-                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\sklearn\metrics\_classification.py", line 97, in _check_targets   
-    check_consistent_length(y_true, y_pred)
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\sklearn\utils\validation.py", line 473, in check_consistent_length
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\transformers\modeling_utils.py", line 5176, in from_pretrained
+    ) = cls._load_pretrained_model(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\transformers\modeling_utils.py", line 5442, in _load_pretrained_model      
+    load_state_dict(checkpoint_files[0], map_location="meta", weights_only=weights_only).keys()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\transformers\modeling_utils.py", line 532, in load_state_dict
+    check_torch_load_is_safe()
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\transformers\utils\import_utils.py", line 1632, in check_torch_load_is_safe
     raise ValueError(
-ValueError: Found input variables with inconsistent numbers of samples: [35511, 278]
+ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.
+See the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434
