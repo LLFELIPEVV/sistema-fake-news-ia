@@ -25,8 +25,8 @@
 ⚙️ Batch size ajustado a: 128
 
 📂 Procesando conjunto: Train (35511 muestras)
-⚠️ Ajustando tamaño de predicciones: 278 → 35511
-   ✅ Train completado en 325.40s
+⚠️ Ajustando tamaño de predicciones: 278 -> 35511
+   ✅ Train completado en 304.09s
 Traceback (most recent call last):
   File "<frozen runpy>", line 198, in _run_module_as_main
   File "<frozen runpy>", line 88, in _run_code
@@ -34,10 +34,10 @@ Traceback (most recent call last):
     main()
   File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1206, in main
     evaluator.evaluate_torch_model_complete(
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 409, in evaluate_torch_model_complete 
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 410, in evaluate_torch_model_complete
     metrics = self._calculate_extended_metrics(
               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 442, in _calculate_extended_metrics   
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 442, in _calculate_extended_metrics
     "Accuracy": accuracy_score(y_true, y_pred),
                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\sklearn\utils\_param_validation.py", line 218, in wrapper
