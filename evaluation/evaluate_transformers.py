@@ -9,6 +9,10 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+os.environ["TRANSFORMERS_NO_TF"] = "1"
+os.environ["TRANSFORMERS_NO_FLAX"] = "1"
+os.environ["USE_TORCH"] = "1"
+
 from scipy import stats
 from transformers import AutoTokenizer
 from training.utils_common import load_datasets
@@ -342,15 +346,26 @@ class AdvancedModelEvaluator:
 
                 # --- Inferencia ---
                 with torch.no_grad():
-                    outputs = model(**inputs)
+                    # Algunos modelos (como mBERT personalizados) no aceptan token_type_ids
+                    if "token_type_ids" in inputs:
+                        try:
+                            outputs = model(**inputs)
+                        except TypeError:
+                            del inputs["token_type_ids"]
+                            outputs = model(**inputs)
+                    else:
+                        outputs = model(**inputs)
+
                     logits = (
                         outputs.logits if hasattr(outputs, "logits") else outputs[0]
                     )
-                    probs = (
-                        torch.sigmoid(logits).cpu().numpy().flatten()
-                        if logits.shape[1] == 1
-                        else torch.softmax(logits, dim=1)[:, 1].cpu().numpy()
-                    )
+
+                    # Compatibilidad universal: salida [batch, 1] o [batch, 2]
+                    if logits.ndim == 1 or logits.shape[-1] == 1:
+                        probs = torch.sigmoid(logits).cpu().numpy().flatten()
+                    else:
+                        probs = torch.softmax(logits, dim=1)[:, 1].cpu().numpy()
+
                     preds = (probs > 0.5).astype(int)
 
                 y_pred_list.extend(preds)
