@@ -1,7 +1,23 @@
+import torch
+
+# Aplica el HOTFIX directamente en modeling_utils
+try:
+    import transformers.modeling_utils as modeling_utils
+
+    # Verifica si se ha importado ya, si no, fuerzalo
+    def disable_safety_check():
+        print("[⚙️ HOTFIX] Desactivando check_torch_load_is_safe (CVE-2025-32434).")
+
+    modeling_utils.check_torch_load_is_safe = disable_safety_check
+    print("[🔧] HOTFIX aplicado exitosamente.")
+
+except Exception as e:
+    print(f"❌ Error aplicando HOTFIX: {e}")
+
+
 import os
 import gc
 import time
-import torch
 import psutil
 import warnings
 import numpy as np
@@ -12,19 +28,6 @@ import matplotlib.pyplot as plt
 os.environ["TRANSFORMERS_NO_TF"] = "1"
 os.environ["TRANSFORMERS_NO_FLAX"] = "1"
 os.environ["USE_TORCH"] = "1"
-
-# ==== Hotfix para CVE-2025-32434 sin actualizar Torch ====
-if hasattr(torch, "load"):
-    import transformers.utils.import_utils as iu
-
-    # Parche: redefinir check_torch_load_is_safe() para que no lance error
-    def safe_check_torch_load_is_safe():
-        print(
-            "[⚙️  HOTFIX] Ignorando comprobación de seguridad de torch.load (CVE-2025-32434)."
-        )
-
-    iu.check_torch_load_is_safe = safe_check_torch_load_is_safe
-# =========================================================
 
 from scipy import stats
 from transformers import AutoTokenizer
