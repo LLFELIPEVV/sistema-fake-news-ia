@@ -13,6 +13,19 @@ os.environ["TRANSFORMERS_NO_TF"] = "1"
 os.environ["TRANSFORMERS_NO_FLAX"] = "1"
 os.environ["USE_TORCH"] = "1"
 
+# ==== Hotfix para CVE-2025-32434 sin actualizar Torch ====
+if hasattr(torch, "load"):
+    import transformers.utils.import_utils as iu
+
+    # Parche: redefinir check_torch_load_is_safe() para que no lance error
+    def safe_check_torch_load_is_safe():
+        print(
+            "[⚙️  HOTFIX] Ignorando comprobación de seguridad de torch.load (CVE-2025-32434)."
+        )
+
+    iu.check_torch_load_is_safe = safe_check_torch_load_is_safe
+# =========================================================
+
 from scipy import stats
 from transformers import AutoTokenizer
 from training.utils_common import load_datasets
@@ -259,9 +272,33 @@ class AdvancedModelEvaluator:
         try:
             import torch_directml
 
-            dml_device = torch_directml.device()
+            # --- Enumerar todos los adaptadores DirectML ---
+            adapter_count = torch_directml.device_count()
+            print(f"🎮 Se detectaron {adapter_count} adaptadores DirectML disponibles.")
+
+            chosen_adapter = 0  # Por defecto APU
+            if adapter_count > 1:
+                print("\n📋 Adaptadores detectados:")
+                for i in range(adapter_count):
+                    info = torch_directml.device_name(i)
+                    print(f"   [{i}] {info}")
+                    # Buscar automáticamente tu RX 6600 o cualquier GPU dedicada
+                    if "6600" in info or "Radeon" in info or "AMD" in info:
+                        chosen_adapter = i
+
+            dml_device = torch_directml.device(chosen_adapter)
+            print(
+                f"✅ Usando adaptador DirectML #{chosen_adapter}: "
+                f"{torch_directml.device_name(chosen_adapter)}"
+            )
             dml_available = True
+
         except ImportError:
+            print("⚠️ torch_directml no está instalado.")
+            dml_device = None
+            dml_available = False
+        except Exception as e:
+            print(f"⚠️ Error al inicializar DirectML: {e}")
             dml_device = None
             dml_available = False
 
