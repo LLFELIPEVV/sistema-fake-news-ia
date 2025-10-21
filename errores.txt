@@ -1,27 +1,53 @@
-📂 Procesando conjunto: Train (35511 muestras)
+[INFO] GPU AMD detectada mediante DirectML.
+[INFO] Usando dispositivo: privateuseone:0
+[INFO] Usando batch_size = 16
+[INFO] GPU AMD detectada mediante DirectML.
+[INFO] Usando dispositivo: privateuseone:0
+[INFO] Usando batch_size = 16
+====================================================================================================
+🚀 SISTEMA AVANZADO DE EVALUACIÓN DE MODELOS
+====================================================================================================
 
-   ✅ Train completado en 162.12s
+🔄 Cargando datasets...
+   ✅ Train: 35511 muestras
+   ✅ Validation: 7610 muestras
+   ✅ Test: 7610 muestras
+
+====================================================================================================
+🔍 EVALUANDO MODELOS...
+====================================================================================================
+
+
+============================================================
+⏳ Evaluando MBERT...
+============================================================
+🖥️ Usando dispositivo: dml (4.0 GB disponibles)
+⚙️ Batch size ajustado a: 128
+
+📂 Procesando conjunto: Train (35511 muestras)
+⚠️ Ajustando tamaño de predicciones: 278 → 35511
+   ✅ Train completado en 325.40s
 Traceback (most recent call last):
   File "<frozen runpy>", line 198, in _run_module_as_main
   File "<frozen runpy>", line 88, in _run_code
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1231, in <module>
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1266, in <module>
     main()
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1171, in main
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1206, in main
     evaluator.evaluate_torch_model_complete(
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 378, in evaluate_torch_model_complete 
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 409, in evaluate_torch_model_complete 
     metrics = self._calculate_extended_metrics(
               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 407, in _calculate_extended_metrics   
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 442, in _calculate_extended_metrics   
     "Accuracy": accuracy_score(y_true, y_pred),
                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\sklearn\utils\_param_validation.py", line 218, in wrapper
     return func(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\sklearn\metrics\_classification.py", line 359, in accuracy_score
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\sklearn\metrics\_classification.py", line 359, in accuracy_score  
     y_type, y_true, y_pred = _check_targets(y_true, y_pred)
                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\sklearn\metrics\_classification.py", line 97, in _check_targets   
     check_consistent_length(y_true, y_pred)
   File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\sklearn\utils\validation.py", line 473, in check_consistent_length
     raise ValueError(
-ValueError: Found input variables with inconsistent numbers of samples: [35511, 2220]
+ValueError: Found input variables with inconsistent numbers of samples: [35511, 278]
