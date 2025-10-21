@@ -1,20 +1,27 @@
-⚠️ max_len reducido a 64 por memoria limitada
-
 📂 Procesando conjunto: Train (35511 muestras)
+
+   ✅ Train completado en 162.12s
 Traceback (most recent call last):
   File "<frozen runpy>", line 198, in _run_module_as_main
   File "<frozen runpy>", line 88, in _run_code
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1216, in <module>
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1231, in <module>
     main()
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1156, in main
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1171, in main
     evaluator.evaluate_torch_model_complete(
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 345, in evaluate_torch_model_complete     
-    outputs = model(**inputs)
-              ^^^^^^^^^^^^^^^
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1553, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1562, in _call_impl
-    return forward_call(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-TypeError: mBERTClassifier.forward() got an unexpected keyword argument 'token_type_ids'
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 378, in evaluate_torch_model_complete 
+    metrics = self._calculate_extended_metrics(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 407, in _calculate_extended_metrics   
+    "Accuracy": accuracy_score(y_true, y_pred),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\sklearn\utils\_param_validation.py", line 218, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\sklearn\metrics\_classification.py", line 359, in accuracy_score
+    y_type, y_true, y_pred = _check_targets(y_true, y_pred)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\sklearn\metrics\_classification.py", line 97, in _check_targets   
+    check_consistent_length(y_true, y_pred)
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\sklearn\utils\validation.py", line 473, in check_consistent_length
+    raise ValueError(
+ValueError: Found input variables with inconsistent numbers of samples: [35511, 2220]
