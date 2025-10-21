@@ -175,34 +175,6 @@ class AdvancedModelEvaluator:
                 try:
                     device = dev["device_obj"]
                     size = 1024
-                    a = torch.randn(size, size).to(device)
-                    b = torch.randn(size, size).to(device)
-
-                    # warmup
-                    _ = torch.matmul(a, b)
-                    torch.cuda.synchronize() if dev["type"] == "cuda" else None
-
-                    start = time.perf_counter()
-                    for _ in range(5):
-                        _ = torch.matmul(a, b)
-                    torch.cuda.synchronize() if dev["type"] == "cuda" else None
-
-                    elapsed = time.perf_counter() - start
-                    gflops = (5 * 2 * size**3) / elapsed / 1e9
-                    dev["benchmark_gflops"] = gflops
-                    print(f"   {dev['device_str']}: {gflops:.1f} GFLOPS (real)")
-
-                except Exception as e:
-                    print(f"   {dev['device_str']}: Benchmark falló ({e})")
-                    dev["benchmark_gflops"] = 0
-
-        # ====== 4. Benchmark real ======
-        if run_benchmark and len(devices_info) > 1:
-            print("\n🏃 Ejecutando benchmark rápido (matmul 1024x1024)...")
-            for dev in devices_info:
-                try:
-                    device = dev["device_obj"]
-                    size = 1024
                     a = torch.randn(size, size)
                     b = torch.randn(size, size)
                     a_dev = a.to(device)
