@@ -280,39 +280,57 @@ class AdvancedModelEvaluator:
         batch_size=None,
         device=None,
     ):
-        """Evalúa modelos Transformer con selección automática de dispositivo"""
+        """Evalúa modelos Transformer con gestión adaptativa de memoria y rendimiento"""
         print(f"\n{'=' * 60}\n⏳ Evaluando {name}...\n{'=' * 60}")
 
         # --- Selección de dispositivo ---
-        device_str, device_obj, available_mem, num_workers = (
-            (device, torch.device(device), 4.0, 4) if device else self.get_best_device()
+        try:
+            import torch_directml
+
+            dml_device = torch_directml.device()
+            dml_available = True
+        except ImportError:
+            dml_device = None
+            dml_available = False
+
+        if device:
+            device_str = device
+            device_obj = torch.device(device)
+            available_mem = 4.0
+        elif torch.cuda.is_available():
+            device_str = "cuda"
+            device_obj = torch.device("cuda")
+            available_mem = torch.cuda.get_device_properties(0).total_memory / 1e9
+        elif dml_available:
+            device_str = "dml"
+            device_obj = dml_device
+            available_mem = 4.0
+        else:
+            device_str = "cpu"
+            device_obj = torch.device("cpu")
+            available_mem = psutil.virtual_memory().available / (1024**3)
+
+        print(
+            f"🖥️ Usando dispositivo: {device_str} ({available_mem:.1f} GB disponibles)"
         )
-        print(f"🖥️ Usando dispositivo: {device_str}")
 
         # --- Calcular batch size óptimo ---
-        batch_size = batch_size or self.calculate_optimal_batch_size(
-            device_str,
-            available_mem,
-            model_type="mbert" if "mbert" in name.lower() else "bert",
-        )
+        if batch_size is None:
+            batch_size = max(8, int(available_mem * 32))
+        print(f"⚙️ Batch size ajustado a: {batch_size}")
 
         # --- Cargar tokenizer y modelo ---
-        print(f"📚 Cargando tokenizer: {tokenizer_name}")
         tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
-        print(f"🤖 Cargando modelo desde: {model_path}")
-        model = (
-            BETOClassifier(tokenizer_name)
-            if "beto" in name.lower()
-            else mBERTClassifier(tokenizer_name)
-        )
+
+        if "beto" in name.lower():
+            model = BETOClassifier(tokenizer_name)
+        else:
+            model = mBERTClassifier(tokenizer_name)
+
         model.load_state_dict(torch.load(model_path, map_location="cpu"))
         model.to(device_obj).eval()
 
-        # --- Configuración de optimización ---
-        if hasattr(torch.backends, "cudnn"):
-            torch.backends.cudnn.benchmark = False
-
-        if device_str == "cpu" or available_mem < 4:
+        if device_str == "cpu" and available_mem < 4:
             max_len = min(max_len, 64)
             print(f"⚠️ max_len reducido a {max_len} por memoria limitada")
 
@@ -326,41 +344,47 @@ class AdvancedModelEvaluator:
         model_results = {"Modelo": name, "Tipo": "torch", "Dispositivo": device_str}
         cm_dict = {}
 
-        # --- Evaluación por conjunto ---
+        # --- Evaluación por dataset ---
         for dataset_name, (X, y_true) in datasets.items():
-            print(f"\n📂 Procesando conjunto: {dataset_name} ({len(X)} muestras)")
+            total_samples = len(X)
+            print(
+                f"\n📂 Procesando conjunto: {dataset_name} ({total_samples} muestras)"
+            )
+
             y_pred_list, y_proba_list = [], []
             start_time = time.time()
 
-            batch_idx = 0
-            while batch_idx < len(X):
-                actual_batch_size = min(batch_size, len(X) - batch_idx)
-                texts_batch = to_text_list(X[batch_idx : batch_idx + actual_batch_size])
+            for start in range(0, total_samples, batch_size):
+                end = min(start + batch_size, total_samples)
+                texts_batch = to_text_list(X[start:end])
+                if not texts_batch:
+                    continue
+
                 inputs = tokenizer(
                     texts_batch,
                     padding=True,
                     truncation=True,
                     max_length=max_len,
                     return_tensors="pt",
-                ).to(device_obj)
+                )
+
+                # Mover tensores al dispositivo correcto
+                inputs = {
+                    k: v.to(device_obj) for k, v in inputs.items() if v is not None
+                }
 
                 # --- Inferencia ---
                 with torch.no_grad():
-                    # Algunos modelos (como mBERT personalizados) no aceptan token_type_ids
-                    if "token_type_ids" in inputs:
-                        try:
-                            outputs = model(**inputs)
-                        except TypeError:
-                            del inputs["token_type_ids"]
-                            outputs = model(**inputs)
-                    else:
+                    try:
+                        outputs = model(**inputs)
+                    except TypeError:
+                        inputs.pop("token_type_ids", None)
                         outputs = model(**inputs)
 
                     logits = (
                         outputs.logits if hasattr(outputs, "logits") else outputs[0]
                     )
 
-                    # Compatibilidad universal: salida [batch, 1] o [batch, 2]
                     if logits.ndim == 1 or logits.shape[-1] == 1:
                         probs = torch.sigmoid(logits).cpu().numpy().flatten()
                     else:
@@ -368,21 +392,29 @@ class AdvancedModelEvaluator:
 
                     preds = (probs > 0.5).astype(int)
 
-                y_pred_list.extend(preds)
-                y_proba_list.extend(probs)
-                batch_idx += actual_batch_size
+                y_pred_list.extend(preds.tolist())
+                y_proba_list.extend(probs.tolist())
 
-            print(
-                f"\n   ✅ {dataset_name} completado en {time.time() - start_time:.2f}s"
-            )
+            # --- Asegurar igualdad de longitudes ---
+            if len(y_pred_list) != len(y_true):
+                print(
+                    f"⚠️ Ajustando tamaño de predicciones: {len(y_pred_list)} → {len(y_true)}"
+                )
+                y_pred_list = y_pred_list[: len(y_true)]
+                y_proba_list = y_proba_list[: len(y_true)]
+
+            elapsed = time.time() - start_time
+            print(f"   ✅ {dataset_name} completado en {elapsed:.2f}s")
+
             metrics = self._calculate_extended_metrics(
                 np.array(y_true),
                 np.array(y_pred_list),
                 np.array(y_proba_list),
-                time.time() - start_time,
+                elapsed,
             )
             for metric, value in metrics.items():
                 model_results[f"{dataset_name}_{metric}"] = value
+
             cm_dict[dataset_name] = confusion_matrix(y_true, y_pred_list)
 
             if dataset_name == "Test":
@@ -392,13 +424,16 @@ class AdvancedModelEvaluator:
                     "y_proba": y_proba_list,
                 }
 
-        # --- Limpieza final ---
-        del model
-        clear_memory()
+            clear_memory()
 
         # --- Resultados finales ---
+        del model
+        gc.collect()
+        clear_memory()
+
         self.confusion_matrices[name] = cm_dict
         self.results.append(model_results)
+
         print(f"\n✅ {name} evaluado correctamente en {device_str}\n{'=' * 60}\n")
 
     def _calculate_extended_metrics(self, y_true, y_pred, y_proba, prediction_time):
