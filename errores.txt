@@ -1,11 +1,42 @@
+2025-10-22 11:40:02.678133: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-10-22 11:40:13.061383: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+[🔧] HOTFIX aplicado exitosamente.
+[INFO] GPU AMD detectada mediante DirectML.
+[INFO] Usando dispositivo: privateuseone:0
+[INFO] Usando batch_size = 16
+[INFO] GPU AMD detectada mediante DirectML.
+[INFO] Usando dispositivo: privateuseone:0
+[INFO] Usando batch_size = 16
+====================================================================================================
+🚀 SISTEMA AVANZADO DE EVALUACIÓN DE MODELOS
+====================================================================================================
+
+🔄 Cargando datasets...
+   ✅ Train: 35511 muestras
+   ✅ Validation: 7610 muestras
+   ✅ Test: 7610 muestras
+
+====================================================================================================
+🔍 EVALUANDO MODELOS...
+====================================================================================================
+
+
+============================================================
+⏳ Evaluando MBERT...
+============================================================
+🎮 Se detectaron 1 adaptadores DirectML disponibles.
+✅ Usando adaptador DirectML #0: AMD Radeon RX 6600
+🖥️ Usando dispositivo: dml (4.0 GB disponibles)
+⚙️ Batch size ajustado a: 128
+
 📂 Procesando conjunto: Train (35511 muestras)
-   ✅ Train completado en 303.67s
+   ✅ Train completado en 363.60s
 
 📂 Procesando conjunto: Validation (7610 muestras)
-   ✅ Validation completado en 64.81s
+   ✅ Validation completado en 77.85s
 
 📂 Procesando conjunto: Test (7610 muestras)
-   ✅ Test completado en 64.63s
+   ✅ Test completado en 77.39s
 
 ✅ MBERT evaluado correctamente en dml
 ============================================================
@@ -24,13 +55,13 @@ Some weights of BertModel were not initialized from the model checkpoint at dccu
 You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
 
 📂 Procesando conjunto: Train (35511 muestras)
-   ✅ Train completado en 617.51s
+   ✅ Train completado en 338.82s
 
 📂 Procesando conjunto: Validation (7610 muestras)
-   ✅ Validation completado en 131.86s
+   ✅ Validation completado en 72.50s
 
 📂 Procesando conjunto: Test (7610 muestras)
-   ✅ Test completado en 132.56s
+   ✅ Test completado en 72.89s
 
 ✅ BETO evaluado correctamente en dml
 ============================================================
@@ -44,12 +75,18 @@ You should probably TRAIN this model on a down-stream task to be able to use it 
 ========================================================================================================================
 🧠 INTERPRETANDO RESULTADOS Y PROPÓSITOS DE LOS MODELOS
 ========================================================================================================================
+🧩 Interpretación completada. Resultados guardados en: reports/model_interpretation_summary.csv
+
+====================================================================================================
+📈 GENERANDO VISUALIZACIONES AVANZADAS...
+====================================================================================================
+
 Traceback (most recent call last):
   File "<frozen runpy>", line 198, in _run_module_as_main
   File "<frozen runpy>", line 88, in _run_code
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1284, in <module>
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1432, in <module>
     main()
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1244, in main
-    evaluator.interpret_model_purposes()
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'AdvancedModelEvaluator' object has no attribute 'interpret_model_purposes'
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1401, in main
+    ("Matrices de Confusión", evaluator.plot_confusion_matrices),
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'AdvancedModelEvaluator' object has no attribute 'plot_confusion_matrices'. Did you mean: 'confusion_matrices'?
