@@ -139,24 +139,49 @@ class AdvancedModelEvaluator:
         try:
             import torch_directml
 
-            dml_device = torch_directml.device()
-            print("🎮 DirectML detectado correctamente (torch_directml)")
+            adapter_count = torch_directml.device_count()
+            print(f"🎮 DirectML: {adapter_count} adaptador(es) detectado(s)")
 
-            devices_info.append(
-                {
-                    "type": "dml",
-                    "id": 0,
-                    "name": "DirectML (Intel/AMD GPU)",
-                    "device_str": "dml",
-                    "device_obj": dml_device,
-                    "total_memory_gb": 4.0,
-                    "free_memory_gb": 3.0,
-                    "tflops_estimate": 2.0,
-                    "score": 0,
-                }
-            )
+            for adapter_id in range(adapter_count):
+                adapter_name = torch_directml.device_name(adapter_id)
+                print(f"   [{adapter_id}] {adapter_name}")
+
+                # Estimar memoria según el tipo de GPU
+                estimated_mem = 8.0  # Default para GPUs dedicadas
+                if (
+                    "Intel" in adapter_name
+                    or "UHD" in adapter_name
+                    or "Iris" in adapter_name
+                ):
+                    estimated_mem = 2.0  # GPU integrada Intel
+                elif "Radeon" in adapter_name or "AMD" in adapter_name:
+                    if (
+                        "6600" in adapter_name
+                        or "6700" in adapter_name
+                        or "6800" in adapter_name
+                    ):
+                        estimated_mem = 8.0  # GPUs dedicadas AMD
+                    else:
+                        estimated_mem = 4.0  # APUs AMD
+
+                dml_device = torch_directml.device(adapter_id)
+
+                devices_info.append(
+                    {
+                        "type": "dml",
+                        "id": adapter_id,
+                        "name": adapter_name,
+                        "device_str": f"dml:{adapter_id}",
+                        "device_obj": dml_device,
+                        "total_memory_gb": estimated_mem,
+                        "free_memory_gb": estimated_mem * 0.8,  # Asumir 80% disponible
+                        "tflops_estimate": 5.0 if "Radeon" in adapter_name else 2.0,
+                        "score": 0,
+                    }
+                )
+
         except ImportError:
-            print("⚠️ DirectML no está instalado o no se detectó.")
+            print("⚠️ DirectML no está instalado (torch_directml)")
         except Exception as e:
             print(f"⚠️ Error al inicializar DirectML: {e}")
 
@@ -181,11 +206,11 @@ class AdvancedModelEvaluator:
             }
         )
         print(
-            f"💻 CPU disponible con {cpu_ram:.1f}GB RAM libre (~{cpu_gflops:.0f} GFLOPS teóricos)"
+            f"💻 CPU disponible: {cpu_ram:.1f}GB RAM libre (~{cpu_gflops:.0f} GFLOPS teóricos)"
         )
 
         # ====== 4. Benchmark real ======
-        if run_benchmark and len(devices_info) > 1:
+        if run_benchmark and len(devices_info) > 0:
             print("\n🏃 Ejecutando benchmark rápido (matmul 1024x1024)...")
             for dev in devices_info:
                 try:
@@ -193,43 +218,93 @@ class AdvancedModelEvaluator:
                     size = 1024
                     a = torch.randn(size, size)
                     b = torch.randn(size, size)
+
+                    # Mover al dispositivo
                     a_dev = a.to(device)
                     b_dev = b.to(device)
 
-                    # warmup
+                    # Warmup
                     _ = torch.matmul(a_dev, b_dev)
-                    if dev["type"] == "cuda":
-                        torch.cuda.synchronize()
 
-                    start = time.perf_counter()
-                    for _ in range(5):
-                        _ = torch.matmul(a_dev, b_dev)
+                    # Sincronización según tipo de dispositivo
                     if dev["type"] == "cuda":
                         torch.cuda.synchronize()
+                    elif dev["type"] == "dml":
+                        # DirectML requiere sincronización especial
+                        try:
+                            torch_directml.synchronize(device)
+                        except Exception:
+                            pass  # Si no tiene synchronize, continuar
+
+                    # Benchmark
+                    start = time.perf_counter()
+                    iterations = 5
+                    for _ in range(iterations):
+                        _ = torch.matmul(a_dev, b_dev)
+
+                    # Sincronización final
+                    if dev["type"] == "cuda":
+                        torch.cuda.synchronize()
+                    elif dev["type"] == "dml":
+                        try:
+                            torch_directml.synchronize(device)
+                        except Exception:
+                            pass
 
                     elapsed = time.perf_counter() - start
-                    gflops = (5 * 2 * size**3) / elapsed / 1e9
+                    gflops = (iterations * 2 * size**3) / elapsed / 1e9
                     dev["benchmark_gflops"] = gflops
                     print(f"   {dev['device_str']}: {gflops:.1f} GFLOPS (real)")
 
+                    # Limpiar memoria
+                    del a_dev, b_dev
+                    if dev["type"] == "cuda":
+                        torch.cuda.empty_cache()
+
                 except Exception as e:
-                    print(f"   {dev['device_str']}: Benchmark falló ({e})")
-                    dev["benchmark_gflops"] = 0
+                    print(f"   {dev['device_str']}: Benchmark falló ({str(e)[:50]})")
+                    dev["benchmark_gflops"] = (
+                        dev["tflops_estimate"] * 1000
+                    )  # Usar estimado
 
         # ====== 5. Calcular score ======
         print("\n📊 Calculando scores...")
         for dev in devices_info:
-            mem_score = dev["free_memory_gb"] * 100
-            compute_score = (
-                dev.get("benchmark_gflops", dev["tflops_estimate"] * 1000) * 3
-            )
-            type_bonus = {"cuda": 500, "dml": 200, "cpu": 0}
+            # Componentes del score
+            mem_score = dev["free_memory_gb"] * 100  # Memoria disponible
+
+            # Usar benchmark real si está disponible, sino estimado
+            compute_power = dev.get("benchmark_gflops", dev["tflops_estimate"] * 1000)
+            compute_score = compute_power * 3
+
+            # Bonus por tipo de dispositivo
+            type_bonus = {
+                "cuda": 500,  # CUDA es preferido
+                "dml": 200,  # DirectML segundo lugar
+                "cpu": 0,  # CPU como fallback
+            }
+
             dev["score"] = mem_score + compute_score + type_bonus[dev["type"]]
-            print(f"   {dev['device_str']}: Score = {dev['score']:.0f}")
+
+            print(
+                f"   {dev['device_str']:12s} | "
+                f"Mem: {dev['free_memory_gb']:5.1f}GB | "
+                f"Compute: {compute_power:7.1f} GFLOPS | "
+                f"Score: {dev['score']:8.0f}"
+            )
 
         # ====== 6. Seleccionar mejor ======
+        if not devices_info:
+            raise RuntimeError("No se detectó ningún dispositivo disponible")
+
         best = max(devices_info, key=lambda d: d["score"])
-        print(f"\n✅ Mejor dispositivo: {best['name']} ({best['device_str']})")
+
+        print("\n✅ Mejor dispositivo seleccionado:")
+        print(f"   Nombre: {best['name']}")
+        print(f"   ID: {best['device_str']}")
+        print(f"   Memoria: {best['free_memory_gb']:.1f}GB disponible")
+        print(f"   Score final: {best['score']:.0f}")
+
         return (
             best["device_str"],
             best["device_obj"],
@@ -476,6 +551,79 @@ class AdvancedModelEvaluator:
         metrics["FNR"] = fn / (fn + tp) if (fn + tp) > 0 else 0
 
         return metrics
+
+    def interpret_model_purposes(self):
+        """Interpreta automáticamente los resultados y clasifica los modelos por propósito y tipo de fitting"""
+        if not self.results:
+            print("⚠️ No hay resultados para interpretar.")
+            return
+
+        df = pd.DataFrame(self.results)
+
+        df["Overfitting_Accuracy"] = (
+            df["Train_Accuracy"] - df["Validation_Accuracy"]
+        ).round(4)
+        df["Overfitting_F1"] = (df["Train_F1"] - df["Validation_F1"]).round(4)
+        df["Overfitting_AUC"] = (df["Train_ROC_AUC"] - df["Validation_ROC_AUC"]).round(
+            4
+        )
+        df["Generalization_Gap"] = (
+            abs(df["Validation_Accuracy"] - df["Test_Accuracy"])
+        ).round(4)
+        df["Average_Performance"] = (
+            df[["Test_Accuracy", "Test_F1", "Test_ROC_AUC"]].mean(axis=1)
+        ).round(4)
+        df["Stability_Score"] = (
+            1
+            - df[["Overfitting_Accuracy", "Overfitting_F1", "Overfitting_AUC"]]
+            .abs()
+            .mean(axis=1)
+        ).round(4)
+        df["Efficiency_Score"] = (
+            df["Test_Accuracy"] / df["Test_Time"]
+            if "Test_Time" in df.columns
+            else df["Test_Accuracy"]
+        ).round(4)
+
+        # Clasificación del tipo de fitting
+        conditions = []
+        for i, row in df.iterrows():
+            if row["Train_Accuracy"] < 0.7 and row["Validation_Accuracy"] < 0.7:
+                conditions.append("Severe_Underfitting")
+            elif row["Train_Accuracy"] - row["Validation_Accuracy"] > 0.1:
+                conditions.append("Overfitting")
+            elif row["Validation_Accuracy"] - row["Test_Accuracy"] > 0.05:
+                conditions.append("Poor_Generalization")
+            elif row["Train_Accuracy"] - row["Validation_Accuracy"] > 0.05:
+                conditions.append("Slight_Overfitting")
+            elif row["Average_Performance"] > 0.85:
+                conditions.append("Good_Fit")
+            else:
+                conditions.append("Underfitting")
+
+        df["Problem_Type"] = conditions
+
+        # Nivel de confianza del modelo
+        df["Confidence_Level"] = pd.cut(
+            df["Average_Performance"],
+            bins=[0, 0.7, 0.8, 0.9, 1],
+            labels=["Bajo", "Medio", "Alto", "Muy_Alto"],
+        )
+
+        # Calcular coeficiente de variación de métricas
+        df["CV_Performance"] = (
+            df[["Test_Accuracy", "Test_F1", "Test_ROC_AUC"]].std(axis=1)
+            / df[["Test_Accuracy", "Test_F1", "Test_ROC_AUC"]].mean(axis=1)
+        ).round(4)
+
+        # Guardar resultados extendidos
+        os.makedirs("reports", exist_ok=True)
+        df.to_csv("reports/model_interpretation_summary.csv", index=False)
+        print(
+            "🧩 Interpretación completada. Resultados guardados en: reports/model_interpretation_summary.csv"
+        )
+
+        self.results = df.to_dict(orient="records")
 
     def generate_comprehensive_report(self):
         """Genera reporte completo de evaluación"""
