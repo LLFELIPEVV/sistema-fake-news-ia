@@ -319,7 +319,9 @@ class AdvancedModelEvaluator:
         memory_per_sample_gb = (
             0.05 if model_type.lower() in ["mbert", "bert", "beto"] else 0.03
         )
-        safety_factors = {"cuda": 0.7, "cpu": 0.8}
+
+        safety_factors = {"cuda": 0.7, "dml": 0.6, "cpu": 0.8}
+
         device_type = device_str.split(":")[0] if ":" in device_str else device_str
         safety = safety_factors.get(device_type, 0.5)
         max_batch = int((available_memory_gb * safety) / memory_per_sample_gb)
@@ -347,64 +349,40 @@ class AdvancedModelEvaluator:
         print(f"\n{'=' * 60}\n⏳ Evaluando {name}...\n{'=' * 60}")
 
         # --- Selección de dispositivo ---
-        try:
-            import torch_directml
-
-            # --- Enumerar todos los adaptadores DirectML ---
-            adapter_count = torch_directml.device_count()
-            print(f"🎮 Se detectaron {adapter_count} adaptadores DirectML disponibles.")
-
-            chosen_adapter = 0  # Por defecto APU
-            if adapter_count > 1:
-                print("\n📋 Adaptadores detectados:")
-                for i in range(adapter_count):
-                    info = torch_directml.device_name(i)
-                    print(f"   [{i}] {info}")
-                    # Buscar automáticamente tu RX 6600 o cualquier GPU dedicada
-                    if "6600" in info or "Radeon" in info or "AMD" in info:
-                        chosen_adapter = i
-
-            dml_device = torch_directml.device(chosen_adapter)
-            print(
-                f"✅ Usando adaptador DirectML #{chosen_adapter}: "
-                f"{torch_directml.device_name(chosen_adapter)}"
+        if device is None:
+            device_str, device_obj, available_mem, num_workers = self.get_best_device(
+                run_benchmark=True
             )
-            dml_available = True
-
-        except ImportError:
-            print("⚠️ torch_directml no está instalado.")
-            dml_device = None
-            dml_available = False
-        except Exception as e:
-            print(f"⚠️ Error al inicializar DirectML: {e}")
-            dml_device = None
-            dml_available = False
-
-        if device:
-            device_str = device
-            device_obj = torch.device(device)
-            available_mem = 4.0
-        elif torch.cuda.is_available():
-            device_str = "cuda"
-            device_obj = torch.device("cuda")
-            available_mem = torch.cuda.get_device_properties(0).total_memory / 1e9
-        elif dml_available:
-            device_str = "dml"
-            device_obj = dml_device
-            available_mem = 4.0
         else:
-            device_str = "cpu"
-            device_obj = torch.device("cpu")
-            available_mem = psutil.virtual_memory().available / (1024**3)
+            device_str = device
+            if device.startswith("dml"):
+                try:
+                    import torch_directml
 
-        print(
-            f"🖥️ Usando dispositivo: {device_str} ({available_mem:.1f} GB disponibles)"
-        )
+                    adapter_id = int(device.split(":")[1]) if ":" in device else 0
+                    device_obj = torch_directml.device(adapter_id)
+                    available_mem = 4.0
+                except Exception as e:
+                    print(f"⚠️ Error usando {device}: {e}. Usando CPU.")
+                    device_str = "cpu"
+                    device_obj = torch.device("cpu")
+                    available_mem = psutil.virtual_memory().available / (1024**3)
+            else:
+                device_obj = torch.device(device)
+                if device == "cuda":
+                    available_mem = (
+                        torch.cuda.get_device_properties(0).total_memory / 1e9
+                    )
+                else:
+                    available_mem = psutil.virtual_memory().available / (1024**3)
 
         # --- Calcular batch size óptimo ---
         if batch_size is None:
-            batch_size = max(8, int(available_mem * 32))
-        print(f"⚙️ Batch size ajustado a: {batch_size}")
+            batch_size = self.calculate_optimal_batch_size(
+                device_str, available_mem, "bert"
+            )
+        else:
+            print(f"⚙️ Batch size manual: {batch_size}")
 
         # --- Cargar tokenizer y modelo ---
         tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
@@ -457,10 +435,7 @@ class AdvancedModelEvaluator:
                 )
 
                 # Mover tensores al dispositivo
-                if device_str == "dml":
-                    inputs = {k: v.to(dml_device) for k, v in inputs.items()}
-                else:
-                    inputs = {k: v.to(device_obj) for k, v in inputs.items()}
+                inputs = {k: v.to(device_obj) for k, v in inputs.items()}
 
                 with torch.no_grad():
                     try:
@@ -640,6 +615,87 @@ class AdvancedModelEvaluator:
         return df
 
     # ==================== VISUALIZACIONES ====================
+
+    def plot_confusion_matrices(self, save_fig=False, normalize=False, cmap="Blues"):
+        """
+        Dibuja matrices de confusión por modelo y por conjunto (Train, Validation, Test).
+        - save_fig: guarda cada figura en ./figures/confusion_{modelo}.png
+        - normalize: si True muestra proporciones en vez de cuentas
+        """
+        if not self.confusion_matrices:
+            print("⚠️ No hay matrices de confusión para mostrar.")
+            return
+
+        os.makedirs("figures", exist_ok=True)
+
+        for model_name, matrices in self.confusion_matrices.items():
+            # matrices esperado: {"Train": cm, "Validation": cm, "Test": cm} (algunos pueden faltar)
+            available_sets = [
+                k for k in ("Train", "Validation", "Test") if k in matrices
+            ]
+            if not available_sets:
+                print(
+                    f"⚠️ {model_name}: no se encontraron matrices para Train/Validation/Test"
+                )
+                continue
+
+            n = len(available_sets)
+            fig, axes = plt.subplots(1, n, figsize=(5 * n, 4), squeeze=False)
+            fig.suptitle(
+                f"Matrices de Confusión — {model_name}", fontsize=14, fontweight="bold"
+            )
+
+            for idx, ds in enumerate(available_sets):
+                ax = axes[0, idx]
+                cm = np.array(matrices[ds])
+                if cm.size == 0:
+                    ax.text(0.5, 0.5, "Matriz vacía", ha="center", va="center")
+                    ax.set_title(ds)
+                    ax.axis("off")
+                    continue
+
+                if normalize:
+                    with np.errstate(all="ignore"):
+                        row_sums = cm.sum(axis=1, keepdims=True)
+                        cm_display = np.divide(cm, row_sums, where=(row_sums != 0))
+                else:
+                    cm_display = cm
+
+                sns.heatmap(
+                    cm_display,
+                    annot=True,
+                    fmt=".2f" if normalize else "d",
+                    cmap=cmap,
+                    cbar=True,
+                    xticklabels=[0, 1],
+                    yticklabels=[0, 1],
+                    ax=ax,
+                )
+                ax.set_xlabel("Predicción")
+                ax.set_ylabel("Verdadero")
+                ax.set_title(f"{ds} (n={int(cm.sum())})")
+
+                # Anotar TN, FP, FN, TP si es 2x2
+                try:
+                    if cm.shape == (2, 2):
+                        tn, fp, fn, tp = cm.ravel()
+                        text = f"TN={int(tn)}  FP={int(fp)}\nFN={int(fn)}  TP={int(tp)}"
+                        ax.text(0.02, -0.25, text, transform=ax.transAxes, fontsize=9)
+                except Exception:
+                    pass
+
+            plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+
+            if save_fig:
+                safe_name = "".join(
+                    c for c in model_name if c.isalnum() or c in (" ", "_", "-")
+                ).rstrip()
+                out_path = os.path.join("figures", f"confusion_{safe_name}.png")
+                plt.savefig(out_path, dpi=300, bbox_inches="tight")
+                print(f"   ✅ Matrices guardadas: {out_path}")
+
+            plt.show()
+            plt.close(fig)
 
     def plot_comprehensive_comparison(self, save_fig=False):
         """Comparación exhaustiva de todos los modelos"""
