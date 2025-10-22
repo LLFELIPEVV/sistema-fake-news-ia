@@ -1,35 +1,11 @@
-[INFO] Usando batch_size = 16
-[INFO] GPU AMD detectada mediante DirectML.
-[INFO] Usando dispositivo: privateuseone:0
-[INFO] Usando batch_size = 16
-====================================================================================================
-🚀 SISTEMA AVANZADO DE EVALUACIÓN DE MODELOS
-====================================================================================================
-
-🔄 Cargando datasets...
-   ✅ Train: 35511 muestras
-   ✅ Validation: 7610 muestras
-   ✅ Test: 7610 muestras
-
-====================================================================================================
-🔍 EVALUANDO MODELOS...
-====================================================================================================
-
-
-============================================================
-⏳ Evaluando MBERT...
-============================================================
-🖥️ Usando dispositivo: dml (4.0 GB disponibles)
-⚙️ Batch size ajustado a: 128
-
 📂 Procesando conjunto: Train (35511 muestras)
-   ✅ Train completado en 335.24s
+   ✅ Train completado en 303.67s
 
 📂 Procesando conjunto: Validation (7610 muestras)
-   ✅ Validation completado en 71.56s
+   ✅ Validation completado en 64.81s
 
 📂 Procesando conjunto: Test (7610 muestras)
-   ✅ Test completado en 71.76s
+   ✅ Test completado en 64.63s
 
 ✅ MBERT evaluado correctamente en dml
 ============================================================
@@ -38,36 +14,42 @@
 ============================================================
 ⏳ Evaluando BETO...
 ============================================================
+🎮 Se detectaron 1 adaptadores DirectML disponibles.        
+✅ Usando adaptador DirectML #0: AMD Radeon RX 6600
 🖥️ Usando dispositivo: dml (4.0 GB disponibles)
 ⚙️ Batch size ajustado a: 128
+[⚙️ HOTFIX] Desactivando check_torch_load_is_safe (CVE-2025-32434).
+[⚙️ HOTFIX] Desactivando check_torch_load_is_safe (CVE-2025-32434).
+Some weights of BertModel were not initialized from the model checkpoint at dccuchile/bert-base-spanish-wwm-cased and are newly initialized: ['pooler.dense.bias', 'pooler.dense.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+
+📂 Procesando conjunto: Train (35511 muestras)
+   ✅ Train completado en 617.51s
+
+📂 Procesando conjunto: Validation (7610 muestras)
+   ✅ Validation completado en 131.86s
+
+📂 Procesando conjunto: Test (7610 muestras)
+   ✅ Test completado en 132.56s
+
+✅ BETO evaluado correctamente en dml
+============================================================
+
+
+====================================================================================================
+📊 GENERANDO REPORTE EXHAUSTIVO...
+====================================================================================================
+💾 Resultados guardados en: reports/model_evaluation_results_transformers.csv
+
+========================================================================================================================
+🧠 INTERPRETANDO RESULTADOS Y PROPÓSITOS DE LOS MODELOS
+========================================================================================================================
 Traceback (most recent call last):
   File "<frozen runpy>", line 198, in _run_module_as_main
   File "<frozen runpy>", line 88, in _run_code
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1244, in <module>
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1284, in <module>
     main()
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1184, in main
-    evaluator.evaluate_torch_model_complete(
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 298, in evaluate_torch_model_complete
-    model = BETOClassifier(tokenizer_name)
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\training\transformers\beto.py", line 108, in __init__
-    self.bert = AutoModel.from_pretrained(model_name)
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\transformers\models\auto\auto_factory.py", line 604, in from_pretrained
-    return model_class.from_pretrained(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\transformers\modeling_utils.py", line 288, in _wrapper
-    return func(*args, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\transformers\modeling_utils.py", line 5176, in from_pretrained
-    ) = cls._load_pretrained_model(
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\transformers\modeling_utils.py", line 5442, in _load_pretrained_model      
-    load_state_dict(checkpoint_files[0], map_location="meta", weights_only=weights_only).keys()
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\transformers\modeling_utils.py", line 532, in load_state_dict
-    check_torch_load_is_safe()
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\transformers\utils\import_utils.py", line 1632, in check_torch_load_is_safe
-    raise ValueError(
-ValueError: Due to a serious vulnerability issue in `torch.load`, even with `weights_only=True`, we now require users to upgrade torch to at least v2.6 in order to use the function. This version restriction does not apply when loading files with safetensors.
-See the vulnerability report here https://nvd.nist.gov/vuln/detail/CVE-2025-32434
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\evaluation\evaluate_transformers.py", line 1244, in main
+    evaluator.interpret_model_purposes()
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'AdvancedModelEvaluator' object has no attribute 'interpret_model_purposes'
