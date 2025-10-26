@@ -16,12 +16,12 @@ from training.utils_common import (
     load_datasets,
     plot_confusion_matrix,
     plot_metrics,
+    Lemmatizer,
 )
 from training.scikit.utils_scikit import (
     save_figure,
     plot_grid_search_results,
     save_best_model_sklearn,
-    Lemmatizer,
 )
 
 RANDOM_STATE = 42
@@ -37,6 +37,7 @@ except OSError:
         "⚠️ Modelo de spaCy no encontrado. Ejecuta: python -m spacy download es_core_news_sm"
     )
     nlp = None
+
 
 def build_pipeline():
     """Construye pipeline con lematización, TF-IDF y ComplementNB."""

@@ -14,13 +14,13 @@ from training.scikit.utils_scikit import (
     save_figure,
     plot_grid_search_results,
     save_best_model_sklearn,
-    Lemmatizer,
 )
 from training.utils_common import (
     MODEL_DIR,
     load_datasets,
     plot_confusion_matrix,
     plot_metrics,
+    Lemmatizer,
 )
 
 

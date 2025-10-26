@@ -210,6 +210,9 @@ __marimo__/
 datasets/
 data/
 
+# Glove
+glove.840B.300d/
+
 # Modelos pesados
 models/beto_pytorch_best_model.pt
 models/mbert_pytorch_best_model.pt
