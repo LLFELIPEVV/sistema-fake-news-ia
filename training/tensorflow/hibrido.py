@@ -1,10 +1,12 @@
 import os
+import pickle
 import numpy as np
 import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
 from keras.models import Model
+from keras.regularizers import l2
 from keras.optimizers import Adam
 from keras.metrics import Precision, Recall
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
@@ -24,6 +26,7 @@ from keras.layers import (
     MultiHeadAttention,
     Input,
     Concatenate,
+    LayerNormalization,
 )
 from sklearn.metrics import classification_report, f1_score
 from sklearn.utils.class_weight import compute_class_weight
@@ -31,6 +34,7 @@ from training.tensorflow.utils_keras import (
     save_best_model_keras,
     plot_training_history,
     load_best_model_keras,
+    build_embedding_matrix,
 )
 from training.utils_common import (
     load_datasets,
@@ -38,6 +42,7 @@ from training.utils_common import (
     plot_metrics,
     MODEL_DIR,
     save_figure,
+    Lemmatizer,
 )
 
 # Configuración de hardware
@@ -82,13 +87,21 @@ BEST_MODEL_PATH = os.path.join(
 BEST_SCORE_PATH = os.path.join(
     MODEL_DIR, "hybrid_cnn_bilstm_gru_attention_best_score.txt"
 )
+VECTORIZER_PATH = os.path.join(MODEL_DIR, "text_vectorizer.pkl")
+
+# Embedding GloVe path
+GLOVE_PATH = os.path.join("glove.840B.300d", "glove.840B.300d.txt")
+EMBEDDING_DIM = 300
+
 SEED = 42
 tf.random.set_seed(SEED)
 np.random.seed(SEED)
 
 
+# ==============================================
+# 🔤 Vectorización y Embedding
+# ==============================================
 def prepare_vectorizer(texts, max_tokens=30000, output_seq_len=200):
-    """Crea y adapta un TextVectorization layer sobre los textos de entrenamiento."""
     vectorizer = TextVectorization(
         max_tokens=max_tokens,
         output_mode="int",
@@ -100,160 +113,94 @@ def prepare_vectorizer(texts, max_tokens=30000, output_seq_len=200):
     return vectorizer
 
 
+# ==============================================
+# 🧠 Modelo híbrido optimizado
+# ==============================================
 def build_hybrid_model(
-    vocab_size,
-    embedding_dim=128,
-    sequence_length=200,
-    cnn_filters=128,
-    cnn_kernel_sizes=[3, 4, 5],
-    bilstm_units=64,
-    gru_units=64,
-    dropout_rate=0.3,
+    vocab_size, embedding_matrix, sequence_length=200, device_type=device
 ):
-    """
-    Construye modelo híbrido CNN + BiLSTM + GRU + Atención.
-
-    Arquitectura:
-    1. Embedding + SpatialDropout
-    2. Rama CNN paralela con múltiples kernel sizes
-    3. BiLSTM para capturar dependencias bidireccionales
-    4. GRU para modelado secuencial adicional
-    5. Mecanismo de atención de Keras (self-attention)
-    6. Concatenación de todas las representaciones
-    7. Capas densas finales con regularización
-    """
-
-    # Input layer
-    inputs = Input(shape=(sequence_length,), name="input_text")
-
-    # Embedding layer
-    embedded = Embedding(
+    inp = Input(shape=(sequence_length,), dtype="int32", name="input_text")
+    # start frozen
+    emb = Embedding(
         input_dim=vocab_size,
-        output_dim=embedding_dim,
+        output_dim=embedding_matrix.shape[1],
         input_length=sequence_length,
-        mask_zero=False,
+        weights=[embedding_matrix],
+        trainable=False,  # Fase 1: congelado
         name="embedding",
-    )(inputs)
+    )(inp)
 
-    # Spatial dropout para regularización en embeddings
-    embedded_dropped = SpatialDropout1D(0.2, name="spatial_dropout")(embedded)
+    x = SpatialDropout1D(0.25)(emb)
 
-    cnn_outputs = []
-    for i, kernel_size in enumerate(cnn_kernel_sizes):
-        # Convolución 1D
-        conv = Conv1D(
-            filters=cnn_filters,
-            kernel_size=kernel_size,
+    # CNN parallel branches
+    convs = []
+    for k in (3, 4, 5):
+        c = Conv1D(
+            filters=128,
+            kernel_size=k,
+            padding="same",
             activation="relu",
-            padding="valid",
-            name=f"conv1d_{kernel_size}",
-        )(embedded_dropped)
+            kernel_regularizer=l2(1e-4),
+        )(x)
+        c = BatchNormalization()(c)
+        c = GlobalMaxPooling1D()(c)
+        convs.append(c)
+    cnn_out = Concatenate()(convs)
 
-        # Batch normalization
-        conv = BatchNormalization(name=f"bn_conv_{kernel_size}")(conv)
-
-        # Global max pooling
-        pool_max = GlobalMaxPooling1D(name=f"global_max_pool_{kernel_size}")(conv)
-
-        # Global average pooling
-        pool_avg = GlobalAveragePooling1D(name=f"global_avg_pool_{kernel_size}")(conv)
-
-        # Concatenar ambos poolings
-        cnn_feature = Concatenate(name=f"cnn_concat_{kernel_size}")(
-            [pool_max, pool_avg]
-        )
-        cnn_outputs.append(cnn_feature)
-
-    # Concatenar todas las features CNN
-    cnn_features = Concatenate(name="cnn_features_concat")(cnn_outputs)
-
-    bilstm_out = Bidirectional(
+    # Recurrent path (BiLSTM -> GRU)
+    # Note: recurrent_dropout lowers CuDNN usage; keep moderate for CPU, set 0 on GPU for speed if desired
+    recurrent_dropout = 0.25 if device_type == "CPU" else 0.0
+    lstm = Bidirectional(
         LSTM(
-            bilstm_units,
-            dropout=dropout_rate,
-            recurrent_dropout=0.3,
-            return_sequences=True,
-            name="bilstm",
-        ),
-        name="bidirectional_lstm",
-    )(embedded_dropped)
+            64, return_sequences=True, dropout=0.3, recurrent_dropout=recurrent_dropout
+        )
+    )(x)
+    gru = GRU(
+        64, return_sequences=True, dropout=0.3, recurrent_dropout=recurrent_dropout
+    )(lstm)
 
-    # Batch normalization después de BiLSTM
-    bilstm_out = BatchNormalization(name="bn_bilstm")(bilstm_out)
-
-    gru_out = GRU(
-        gru_units,
-        dropout=dropout_rate,
-        recurrent_dropout=0.3,
-        return_sequences=True,
-        name="gru",
-    )(bilstm_out)
-
-    # Batch normalization después de GRU
-    gru_out = BatchNormalization(name="bn_gru")(gru_out)
-
-    # La salida del GRU se usa como query, key y value
-    attention_out = MultiHeadAttention(
-        num_heads=4, key_dim=gru_units, dropout=0.1, name="self_attention"
-    )(query=gru_out, value=gru_out, key=gru_out)
-
-    # Pooling global para resumir
-    attention_pooled = GlobalAveragePooling1D(name="attention_pooled")(attention_out)
-
-    # También obtener representación mediante pooling global del GRU
-    gru_max_pool = GlobalMaxPooling1D(name="gru_max_pool")(gru_out)
-    gru_avg_pool = GlobalAveragePooling1D(name="gru_avg_pool")(gru_out)
-
-    all_features = Concatenate(name="all_features_concat")(
-        [
-            cnn_features,  # Features CNN
-            attention_pooled,  # Features con atención de Keras
-            gru_max_pool,  # GRU max pooling
-            gru_avg_pool,  # GRU average pooling
-        ]
+    # Attention
+    attn = MultiHeadAttention(num_heads=2, key_dim=64, dropout=0.1)(gru, gru)
+    attn = LayerNormalization()(attn)
+    seq_feat = Concatenate()(
+        [GlobalAveragePooling1D()(attn), GlobalMaxPooling1D()(attn)]
     )
 
-    # Primera capa densa con regularización
-    dense1 = Dense(256, activation="relu", name="dense_1")(all_features)
-    dense1 = BatchNormalization(name="bn_dense1")(dense1)
-    dense1 = Dropout(0.5, name="dropout_1")(dense1)
+    # Merge features
+    merged = Concatenate()([cnn_out, seq_feat])
+    merged = Dropout(0.4)(merged)
 
-    # Segunda capa densa
-    dense2 = Dense(128, activation="relu", name="dense_2")(dense1)
-    dense2 = BatchNormalization(name="bn_dense2")(dense2)
-    dense2 = Dropout(0.4, name="dropout_2")(dense2)
+    # Dense head with L2 regularization and BatchNorm
+    x = Dense(256, activation="relu", kernel_regularizer=l2(1e-4))(merged)
+    x = BatchNormalization()(x)
+    x = Dropout(0.5)(x)
 
-    # Tercera capa densa
-    dense3 = Dense(64, activation="relu", name="dense_3")(dense2)
-    dense3 = Dropout(0.3, name="dropout_3")(dense3)
+    x = Dense(128, activation="relu", kernel_regularizer=l2(1e-4))(x)
+    x = BatchNormalization()(x)
+    x = Dropout(0.4)(x)
 
-    # Output layer
-    outputs = Dense(1, activation="sigmoid", name="output")(dense3)
+    x = Dense(64, activation="relu", kernel_regularizer=l2(1e-4))(x)
+    x = Dropout(0.3)(x)
 
-    # Crear modelo
-    model = Model(
-        inputs=inputs, outputs=outputs, name="hybrid_cnn_bilstm_gru_attention"
-    )
+    out = Dense(1, activation="sigmoid", name="output")(x)
 
-    # Compilar con métricas adicionales
+    model = Model(inputs=inp, outputs=out, name="Hybrid_CNN_BiLSTM_GRU_Att")
     model.compile(
-        optimizer=Adam(learning_rate=1e-3, clipnorm=1.0),  # Gradient clipping
+        optimizer=Adam(learning_rate=1e-3, clipnorm=1.0),
         loss="binary_crossentropy",
         metrics=["accuracy", Precision(name="precision"), Recall(name="recall")],
     )
-
     return model
 
 
-def to_tf_dataset(texts, labels, vectorizer, batch_size=64, shuffle=True):
+def to_tf_dataset(X, y, vectorizer, batch_size=BATCH_SIZE, shuffle=True):
     """Convierte arrays en tf.data.Dataset optimizado con vectorización."""
-    ds = tf.data.Dataset.from_tensor_slices((texts, labels))
+    ds = tf.data.Dataset.from_tensor_slices((X, y))
     if shuffle:
-        ds = ds.shuffle(buffer_size=min(len(texts), 10000), seed=SEED)
+        ds = ds.shuffle(buffer_size=min(len(X), 10000), seed=SEED)
     ds = ds.batch(batch_size)
     ds = ds.map(lambda x, y: (vectorizer(x), y), num_parallel_calls=tf.data.AUTOTUNE)
-    ds = ds.prefetch(tf.data.AUTOTUNE)
-    return ds
+    return ds.prefetch(tf.data.AUTOTUNE)
 
 
 def compute_class_weights(y):
@@ -288,52 +235,57 @@ if __name__ == "__main__":
     print("[INFO] Cargando datos...")
     train_df, valid_df, test_df = load_datasets()
 
-    X_train_texts = train_df["texto"].astype(str).values
-    y_train = train_df["clase"].astype(int).values
-    X_valid_texts = valid_df["texto"].astype(str).values
-    y_valid = valid_df["clase"].astype(int).values
-    X_test_texts = test_df["texto"].astype(str).values
-    y_test = test_df["clase"].astype(int).values
+    X_train, y_train = (
+        train_df["texto"].astype(str).values,
+        train_df["clase"].astype(int).values,
+    )
+    X_valid, y_valid = (
+        valid_df["texto"].astype(str).values,
+        valid_df["clase"].astype(int).values,
+    )
+    X_test, y_test = (
+        test_df["texto"].astype(str).values,
+        test_df["clase"].astype(int).values,
+    )
 
     print(
-        f"[INFO] Tamaños - Train: {len(X_train_texts)}, Valid: {len(X_valid_texts)}, Test: {len(X_test_texts)}"
+        f"[INFO] Tamaños - Train: {len(X_train)}, Valid: {len(X_valid)}, Test: {len(X_test)}"
     )
 
+    lemmatizer = Lemmatizer()
+    X_train, X_valid, X_test = map(lemmatizer.transform, [X_train, X_valid, X_test])
+
     # Vectorización
-    print("[INFO] Preparando vectorizador TextVectorization...")
-    MAX_TOKENS = 30000
-    SEQ_LEN = 200
-    vectorizer = prepare_vectorizer(
-        X_train_texts, max_tokens=MAX_TOKENS, output_seq_len=SEQ_LEN
-    )
+    print("[INFO] Preparando TextVectorization...")
+    vectorizer = prepare_vectorizer(X_train, max_tokens=30000, output_seq_len=200)
+    # Guardar vectorizer para producción
+    with open(VECTORIZER_PATH, "wb") as f:
+        pickle.dump(vectorizer, f)
+    print(f"[INFO] Vectorizer guardado en {VECTORIZER_PATH}")
+
+    embedding_matrix = build_embedding_matrix(vectorizer)
 
     # Tamaño de vocabulario real
     vocab_size = len(vectorizer.get_vocabulary())
     print(f"[INFO] Vocab size real: {vocab_size}")
 
+    # sample weights
+    cw_dict = compute_class_weights(y_train)
+    print(f"[INFO] Class weights dict: {cw_dict}")
+
     # Crear datasets
     print("[INFO] Creando datasets de TensorFlow...")
-    train_ds = to_tf_dataset(
-        X_train_texts, y_train, vectorizer, batch_size=BATCH_SIZE, shuffle=True
-    )
-    valid_ds = to_tf_dataset(
-        X_valid_texts, y_valid, vectorizer, batch_size=BATCH_SIZE, shuffle=False
-    )
-    test_ds = to_tf_dataset(
-        X_test_texts, y_test, vectorizer, batch_size=BATCH_SIZE, shuffle=False
-    )
+    train_ds = to_tf_dataset(X_train, y_train, vectorizer)
+    valid_ds = to_tf_dataset(X_valid, y_valid, vectorizer)
+    test_ds = to_tf_dataset(X_test, y_test, vectorizer)
 
     # Construir modelo
     print("[INFO] Construyendo modelo híbrido CNN + BiLSTM + GRU + Atención...")
     model = build_hybrid_model(
         vocab_size=vocab_size,
-        embedding_dim=128,
-        sequence_length=SEQ_LEN,
-        cnn_filters=128,
-        cnn_kernel_sizes=[3, 4, 5],
-        bilstm_units=64,
-        gru_units=64,
-        dropout_rate=0.4,
+        embedding_matrix=embedding_matrix,
+        sequence_length=200,
+        device_type=device,
     )
 
     # Compilar modelo con datos de ejemplo para mostrar arquitectura completa
@@ -344,19 +296,10 @@ if __name__ == "__main__":
     # Callbacks
     callbacks = [
         EarlyStopping(
-            monitor="val_loss",
-            patience=14,
-            restore_best_weights=True,
-            verbose=1,
-            mode="min",
+            monitor="val_loss", patience=7, restore_best_weights=True, verbose=1
         ),
         ReduceLROnPlateau(
-            monitor="val_loss",
-            factor=0.5,
-            patience=3,
-            min_lr=1e-6,
-            verbose=1,
-            mode="min",
+            monitor="val_loss", factor=0.4, patience=3, min_lr=1e-6, verbose=1
         ),
     ]
 
@@ -364,14 +307,32 @@ if __name__ == "__main__":
     class_weights = compute_class_weights(y_train)
 
     # Entrenamiento
-    print("[INFO] Iniciando entrenamiento...")
-    EPOCHS = 15
+    print("[INFO] Entrenamiento fase 1 (embeddings congelados)...")
     history = model.fit(
         train_ds,
         validation_data=valid_ds,
-        epochs=EPOCHS,
+        epochs=15,
         callbacks=callbacks,
-        class_weight=class_weights,
+        verbose=1,
+    )
+
+    # Fine-tuning: unfreeze embedding and continue with lower LR
+    print("[INFO] Descongelando embeddings para fine-tuning (fase 2)...")
+    for layer in model.layers:
+        if layer.name == "embedding":
+            layer.trainable = True
+
+    model.compile(
+        optimizer=Adam(learning_rate=1e-4, clipnorm=1.0),
+        loss="binary_crossentropy",
+        metrics=["accuracy", Precision(name="precision"), Recall(name="recall")],
+    )
+
+    history_ft = model.fit(
+        train_ds,
+        validation_data=valid_ds,
+        epochs=5,
+        callbacks=callbacks,
         verbose=1,
     )
 

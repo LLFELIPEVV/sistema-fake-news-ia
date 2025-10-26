@@ -25,6 +25,7 @@ from training.tensorflow.utils_keras import (
     save_best_model_keras,
     plot_training_history,
     load_best_model_keras,
+    build_embedding_matrix,
 )
 from training.utils_common import (
     load_datasets,
@@ -74,9 +75,6 @@ np.random.seed(SEED)
 BEST_MODEL_PATH = os.path.join(MODEL_DIR, "cnn_best_model.keras")
 BEST_SCORE_PATH = os.path.join(MODEL_DIR, "cnn_best_score.txt")
 
-# Embedding GloVe path
-GLOVE_PATH = os.path.join("glove.840B.300d", "glove.840B.300d.txt")
-
 
 # ==============================
 # 🔤 Text Vectorization
@@ -91,42 +89,6 @@ def prepare_vectorizer(texts, max_tokens=30000, output_seq_len=200):
     )
     vectorizer.adapt(texts)
     return vectorizer
-
-
-# ==============================
-# 🧠 Construcción Embedding
-# ==============================
-def build_embedding_matrix(vectorizer, embedding_dim=300):
-    vocab = vectorizer.get_vocabulary()
-    word_index = dict(zip(vocab, range(len(vocab))))
-    embedding_matrix = np.zeros((len(vocab), embedding_dim))
-    skipped = 0
-    loaded = 0
-
-    with open(GLOVE_PATH, encoding="utf8") as f:
-        for line in f:
-            values = line.strip().split()
-            if len(values) != embedding_dim + 1:
-                # Línea corrupta o con tokens de más/menos
-                skipped += 1
-                continue
-
-            word = values[0]
-            try:
-                coefs = np.asarray(values[1:], dtype="float32")
-                coefs /= np.linalg.norm(coefs) + 1e-8  # Normalización
-            except ValueError:
-                skipped += 1
-                continue
-
-            if word in word_index:
-                embedding_matrix[word_index[word]] = coefs
-                loaded += 1
-
-    print(f"[INFO] Embeddings cargados correctamente: {loaded}")
-    print(f"[WARNING] Líneas omitidas por formato incorrecto: {skipped}")
-    print(f"[INFO] Tamaño final de embedding_matrix: {embedding_matrix.shape}")
-    return embedding_matrix
 
 
 # ==============================
