@@ -1,9 +1,11 @@
 import os
+import spacy
 import joblib
 import pandas as pd
 import matplotlib.pyplot as plt
 
 from training.utils_common import save_figure
+from sklearn.base import BaseEstimator, TransformerMixin
 
 
 def save_best_model_sklearn(model, score, BEST_SCORE_PATH, BEST_MODEL_PATH):
@@ -66,3 +68,14 @@ def plot_grid_search_results(grid, filename="grid_results.png", param_x="param_c
     ax.legend()
     save_figure(fig, filename)
     plt.close(fig)
+
+class Lemmatizer(BaseEstimator, TransformerMixin):
+    def __init__(self):
+        self.nlp = spacy.load("es_core_news_sm", disable=["parser", "ner"])
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        return [" ".join([token.lemma_ for token in self.nlp(text)]) for text in X]
+

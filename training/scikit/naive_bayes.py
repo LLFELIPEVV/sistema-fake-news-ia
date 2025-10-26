@@ -10,7 +10,6 @@ from sklearn.pipeline import Pipeline
 from sklearn.naive_bayes import ComplementNB
 from sklearn.metrics import classification_report
 from sklearn.model_selection import RandomizedSearchCV
-from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.feature_extraction.text import TfidfVectorizer
 from training.utils_common import (
     MODEL_DIR,
@@ -22,6 +21,7 @@ from training.scikit.utils_scikit import (
     save_figure,
     plot_grid_search_results,
     save_best_model_sklearn,
+    Lemmatizer,
 )
 
 RANDOM_STATE = 42
@@ -37,27 +37,6 @@ except OSError:
         "⚠️ Modelo de spaCy no encontrado. Ejecuta: python -m spacy download es_core_news_sm"
     )
     nlp = None
-
-
-class Lemmatizer(BaseEstimator, TransformerMixin):
-    """Lematiza texto en español sin limpieza adicional."""
-
-    def __init__(self):
-        self.active = nlp is not None
-
-    def fit(self, X, y=None):
-        return self
-
-    def transform(self, X):
-        if not self.active:
-            print("⚠️ spaCy no está disponible. Se omite lematización.")
-            return X
-        lemmatized = []
-        for text in X:
-            doc = nlp(text)
-            lemmatized.append(" ".join([token.lemma_ for token in doc]))
-        return lemmatized
-
 
 def build_pipeline():
     """Construye pipeline con lematización, TF-IDF y ComplementNB."""
@@ -98,7 +77,7 @@ def optimize_nb(X_train, y_train):
     random_search = RandomizedSearchCV(
         pipeline,
         param_distributions=param_distributions,
-        n_iter=75,
+        n_iter=80,
         cv=3,
         scoring="f1_macro",  # balancea ambas clases (fake y real)
         n_jobs=-1,
