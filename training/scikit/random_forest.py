@@ -8,12 +8,13 @@ from scipy.stats import randint
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import classification_report
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import RandomizedSearchCV
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import RandomizedSearchCV, RepeatedKFold
 from training.scikit.utils_scikit import (
     save_figure,
     plot_grid_search_results,
     save_best_model_sklearn,
+    Lemmatizer,
 )
 from training.utils_common import (
     MODEL_DIR,
@@ -31,15 +32,26 @@ BEST_SCORE_PATH = os.path.join(MODEL_DIR, "random_forest_best_score.txt")
 
 
 def build_pipeline():
-    """Construye un pipeline con TF-IDF y Random Forest."""
+    """Construye un pipeline con lematización, TF-IDF y Random Forest optimizado."""
     return Pipeline(
         steps=[
-            ("tfidf", TfidfVectorizer(stop_words=SPANISH_STOPWORDS)),
+            ("lemmatizer", Lemmatizer()),  # Aplica lematización antes del vectorizado
+            (
+                "tfidf",
+                TfidfVectorizer(
+                    stop_words=SPANISH_STOPWORDS,
+                    sublinear_tf=True,
+                    norm="l2",
+                    max_df=0.85,
+                    min_df=3,
+                ),
+            ),
             (
                 "clf",
                 RandomForestClassifier(
                     random_state=42,
-                    class_weight="balanced",
+                    class_weight="balanced_subsample",
+                    criterion="entropy",
                     n_jobs=-1,
                 ),
             ),
@@ -53,20 +65,20 @@ def optimize_random_forest(X_train, y_train):
     pipeline = build_pipeline()
 
     param_distributions = {
-        "clf__n_estimators": randint(100, 500),  # número de árboles
-        "clf__max_depth": randint(5, 50),
-        "clf__min_samples_split": randint(2, 20),
-        "clf__min_samples_leaf": randint(1, 10),
-        "clf__max_features": ["sqrt", "log2", None],
-        "tfidf__max_features": [20000, 50000],
+        "clf__n_estimators": randint(300, 800),
+        "clf__max_depth": randint(10, 60),
+        "clf__min_samples_split": randint(3, 12),
+        "clf__min_samples_leaf": randint(2, 8),
+        "clf__max_features": ["sqrt", "log2"],
+        "tfidf__max_features": [30000, 50000],
         "tfidf__ngram_range": [(1, 1), (1, 2)],
     }
 
     random_search = RandomizedSearchCV(
         pipeline,
         param_distributions=param_distributions,
-        n_iter=75,
-        cv=3,
+        n_iter=80,
+        cv=RepeatedKFold(n_splits=3, n_repeats=2, random_state=42),
         scoring="f1_weighted",
         n_jobs=-1,
         verbose=3,
