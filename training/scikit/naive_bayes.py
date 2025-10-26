@@ -1,4 +1,5 @@
 import os
+import spacy
 import joblib
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -6,9 +7,10 @@ import stopwordsiso as stopwords
 
 from scipy.stats import loguniform
 from sklearn.pipeline import Pipeline
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.naive_bayes import ComplementNB
 from sklearn.metrics import classification_report
 from sklearn.model_selection import RandomizedSearchCV
+from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.feature_extraction.text import TfidfVectorizer
 from training.utils_common import (
     MODEL_DIR,
@@ -22,35 +24,75 @@ from training.scikit.utils_scikit import (
     save_best_model_sklearn,
 )
 
-# Stopwords en español
+RANDOM_STATE = 42
 SPANISH_STOPWORDS = list(stopwords.stopwords("es"))
-
 BEST_MODEL_PATH = os.path.join(MODEL_DIR, "naive_bayes_best_model.pkl")
 BEST_SCORE_PATH = os.path.join(MODEL_DIR, "naive_bayes_best_score.txt")
 
+# Cargar modelo de spaCy en español (para lematización)
+try:
+    nlp = spacy.load("es_core_news_sm")
+except OSError:
+    print(
+        "⚠️ Modelo de spaCy no encontrado. Ejecuta: python -m spacy download es_core_news_sm"
+    )
+    nlp = None
+
+
+class Lemmatizer(BaseEstimator, TransformerMixin):
+    """Lematiza texto en español sin limpieza adicional."""
+
+    def __init__(self):
+        self.active = nlp is not None
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        if not self.active:
+            print("⚠️ spaCy no está disponible. Se omite lematización.")
+            return X
+        lemmatized = []
+        for text in X:
+            doc = nlp(text)
+            lemmatized.append(" ".join([token.lemma_ for token in doc]))
+        return lemmatized
+
 
 def build_pipeline():
-    """Construye un pipeline con TF-IDF y Naive Bayes."""
+    """Construye pipeline con lematización, TF-IDF y ComplementNB."""
     return Pipeline(
         steps=[
-            ("tfidf", TfidfVectorizer(stop_words=SPANISH_STOPWORDS)),
+            ("lemmatizer", Lemmatizer()),
             (
-                "clf",
-                MultinomialNB(),
+                "tfidf",
+                TfidfVectorizer(
+                    stop_words=SPANISH_STOPWORDS,
+                    ngram_range=(1, 2),  # unigrama + bigrama
+                    max_df=0.9,  # ignora palabras muy frecuentes
+                    min_df=5,  # ignora palabras raras
+                    sublinear_tf=True,  # suavizado logarítmico
+                    norm="l2",  # regularización L2
+                    lowercase=True,
+                    max_features=20000,
+                ),
             ),
+            ("clf", ComplementNB(alpha=0.5, norm=False)),  # robusto al desbalance
         ],
-        memory="__cache__",
+        memory="__cache__",  # cache para eficiencia
     )
 
 
 def optimize_nb(X_train, y_train):
-    """Optimiza hiperparámetros de Naive Bayes con RandomizedSearchCV."""
+    """Optimiza hiperparámetros de ComplementNB con RandomizedSearchCV."""
     pipeline = build_pipeline()
 
     param_distributions = {
-        "clf__alpha": loguniform(1e-3, 1e1),  # suavizado de Laplace
-        "tfidf__max_features": [20000, 50000],
+        "clf__alpha": loguniform(1e-3, 10),
         "tfidf__ngram_range": [(1, 1), (1, 2)],
+        "tfidf__max_features": [10000, 20000, 30000],
+        "tfidf__sublinear_tf": [True, False],
+        "tfidf__min_df": [3, 5, 10],
     }
 
     random_search = RandomizedSearchCV(
@@ -58,10 +100,10 @@ def optimize_nb(X_train, y_train):
         param_distributions=param_distributions,
         n_iter=75,
         cv=3,
-        scoring="f1_weighted",
+        scoring="f1_macro",  # balancea ambas clases (fake y real)
         n_jobs=-1,
         verbose=3,
-        random_state=42,
+        random_state=RANDOM_STATE,
         return_train_score=True,
     )
 
