@@ -49,15 +49,17 @@ def build_pipeline():
                 TfidfVectorizer(
                     stop_words=SPANISH_STOPWORDS,
                     ngram_range=(1, 2),  # unigrama + bigrama
-                    max_df=0.9,  # ignora palabras muy frecuentes
-                    min_df=5,  # ignora palabras raras
+                    max_df=0.85,  # ignora palabras muy frecuentes
+                    min_df=3,  # ignora palabras raras
                     sublinear_tf=True,  # suavizado logarítmico
                     norm="l2",  # regularización L2
                     lowercase=True,
-                    max_features=20000,
+                    max_features=30000,
+                    smooth_idf=True,
+                    use_idf=True,
                 ),
             ),
-            ("clf", ComplementNB(alpha=0.5, norm=False)),  # robusto al desbalance
+            ("clf", ComplementNB(alpha=0.3, norm=True)),  # robusto al desbalance
         ],
         memory="__cache__",  # cache para eficiencia
     )
@@ -68,17 +70,19 @@ def optimize_nb(X_train, y_train):
     pipeline = build_pipeline()
 
     param_distributions = {
-        "clf__alpha": loguniform(1e-3, 10),
+        "clf__alpha": loguniform(1e-3, 5),
+        "clf__norm": [True, False],
         "tfidf__ngram_range": [(1, 1), (1, 2)],
         "tfidf__max_features": [10000, 20000, 30000],
         "tfidf__sublinear_tf": [True, False],
+        "tfidf__smooth_idf": [True, False],
         "tfidf__min_df": [3, 5, 10],
     }
 
     random_search = RandomizedSearchCV(
         pipeline,
         param_distributions=param_distributions,
-        n_iter=80,
+        n_iter=100,
         cv=3,
         scoring="f1_macro",  # balancea ambas clases (fake y real)
         n_jobs=-1,
