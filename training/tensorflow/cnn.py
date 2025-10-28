@@ -4,9 +4,9 @@ import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
+from keras import Model
 from keras.regularizers import l2
 from keras.optimizers import Adam
-from keras.models import Sequential
 from keras.metrics import Precision, Recall
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from keras.layers import (
@@ -18,6 +18,10 @@ from keras.layers import (
     GlobalMaxPooling1D,
     Dropout,
     BatchNormalization,
+    Input,
+    Concatenate,
+    LayerNormalization,
+    LeakyReLU,
 )
 from sklearn.metrics import classification_report, f1_score
 from sklearn.utils.class_weight import compute_class_weight
@@ -104,45 +108,53 @@ def build_cnn_model(
     dropout_rate=0.4 if device == "GPU" else 0.3,  # ✅ Dropout adaptativo
     l2_reg=1e-4,
 ):
-    model = Sequential()
+    # Input layer
+    input_layer = Input(shape=(sequence_length,))
+
+    # Embedding
     if embedding_matrix is not None:
-        model.add(
-            Embedding(
-                input_dim=vocab_size,
-                output_dim=embedding_dim,
-                input_length=sequence_length,
-                weights=[embedding_matrix],
-                trainable=False,  # ✅ Entrenamiento inicial congelado
-                name="embedding",
-            )
-        )
+        x = Embedding(
+            input_dim=vocab_size,
+            output_dim=embedding_dim,
+            weights=[embedding_matrix],
+            trainable=False,
+            name="embedding",
+        )(input_layer)
     else:
-        model.add(
-            Embedding(
-                input_dim=vocab_size,
-                output_dim=embedding_dim,
-                input_length=sequence_length,
-                name="embedding",
-            )
+        x = Embedding(input_dim=vocab_size, output_dim=embedding_dim, name="embedding")(
+            input_layer
         )
 
-    model.add(SpatialDropout1D(dropout_rate))
+    x = SpatialDropout1D(dropout_rate)(x)
+
+    # ✅ CONVOLUCIONES PARALELAS (no secuenciales)
+    conv_blocks = []
     for ks in kernel_sizes:
-        model.add(
-            Conv1D(
-                filters=num_filters,
-                kernel_size=ks,
-                activation="relu",
-                padding="same",
-                kernel_regularizer=l2(l2_reg),
-                name=f"conv1d_{ks}",
-            )
-        )
-        model.add(BatchNormalization(name=f"bn_{ks}"))
-    model.add(GlobalMaxPooling1D(name="global_max_pool"))
-    model.add(Dense(64, activation="relu", kernel_regularizer=l2(l2_reg)))
-    model.add(Dropout(dropout_rate))
-    model.add(Dense(1, activation="sigmoid"))
+        conv = Conv1D(
+            filters=num_filters,
+            kernel_size=ks,
+            padding="same",
+            kernel_regularizer=l2(l2_reg),
+        )(x)
+        conv = LeakyReLU(alpha=0.1)(conv)
+        conv = BatchNormalization()(conv)
+        conv = GlobalMaxPooling1D()(conv)
+        conv_blocks.append(conv)
+
+    # Concatenar todas las convoluciones
+    x = Concatenate()(conv_blocks)
+    x = LayerNormalization()(x)
+
+    # Dense layers
+    x = Dense(128, kernel_regularizer=l2(l2_reg))(x)
+    x = LeakyReLU(alpha=0.1)(x)
+    x = Dropout(dropout_rate)(x)
+    x = Dense(64, kernel_regularizer=l2(l2_reg))(x)
+    x = LeakyReLU(alpha=0.1)(x)
+    x = Dropout(dropout_rate * 0.5)(x)
+    output = Dense(1, activation="sigmoid")(x)
+
+    model = Model(inputs=input_layer, outputs=output)
 
     model.compile(
         optimizer=Adam(learning_rate=1e-3, clipnorm=1.0),
@@ -234,7 +246,7 @@ if __name__ == "__main__":
 
     callbacks = [
         EarlyStopping(
-            monitor="val_loss", patience=7, restore_best_weights=True, verbose=1
+            monitor="val_loss", patience=25, restore_best_weights=True, verbose=1
         ),
         ReduceLROnPlateau(
             monitor="val_loss", factor=0.4, patience=3, min_lr=1e-6, verbose=1

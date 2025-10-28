@@ -1,5 +1,4 @@
 import os
-import spacy
 import joblib
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -22,21 +21,15 @@ from training.scikit.utils_scikit import (
     save_figure,
     plot_grid_search_results,
     save_best_model_sklearn,
+    filter_used_combinations,
+    save_results,
 )
 
 RANDOM_STATE = 42
 SPANISH_STOPWORDS = list(stopwords.stopwords("es"))
 BEST_MODEL_PATH = os.path.join(MODEL_DIR, "naive_bayes_best_model.pkl")
 BEST_SCORE_PATH = os.path.join(MODEL_DIR, "naive_bayes_best_score.txt")
-
-# Cargar modelo de spaCy en español (para lematización)
-try:
-    nlp = spacy.load("es_core_news_sm")
-except OSError:
-    print(
-        "⚠️ Modelo de spaCy no encontrado. Ejecuta: python -m spacy download es_core_news_sm"
-    )
-    nlp = None
+HISTORY_FILE = os.path.join(MODEL_DIR, "nb_hyperparam_history.json")
 
 
 def build_pipeline():
@@ -69,7 +62,7 @@ def optimize_nb(X_train, y_train):
     """Optimiza hiperparámetros de ComplementNB con RandomizedSearchCV."""
     pipeline = build_pipeline()
 
-    param_distributions = {
+    base_param_distributions = {
         "clf__alpha": loguniform(1e-3, 5),
         "clf__norm": [True, False],
         "tfidf__ngram_range": [(1, 1), (1, 2)],
@@ -79,9 +72,11 @@ def optimize_nb(X_train, y_train):
         "tfidf__min_df": [3, 5, 10],
     }
 
+    filtered_params = filter_used_combinations(base_param_distributions, HISTORY_FILE)
+
     random_search = RandomizedSearchCV(
         pipeline,
-        param_distributions=param_distributions,
+        param_distributions=filtered_params,
         n_iter=100,
         cv=3,
         scoring="f1_macro",  # balancea ambas clases (fake y real)
@@ -92,6 +87,7 @@ def optimize_nb(X_train, y_train):
     )
 
     random_search.fit(X_train, y_train)
+    save_results(random_search.cv_results_, HISTORY_FILE, "f1_macro")
     return random_search
 
 

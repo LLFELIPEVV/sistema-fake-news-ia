@@ -14,6 +14,8 @@ from training.scikit.utils_scikit import (
     save_figure,
     plot_grid_search_results,
     save_best_model_sklearn,
+    filter_used_combinations,
+    save_results,
 )
 from training.utils_common import (
     MODEL_DIR,
@@ -29,6 +31,7 @@ SPANISH_STOPWORDS = list(stopwords.stopwords("es"))
 
 BEST_MODEL_PATH = os.path.join(MODEL_DIR, "random_forest_best_model.pkl")
 BEST_SCORE_PATH = os.path.join(MODEL_DIR, "random_forest_best_score.txt")
+HISTORY_FILE = os.path.join(MODEL_DIR, "rf_hyperparam_history.json")
 
 
 def build_pipeline():
@@ -64,7 +67,7 @@ def optimize_random_forest(X_train, y_train):
     """Optimiza hiperparámetros de Random Forest con RandomizedSearchCV."""
     pipeline = build_pipeline()
 
-    param_distributions = {
+    base_param_distributions = {
         "clf__n_estimators": randint(300, 800),
         "clf__max_depth": randint(10, 60),
         "clf__min_samples_split": randint(3, 12),
@@ -74,9 +77,11 @@ def optimize_random_forest(X_train, y_train):
         "tfidf__ngram_range": [(1, 1), (1, 2)],
     }
 
+    filtered_params = filter_used_combinations(base_param_distributions, HISTORY_FILE)
+
     random_search = RandomizedSearchCV(
         pipeline,
-        param_distributions=param_distributions,
+        param_distributions=filtered_params,
         n_iter=80,
         cv=RepeatedKFold(n_splits=3, n_repeats=2, random_state=42),
         scoring="f1_weighted",
@@ -87,6 +92,7 @@ def optimize_random_forest(X_train, y_train):
     )
 
     random_search.fit(X_train, y_train)
+    save_results(random_search.cv_results_, HISTORY_FILE, "f1_macro")
     return random_search
 
 
