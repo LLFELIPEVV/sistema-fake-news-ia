@@ -1,9 +1,16 @@
 import os
+import json
+import random
 import numpy as np
 import matplotlib.pyplot as plt
 
+from datetime import datetime
 from keras.models import load_model
-from training.utils_common import save_figure
+from training.utils_common import (
+    save_figure,
+    load_previous_results,
+    _params_to_frozenset,
+)
 
 # Embedding GloVe path
 GLOVE_PATH = os.path.join("glove.840B.300d", "glove.840B.300d.txt")
@@ -108,3 +115,47 @@ def build_embedding_matrix(vectorizer, embedding_dim=300):
     print(f"[WARNING] Líneas omitidas por formato incorrecto: {skipped}")
     print(f"[INFO] Tamaño final de embedding_matrix: {embedding_matrix.shape}")
     return embedding_matrix
+
+
+# =============================
+# FUNCIONES DE REGISTRO
+# =============================
+def save_results(params, metrics, history_file):
+    """Guarda hiperparámetros y métricas (Keras)."""
+    history = load_previous_results(history_file)
+    existing_combos = {_params_to_frozenset(h["params"]) for h in history}
+    combo = _params_to_frozenset(params)
+
+    if combo not in existing_combos:
+        record = {
+            "timestamp": datetime.now().isoformat(),
+            "params": params,
+            "metrics": metrics,
+        }
+        history.append(record)
+
+        with open(history_file, "w", encoding="utf8") as f:
+            json.dump(history, f, indent=2, ensure_ascii=False)
+
+        print(f"[INFO] Nueva combinación registrada en {history_file}")
+    else:
+        print("[INFO] Combinación de hiperparámetros ya registrada.")
+
+
+def get_random_hyperparams(param_space, history_file, max_attempts=50):
+    """Genera combinación aleatoria única (Keras)."""
+    history = load_previous_results(history_file)
+    tried_combinations = {_params_to_frozenset(h["params"]) for h in history}
+
+    print(f"[INFO] {len(tried_combinations)} combinaciones ya probadas.")
+
+    for attempt in range(max_attempts):
+        params = {key: random.choice(values) for key, values in param_space.items()}
+        combo = _params_to_frozenset(params)
+
+        if combo not in tried_combinations:
+            print(f"[INFO] Nueva combinación en intento {attempt + 1}")
+            return params
+
+    print(f"[WARNING] No se encontró combinación única en {max_attempts} intentos.")
+    return {key: random.choice(values) for key, values in param_space.items()}

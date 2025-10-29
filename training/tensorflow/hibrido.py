@@ -1,13 +1,10 @@
 import os
-import json
-import random
 import pickle
 import numpy as np
 import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
-from datetime import datetime
 from keras.models import Model
 from keras.regularizers import l2
 from keras.optimizers import Adam
@@ -38,6 +35,8 @@ from training.tensorflow.utils_keras import (
     plot_training_history,
     load_best_model_keras,
     build_embedding_matrix,
+    get_random_hyperparams,
+    save_results,
 )
 from training.utils_common import (
     load_datasets,
@@ -92,9 +91,6 @@ BEST_SCORE_PATH = os.path.join(
 )
 VECTORIZER_PATH = os.path.join(MODEL_DIR, "text_vectorizer.pkl")
 HISTORY_FILE = os.path.join(MODEL_DIR, "hybrid_hyperparam_history.json")
-
-# Embedding GloVe path
-GLOVE_PATH = os.path.join("glove.840B.300d", "glove.840B.300d.txt")
 EMBEDDING_DIM = 300
 
 SEED = 42
@@ -115,51 +111,6 @@ def prepare_vectorizer(texts, max_tokens=30000, output_seq_len=200):
     )
     vectorizer.adapt(texts)
     return vectorizer
-
-
-def load_previous_hybrid_results():
-    if os.path.exists(HISTORY_FILE):
-        with open(HISTORY_FILE, "r", encoding="utf8") as f:
-            return json.load(f)
-    return []
-
-
-def save_hybrid_results(params, metrics):
-    history = load_previous_hybrid_results()
-    record = {
-        "timestamp": datetime.now().isoformat(),
-        "params": params,
-        "metrics": metrics,
-    }
-    if record["params"] not in [h["params"] for h in history]:
-        history.append(record)
-        with open(HISTORY_FILE, "w", encoding="utf8") as f:
-            json.dump(history, f, indent=2, ensure_ascii=False)
-        print(f"[INFO] Nueva combinación registrada en {HISTORY_FILE}")
-    else:
-        print("[INFO] Combinación de hiperparámetros ya registrada.")
-
-
-def random_hybrid_hyperparams():
-    """Genera combinación aleatoria no repetida de hiperparámetros."""
-    all_combinations = {
-        "filters": [96, 128, 160],
-        "lstm_units": [64, 80, 96],
-        "gru_units": [64, 80, 96],
-        "dropout_rate": [0.3, 0.4, 0.5],
-        "l2_reg": [1e-3, 1e-4],
-    }
-
-    history = load_previous_hybrid_results()
-    tried = [h["params"] for h in history]
-
-    for _ in range(20):
-        params = {k: random.choice(v) for k, v in all_combinations.items()}
-        if params not in tried:
-            return params
-
-    print("[WARNING] Se agotaron combinaciones nuevas, usando una repetida al azar.")
-    return {k: random.choice(v) for k, v in all_combinations.items()}
 
 
 # ==============================================
@@ -346,7 +297,15 @@ if __name__ == "__main__":
         to_tf_dataset(X_test, y_test, vectorizer).cache().prefetch(tf.data.AUTOTUNE)
     )
 
-    params = random_hybrid_hyperparams()
+    all_combinations = {
+        "filters": [96, 128, 160],
+        "lstm_units": [64, 80, 96],
+        "gru_units": [64, 80, 96],
+        "dropout_rate": [0.3, 0.4, 0.5],
+        "l2_reg": [1e-3, 1e-4],
+    }
+
+    params = get_random_hyperparams(all_combinations, HISTORY_FILE, max_attempts=50)
     print(f"[INFO] Hiperparámetros seleccionados: {params}")
 
     # Construir modelo
@@ -384,6 +343,7 @@ if __name__ == "__main__":
         validation_data=valid_ds,
         epochs=15,
         callbacks=callbacks,
+        class_weight=cw_dict,
         verbose=1,
     )
 
@@ -404,6 +364,7 @@ if __name__ == "__main__":
         validation_data=valid_ds,
         epochs=5,
         callbacks=callbacks,
+        class_weight=cw_dict,
         verbose=1,
     )
 
@@ -507,4 +468,4 @@ if __name__ == "__main__":
         "f1_test": float(f1_test),
         "params": params,
     }
-    save_hybrid_results(params, metrics)
+    save_results(params, metrics, HISTORY_FILE)

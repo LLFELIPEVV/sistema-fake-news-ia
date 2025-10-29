@@ -1,13 +1,10 @@
 import os
-import json
-import random
 import numpy as np
 import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
 from keras import Model
-from datetime import datetime
 from keras.regularizers import l2
 from keras.optimizers import Adam
 from keras.metrics import Precision, Recall
@@ -33,6 +30,8 @@ from training.tensorflow.utils_keras import (
     plot_training_history,
     load_best_model_keras,
     build_embedding_matrix,
+    save_results,
+    get_random_hyperparams,
 )
 from training.utils_common import (
     load_datasets,
@@ -97,55 +96,6 @@ def prepare_vectorizer(texts, max_tokens=30000, output_seq_len=200):
     )
     vectorizer.adapt(texts)
     return vectorizer
-
-
-def load_previous_cnn_results():
-    """Carga combinaciones ya probadas de hiperparámetros."""
-    if os.path.exists(HISTORY_FILE):
-        with open(HISTORY_FILE, "r", encoding="utf8") as f:
-            return json.load(f)
-    return []
-
-
-def save_cnn_results(params, metrics):
-    """Guarda los hiperparámetros y resultados del entrenamiento."""
-    history = load_previous_cnn_results()
-    record = {
-        "timestamp": datetime.now().isoformat(),
-        "params": params,
-        "metrics": metrics,
-    }
-
-    # Evitar duplicados exactos
-    if record["params"] not in [h["params"] for h in history]:
-        history.append(record)
-        with open(HISTORY_FILE, "w", encoding="utf8") as f:
-            json.dump(history, f, indent=2, ensure_ascii=False)
-        print(f"[INFO] Nueva combinación registrada en {HISTORY_FILE}")
-    else:
-        print("[INFO] Combinación de hiperparámetros ya registrada.")
-
-
-def random_cnn_hyperparams():
-    """Genera una combinación aleatoria no repetida de hiperparámetros."""
-    all_combinations = {
-        "num_filters": [64, 96, 128, 160],
-        "kernel_sizes": [(3, 4, 5), (2, 3, 4), (3, 5, 7)],
-        "dropout_rate": [0.3, 0.4, 0.5],
-        "l2_reg": [1e-3, 1e-4, 1e-5],
-        "embedding_dim": [300],
-    }
-
-    history = load_previous_cnn_results()
-    tried = [h["params"] for h in history]
-
-    for _ in range(20):  # hasta 20 intentos
-        params = {k: random.choice(v) for k, v in all_combinations.items()}
-        if params not in tried:
-            return params
-
-    print("[WARNING] Se agotaron combinaciones nuevas, repitiendo una al azar.")
-    return {k: random.choice(v) for k, v in all_combinations.items()}
 
 
 # ==============================
@@ -303,7 +253,14 @@ if __name__ == "__main__":
     )
 
     # === Selección de hiperparámetros ===
-    params = random_cnn_hyperparams()
+    all_combinations = {
+        "num_filters": [64, 96, 128, 160],
+        "kernel_sizes": [(3, 4, 5), (2, 3, 4), (3, 5, 7)],
+        "dropout_rate": [0.3, 0.4, 0.5],
+        "l2_reg": [1e-3, 1e-4, 1e-5],
+        "embedding_dim": [300],
+    }
+    params = get_random_hyperparams(all_combinations, HISTORY_FILE, max_attempts=50)
     print(f"[INFO] Hiperparámetros seleccionados: {params}")
 
     print("[INFO] Construyendo modelo CNN...")
@@ -446,4 +403,4 @@ if __name__ == "__main__":
         "device": device,
         "batch_size": BATCH_SIZE,
     }
-    save_cnn_results(params, metrics)
+    save_results(params, metrics, HISTORY_FILE)

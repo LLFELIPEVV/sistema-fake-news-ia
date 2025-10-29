@@ -7,8 +7,8 @@ import stopwordsiso as stopwords
 from scipy.stats import loguniform
 from sklearn.pipeline import Pipeline
 from sklearn.naive_bayes import ComplementNB
+from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report
-from sklearn.model_selection import RandomizedSearchCV
 from sklearn.feature_extraction.text import TfidfVectorizer
 from training.utils_common import (
     MODEL_DIR,
@@ -21,7 +21,7 @@ from training.scikit.utils_scikit import (
     save_figure,
     plot_grid_search_results,
     save_best_model_sklearn,
-    filter_used_combinations,
+    get_unique_param_samples,
     save_results,
 )
 
@@ -72,23 +72,24 @@ def optimize_nb(X_train, y_train):
         "tfidf__min_df": [3, 5, 10],
     }
 
-    filtered_params = filter_used_combinations(base_param_distributions, HISTORY_FILE)
+    # Generar combinaciones únicas
+    unique_params = get_unique_param_samples(
+        base_param_distributions, HISTORY_FILE, n_iter=12, random_state=RANDOM_STATE
+    )
 
-    random_search = RandomizedSearchCV(
+    grid_search = GridSearchCV(
         pipeline,
-        param_distributions=filtered_params,
-        n_iter=100,
+        param_grid=unique_params,  # Lista de diccionarios
         cv=3,
-        scoring="f1_macro",  # balancea ambas clases (fake y real)
+        scoring="f1_macro",
         n_jobs=-1,
         verbose=3,
-        random_state=RANDOM_STATE,
         return_train_score=True,
     )
 
-    random_search.fit(X_train, y_train)
-    save_results(random_search.cv_results_, HISTORY_FILE, "f1_macro")
-    return random_search
+    grid_search.fit(X_train, y_train)
+    save_results(grid_search.cv_results_, HISTORY_FILE, "f1_macro")
+    return grid_search
 
 
 if __name__ == "__main__":

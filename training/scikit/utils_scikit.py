@@ -5,7 +5,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from datetime import datetime
-from training.utils_common import save_figure
+from training.utils_common import (
+    save_figure,
+    load_previous_results,
+    _params_to_frozenset,
+)
+from sklearn.model_selection import ParameterSampler
 
 
 def save_best_model_sklearn(model, score, BEST_SCORE_PATH, BEST_MODEL_PATH):
@@ -73,28 +78,26 @@ def plot_grid_search_results(grid, filename="grid_results.png", param_x="param_c
 # =============================
 # FUNCIONES DE REGISTRO
 # =============================
-def load_previous_results(history_file):
-    """Carga combinaciones ya probadas de hiperparámetros."""
-    if os.path.exists(history_file):
-        with open(history_file, "r", encoding="utf8") as f:
-            return json.load(f)
-    return []
-
-
 def save_results(cv_results, history_file, scoring_name="f1_macro"):
     """Guarda combinaciones probadas y sus resultados."""
     history = load_previous_results(history_file)
-    new_entries = []
 
+    # Crear set de combinaciones existentes para búsqueda rápida
+    existing_combos = {_params_to_frozenset(h["params"]) for h in history}
+
+    new_entries = []
     for params, score in zip(cv_results["params"], cv_results["mean_test_score"]):
-        record = {
-            "timestamp": datetime.now().isoformat(),
-            "scoring": scoring_name,
-            "params": params,
-            "mean_test_score": float(score),
-        }
-        if record["params"] not in [h["params"] for h in history]:
+        combo = _params_to_frozenset(params)
+
+        if combo not in existing_combos:
+            record = {
+                "timestamp": datetime.now().isoformat(),
+                "scoring": scoring_name,
+                "params": params,
+                "mean_test_score": float(score),
+            }
             new_entries.append(record)
+            existing_combos.add(combo)  # Evitar duplicados en el mismo batch
 
     if new_entries:
         history.extend(new_entries)
@@ -107,40 +110,39 @@ def save_results(cv_results, history_file, scoring_name="f1_macro"):
         print("[INFO] No se registraron nuevas combinaciones (todas ya probadas).")
 
 
-def filter_used_combinations(param_distributions, history_file):
-    """Elimina combinaciones ya probadas de los valores discretos."""
+def get_unique_param_samples(param_distributions, history_file, n_iter, random_state):
+    """Genera n_iter muestras que no hayan sido probadas antes."""
     history = load_previous_results(history_file)
-    if not history:
-        return param_distributions
 
-    tried_params = [h["params"] for h in history]
-    new_params = {}
+    # Convertir historial a set de combinaciones
+    tried_combinations = {_params_to_frozenset(h["params"]) for h in history}
 
-    for key, values in param_distributions.items():
-        if isinstance(values, list):
-            tried_values = set()
-            for p in tried_params:
-                if key in p:
-                    v = p[key]
-                    # Convertir listas/tuplas a tupla hashable
-                    if isinstance(v, (list, tuple)):
-                        v = tuple(v)
-                    tried_values.add(v)
+    print(f"[INFO] {len(tried_combinations)} combinaciones únicas ya probadas.")
 
-            filtered = []
-            for v in values:
-                val_hash = tuple(v) if isinstance(v, (list, tuple)) else v
-                if val_hash not in tried_values:
-                    filtered.append(v)
-
-            if filtered:
-                new_params[key] = filtered
-            else:
-                new_params[key] = values  # si se agotaron, no filtrar
-        else:
-            new_params[key] = values  # distribuciones continuas no se filtran
-
-    print(
-        f"[INFO] Se filtraron valores ya probados. Nuevas combinaciones posibles: {len(new_params)} parámetros."
+    # Generar más muestras de las necesarias para filtrar
+    sampler = ParameterSampler(
+        param_distributions,
+        n_iter=n_iter * 3,  # Generar 3x para compensar filtrado
+        random_state=random_state,
     )
-    return new_params
+
+    unique_samples = []
+    for params in sampler:
+        combo = _params_to_frozenset(params)
+
+        if combo not in tried_combinations:
+            grid_params = {k: [v] for k, v in params.items()}
+            unique_samples.append(grid_params)
+            tried_combinations.add(combo)
+
+        if len(unique_samples) >= n_iter:
+            break
+
+    if len(unique_samples) < n_iter:
+        print(
+            f"[WARNING] Solo se pudieron generar {len(unique_samples)} combinaciones únicas de {n_iter} solicitadas"
+        )
+    else:
+        print(f"[INFO] {len(unique_samples)} combinaciones únicas generadas.")
+
+    return unique_samples
