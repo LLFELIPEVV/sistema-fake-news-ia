@@ -1,10 +1,13 @@
 import os
+import json
+import random
 import pickle
 import numpy as np
 import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
+from datetime import datetime
 from keras.models import Model
 from keras.regularizers import l2
 from keras.optimizers import Adam
@@ -88,6 +91,7 @@ BEST_SCORE_PATH = os.path.join(
     MODEL_DIR, "hybrid_cnn_bilstm_gru_attention_best_score.txt"
 )
 VECTORIZER_PATH = os.path.join(MODEL_DIR, "text_vectorizer.pkl")
+HISTORY_FILE = os.path.join(MODEL_DIR, "hybrid_hyperparam_history.json")
 
 # Embedding GloVe path
 GLOVE_PATH = os.path.join("glove.840B.300d", "glove.840B.300d.txt")
@@ -113,12 +117,63 @@ def prepare_vectorizer(texts, max_tokens=30000, output_seq_len=200):
     return vectorizer
 
 
+def load_previous_hybrid_results():
+    if os.path.exists(HISTORY_FILE):
+        with open(HISTORY_FILE, "r", encoding="utf8") as f:
+            return json.load(f)
+    return []
+
+
+def save_hybrid_results(params, metrics):
+    history = load_previous_hybrid_results()
+    record = {
+        "timestamp": datetime.now().isoformat(),
+        "params": params,
+        "metrics": metrics,
+    }
+    if record["params"] not in [h["params"] for h in history]:
+        history.append(record)
+        with open(HISTORY_FILE, "w", encoding="utf8") as f:
+            json.dump(history, f, indent=2, ensure_ascii=False)
+        print(f"[INFO] Nueva combinación registrada en {HISTORY_FILE}")
+    else:
+        print("[INFO] Combinación de hiperparámetros ya registrada.")
+
+
+def random_hybrid_hyperparams():
+    """Genera combinación aleatoria no repetida de hiperparámetros."""
+    all_combinations = {
+        "filters": [96, 128, 160],
+        "lstm_units": [64, 80, 96],
+        "gru_units": [64, 80, 96],
+        "dropout_rate": [0.3, 0.4, 0.5],
+        "l2_reg": [1e-3, 1e-4],
+    }
+
+    history = load_previous_hybrid_results()
+    tried = [h["params"] for h in history]
+
+    for _ in range(20):
+        params = {k: random.choice(v) for k, v in all_combinations.items()}
+        if params not in tried:
+            return params
+
+    print("[WARNING] Se agotaron combinaciones nuevas, usando una repetida al azar.")
+    return {k: random.choice(v) for k, v in all_combinations.items()}
+
+
 # ==============================================
 # 🧠 Modelo híbrido optimizado
 # ==============================================
 def build_hybrid_model(
-    vocab_size, embedding_matrix, sequence_length=200, device_type=device
+    vocab_size, embedding_matrix, sequence_length=200, device_type=device, params=None
 ):
+    filters = params.get("filters", 128)
+    lstm_units = params.get("lstm_units", 64)
+    gru_units = params.get("gru_units", 64)
+    dropout_rate = params.get("dropout_rate", 0.4)
+    l2_reg = params.get("l2_reg", 1e-4)
+
     inp = Input(shape=(sequence_length,), dtype="int32", name="input_text")
     # start frozen
     emb = Embedding(
@@ -136,11 +191,11 @@ def build_hybrid_model(
     convs = []
     for k in (3, 4, 5):
         c = Conv1D(
-            filters=128,
+            filters=filters,
             kernel_size=k,
             padding="same",
             activation="relu",
-            kernel_regularizer=l2(1e-4),
+            kernel_regularizer=l2(l2_reg),
         )(x)
         c = BatchNormalization()(c)
         c = GlobalMaxPooling1D()(c)
@@ -152,11 +207,17 @@ def build_hybrid_model(
     recurrent_dropout = 0.25 if device_type == "CPU" else 0.0
     lstm = Bidirectional(
         LSTM(
-            64, return_sequences=True, dropout=0.3, recurrent_dropout=recurrent_dropout
+            lstm_units,
+            return_sequences=True,
+            dropout=dropout_rate,
+            recurrent_dropout=recurrent_dropout,
         )
     )(x)
     gru = GRU(
-        64, return_sequences=True, dropout=0.3, recurrent_dropout=recurrent_dropout
+        gru_units,
+        return_sequences=True,
+        dropout=dropout_rate,
+        recurrent_dropout=recurrent_dropout,
     )(lstm)
 
     # Attention
@@ -168,19 +229,19 @@ def build_hybrid_model(
 
     # Merge features
     merged = Concatenate()([cnn_out, seq_feat])
-    merged = Dropout(0.4)(merged)
+    merged = Dropout(dropout_rate)(merged)
 
     # Dense head with L2 regularization and BatchNorm
-    x = Dense(256, activation="relu", kernel_regularizer=l2(1e-4))(merged)
+    x = Dense(256, activation="relu", kernel_regularizer=l2(l2_reg))(merged)
     x = BatchNormalization()(x)
-    x = Dropout(0.5)(x)
+    x = Dropout(dropout_rate)(x)
 
-    x = Dense(128, activation="relu", kernel_regularizer=l2(1e-4))(x)
+    x = Dense(128, activation="relu", kernel_regularizer=l2(l2_reg))(x)
     x = BatchNormalization()(x)
-    x = Dropout(0.4)(x)
+    x = Dropout(dropout_rate)(x)
 
-    x = Dense(64, activation="relu", kernel_regularizer=l2(1e-4))(x)
-    x = Dropout(0.3)(x)
+    x = Dense(64, activation="relu", kernel_regularizer=l2(l2_reg))(x)
+    x = Dropout(dropout_rate)(x)
 
     out = Dense(1, activation="sigmoid", name="output")(x)
 
@@ -275,9 +336,18 @@ if __name__ == "__main__":
 
     # Crear datasets
     print("[INFO] Creando datasets de TensorFlow...")
-    train_ds = to_tf_dataset(X_train, y_train, vectorizer)
-    valid_ds = to_tf_dataset(X_valid, y_valid, vectorizer)
-    test_ds = to_tf_dataset(X_test, y_test, vectorizer)
+    train_ds = (
+        to_tf_dataset(X_train, y_train, vectorizer).cache().prefetch(tf.data.AUTOTUNE)
+    )
+    valid_ds = (
+        to_tf_dataset(X_valid, y_valid, vectorizer).cache().prefetch(tf.data.AUTOTUNE)
+    )
+    test_ds = (
+        to_tf_dataset(X_test, y_test, vectorizer).cache().prefetch(tf.data.AUTOTUNE)
+    )
+
+    params = random_hybrid_hyperparams()
+    print(f"[INFO] Hiperparámetros seleccionados: {params}")
 
     # Construir modelo
     print("[INFO] Construyendo modelo híbrido CNN + BiLSTM + GRU + Atención...")
@@ -286,6 +356,7 @@ if __name__ == "__main__":
         embedding_matrix=embedding_matrix,
         sequence_length=200,
         device_type=device,
+        params=params,
     )
 
     # Compilar modelo con datos de ejemplo para mostrar arquitectura completa
@@ -430,3 +501,10 @@ if __name__ == "__main__":
     print("[INFO] Proceso terminado.")
     print(f"[INFO] F1 Score Final - Validación: {f1_valid:.4f}, Prueba: {f1_test:.4f}")
     print(f"[INFO] Modelo híbrido guardado en: {BEST_MODEL_PATH}")
+
+    metrics = {
+        "f1_valid": float(f1_valid),
+        "f1_test": float(f1_test),
+        "params": params,
+    }
+    save_hybrid_results(params, metrics)

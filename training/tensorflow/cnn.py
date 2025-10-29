@@ -1,10 +1,13 @@
 import os
+import json
+import random
 import numpy as np
 import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
 from keras import Model
+from datetime import datetime
 from keras.regularizers import l2
 from keras.optimizers import Adam
 from keras.metrics import Precision, Recall
@@ -78,6 +81,7 @@ np.random.seed(SEED)
 # Configuración general
 BEST_MODEL_PATH = os.path.join(MODEL_DIR, "cnn_best_model.keras")
 BEST_SCORE_PATH = os.path.join(MODEL_DIR, "cnn_best_score.txt")
+HISTORY_FILE = os.path.join(MODEL_DIR, "cnn_hyperparam_history.json")
 
 
 # ==============================
@@ -93,6 +97,55 @@ def prepare_vectorizer(texts, max_tokens=30000, output_seq_len=200):
     )
     vectorizer.adapt(texts)
     return vectorizer
+
+
+def load_previous_cnn_results():
+    """Carga combinaciones ya probadas de hiperparámetros."""
+    if os.path.exists(HISTORY_FILE):
+        with open(HISTORY_FILE, "r", encoding="utf8") as f:
+            return json.load(f)
+    return []
+
+
+def save_cnn_results(params, metrics):
+    """Guarda los hiperparámetros y resultados del entrenamiento."""
+    history = load_previous_cnn_results()
+    record = {
+        "timestamp": datetime.now().isoformat(),
+        "params": params,
+        "metrics": metrics,
+    }
+
+    # Evitar duplicados exactos
+    if record["params"] not in [h["params"] for h in history]:
+        history.append(record)
+        with open(HISTORY_FILE, "w", encoding="utf8") as f:
+            json.dump(history, f, indent=2, ensure_ascii=False)
+        print(f"[INFO] Nueva combinación registrada en {HISTORY_FILE}")
+    else:
+        print("[INFO] Combinación de hiperparámetros ya registrada.")
+
+
+def random_cnn_hyperparams():
+    """Genera una combinación aleatoria no repetida de hiperparámetros."""
+    all_combinations = {
+        "num_filters": [64, 96, 128, 160],
+        "kernel_sizes": [(3, 4, 5), (2, 3, 4), (3, 5, 7)],
+        "dropout_rate": [0.3, 0.4, 0.5],
+        "l2_reg": [1e-3, 1e-4, 1e-5],
+        "embedding_dim": [300],
+    }
+
+    history = load_previous_cnn_results()
+    tried = [h["params"] for h in history]
+
+    for _ in range(20):  # hasta 20 intentos
+        params = {k: random.choice(v) for k, v in all_combinations.items()}
+        if params not in tried:
+            return params
+
+    print("[WARNING] Se agotaron combinaciones nuevas, repitiendo una al azar.")
+    return {k: random.choice(v) for k, v in all_combinations.items()}
 
 
 # ==============================
@@ -233,12 +286,36 @@ if __name__ == "__main__":
     print(f"[INFO] Vocab size real: {vocab_size}")
     embedding_matrix = build_embedding_matrix(vectorizer)
 
-    train_ds = to_tf_dataset(X_train, y_train, vectorizer, BATCH_SIZE, True)
-    valid_ds = to_tf_dataset(X_valid, y_valid, vectorizer, BATCH_SIZE, False)
-    test_ds = to_tf_dataset(X_test, y_test, vectorizer, BATCH_SIZE, False)
+    train_ds = (
+        to_tf_dataset(X_train, y_train, vectorizer, BATCH_SIZE, True)
+        .cache()
+        .prefetch(tf.data.AUTOTUNE)
+    )
+    valid_ds = (
+        to_tf_dataset(X_valid, y_valid, vectorizer, BATCH_SIZE, False)
+        .cache()
+        .prefetch(tf.data.AUTOTUNE)
+    )
+    test_ds = (
+        to_tf_dataset(X_test, y_test, vectorizer, BATCH_SIZE, False)
+        .cache()
+        .prefetch(tf.data.AUTOTUNE)
+    )
+
+    # === Selección de hiperparámetros ===
+    params = random_cnn_hyperparams()
+    print(f"[INFO] Hiperparámetros seleccionados: {params}")
 
     print("[INFO] Construyendo modelo CNN...")
-    model = build_cnn_model(vocab_size, embedding_matrix=embedding_matrix)
+    model = build_cnn_model(
+        vocab_size=vocab_size,
+        embedding_matrix=embedding_matrix,
+        num_filters=params["num_filters"],
+        kernel_sizes=params["kernel_sizes"],
+        dropout_rate=params["dropout_rate"],
+        l2_reg=params["l2_reg"],
+        embedding_dim=params["embedding_dim"],
+    )
 
     sample_batch = next(iter(train_ds.take(1)))
     model(sample_batch[0])
@@ -246,7 +323,7 @@ if __name__ == "__main__":
 
     callbacks = [
         EarlyStopping(
-            monitor="val_loss", patience=25, restore_best_weights=True, verbose=1
+            monitor="val_loss", patience=7, restore_best_weights=True, verbose=1
         ),
         ReduceLROnPlateau(
             monitor="val_loss", factor=0.4, patience=3, min_lr=1e-6, verbose=1
@@ -363,3 +440,10 @@ if __name__ == "__main__":
 
     print("[INFO] Proceso terminado.")
     print(f"[INFO] F1 Score Final - Validación: {f1_valid:.4f}, Prueba: {f1_test:.4f}")
+    metrics = {
+        "f1_valid": float(f1_valid),
+        "f1_test": float(f1_test),
+        "device": device,
+        "batch_size": BATCH_SIZE,
+    }
+    save_cnn_results(params, metrics)
