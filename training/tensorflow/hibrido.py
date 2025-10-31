@@ -117,7 +117,7 @@ def prepare_vectorizer(texts, max_tokens=30000, output_seq_len=200):
 # 🧠 Modelo híbrido optimizado
 # ==============================================
 def build_hybrid_model(
-    vocab_size, embedding_matrix, sequence_length=200, device_type=device, params=None
+    vocab_size, embedding_matrix, vectorizer, sequence_length=200, device_type=device, params=None
 ):
     filters = params.get("filters", 128)
     lstm_units = params.get("lstm_units", 64)
@@ -125,7 +125,8 @@ def build_hybrid_model(
     dropout_rate = params.get("dropout_rate", 0.4)
     l2_reg = params.get("l2_reg", 1e-4)
 
-    inp = Input(shape=(sequence_length,), dtype="int32", name="input_text")
+    inp = Input(shape=(1,), dtype=tf.string, name="text_input")  # texto crudo (string)
+    x = vectorizer(inp) 
     # start frozen
     emb = Embedding(
         input_dim=vocab_size,
@@ -134,7 +135,7 @@ def build_hybrid_model(
         weights=[embedding_matrix],
         trainable=False,  # Fase 1: congelado
         name="embedding",
-    )(inp)
+    )(x)
 
     x = SpatialDropout1D(0.25)(emb)
 
@@ -205,14 +206,14 @@ def build_hybrid_model(
     return model
 
 
-def to_tf_dataset(X, y, vectorizer, batch_size=BATCH_SIZE, shuffle=True):
-    """Convierte arrays en tf.data.Dataset optimizado con vectorización."""
+def to_tf_dataset(X, y, batch_size=BATCH_SIZE, shuffle=True):
+    """Convierte arrays de texto crudo en tf.data.Dataset (sin vectorizar)."""
     ds = tf.data.Dataset.from_tensor_slices((X, y))
     if shuffle:
         ds = ds.shuffle(buffer_size=min(len(X), 10000), seed=SEED)
-    ds = ds.batch(batch_size)
-    ds = ds.map(lambda x, y: (vectorizer(x), y), num_parallel_calls=tf.data.AUTOTUNE)
-    return ds.prefetch(tf.data.AUTOTUNE)
+    ds = ds.batch(batch_size).prefetch(tf.data.AUTOTUNE)
+    return ds
+
 
 
 def compute_class_weights(y):
@@ -288,13 +289,13 @@ if __name__ == "__main__":
     # Crear datasets
     print("[INFO] Creando datasets de TensorFlow...")
     train_ds = (
-        to_tf_dataset(X_train, y_train, vectorizer).cache().prefetch(tf.data.AUTOTUNE)
+        to_tf_dataset(X_train, y_train).cache().prefetch(tf.data.AUTOTUNE)
     )
     valid_ds = (
-        to_tf_dataset(X_valid, y_valid, vectorizer).cache().prefetch(tf.data.AUTOTUNE)
+        to_tf_dataset(X_valid, y_valid).cache().prefetch(tf.data.AUTOTUNE)
     )
     test_ds = (
-        to_tf_dataset(X_test, y_test, vectorizer).cache().prefetch(tf.data.AUTOTUNE)
+        to_tf_dataset(X_test, y_test).cache().prefetch(tf.data.AUTOTUNE)
     )
 
     all_combinations = {
@@ -313,6 +314,7 @@ if __name__ == "__main__":
     model = build_hybrid_model(
         vocab_size=vocab_size,
         embedding_matrix=embedding_matrix,
+        vectorizer=vectorizer,
         sequence_length=200,
         device_type=device,
         params=params,
