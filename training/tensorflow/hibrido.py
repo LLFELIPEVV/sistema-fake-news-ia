@@ -26,7 +26,6 @@ from keras.layers import (
     MultiHeadAttention,
     Input,
     Concatenate,
-    LayerNormalization,
 )
 from sklearn.metrics import classification_report, f1_score
 from sklearn.utils.class_weight import compute_class_weight
@@ -93,15 +92,17 @@ VECTORIZER_PATH = os.path.join(MODEL_DIR, "text_vectorizer.pkl")
 HISTORY_FILE = os.path.join(MODEL_DIR, "hybrid_hyperparam_history.json")
 EMBEDDING_DIM = 300
 
+SEQ_LEN = 200
+MAX_TOKENS = 30000
 SEED = 42
 tf.random.set_seed(SEED)
 np.random.seed(SEED)
 
 
 # ==============================================
-# 🔤 Vectorización y Embedding
+# 📤 Vectorización y Embedding
 # ==============================================
-def prepare_vectorizer(texts, max_tokens=30000, output_seq_len=200):
+def prepare_vectorizer(texts, max_tokens=MAX_TOKENS, output_seq_len=SEQ_LEN):
     vectorizer = TextVectorization(
         max_tokens=max_tokens,
         output_mode="int",
@@ -116,104 +117,105 @@ def prepare_vectorizer(texts, max_tokens=30000, output_seq_len=200):
 # ==============================================
 # 🧠 Modelo híbrido optimizado
 # ==============================================
-def build_hybrid_model(
-    vocab_size, embedding_matrix, vectorizer, sequence_length=200, device_type=device, params=None
-):
-    filters = params.get("filters", 128)
-    lstm_units = params.get("lstm_units", 64)
+def build_hybrid_model(vocab_size, embedding_matrix, params):
+    cnn_filters = params.get("filters", 128)
+    bilstm_units = params.get("lstm_units", 64)
     gru_units = params.get("gru_units", 64)
     dropout_rate = params.get("dropout_rate", 0.4)
-    l2_reg = params.get("l2_reg", 1e-4)
+    l2_reg = params.get("l2_reg", 1e-4)  # ✅ Ahora se usa
 
-    inp = Input(shape=(1,), dtype=tf.string, name="text_input")  # texto crudo (string)
-    x = vectorizer(inp) 
-    # start frozen
+    inp = Input(shape=(SEQ_LEN,), name="input_text")
+
     emb = Embedding(
         input_dim=vocab_size,
         output_dim=embedding_matrix.shape[1],
-        input_length=sequence_length,
+        input_length=SEQ_LEN,
         weights=[embedding_matrix],
         trainable=False,  # Fase 1: congelado
         name="embedding",
-    )(x)
+    )(inp)
 
-    x = SpatialDropout1D(0.25)(emb)
+    x = SpatialDropout1D(0.2)(emb)
 
-    # CNN parallel branches
-    convs = []
-    for k in (3, 4, 5):
-        c = Conv1D(
-            filters=filters,
+    # CNN paralelas
+    cnn_outputs = []
+    for k in [3, 4, 5]:
+        conv = Conv1D(
+            filters=cnn_filters,
             kernel_size=k,
-            padding="same",
             activation="relu",
-            kernel_regularizer=l2(l2_reg),
+            padding="same",
+            kernel_regularizer=l2(l2_reg),  # ✅ Agregado regularización
         )(x)
-        c = BatchNormalization()(c)
-        c = GlobalMaxPooling1D()(c)
-        convs.append(c)
-    cnn_out = Concatenate()(convs)
+        conv = BatchNormalization()(conv)
+        pool_max = GlobalMaxPooling1D()(conv)
+        pool_avg = GlobalAveragePooling1D()(conv)
+        cnn_feature = Concatenate()([pool_max, pool_avg])
+        cnn_outputs.append(cnn_feature)
+    cnn_features = Concatenate()(cnn_outputs)
 
-    # Recurrent path (BiLSTM -> GRU)
-    # Note: recurrent_dropout lowers CuDNN usage; keep moderate for CPU, set 0 on GPU for speed if desired
-    recurrent_dropout = 0.25 if device_type == "CPU" else 0.0
-    lstm = Bidirectional(
+    # BiLSTM + GRU
+    bilstm_out = Bidirectional(
         LSTM(
-            lstm_units,
+            bilstm_units,
             return_sequences=True,
             dropout=dropout_rate,
-            recurrent_dropout=recurrent_dropout,
+            recurrent_dropout=0.3,
+            kernel_regularizer=l2(l2_reg),  # ✅ Agregado regularización
         )
     )(x)
-    gru = GRU(
+    bilstm_out = BatchNormalization()(bilstm_out)
+
+    gru_out = GRU(
         gru_units,
         return_sequences=True,
         dropout=dropout_rate,
-        recurrent_dropout=recurrent_dropout,
-    )(lstm)
+        recurrent_dropout=0.3,
+        kernel_regularizer=l2(l2_reg),  # ✅ Agregado regularización
+    )(bilstm_out)
+    gru_out = BatchNormalization()(gru_out)
 
-    # Attention
-    attn = MultiHeadAttention(num_heads=2, key_dim=64, dropout=0.1)(gru, gru)
-    attn = LayerNormalization()(attn)
-    seq_feat = Concatenate()(
-        [GlobalAveragePooling1D()(attn), GlobalMaxPooling1D()(attn)]
+    # Atención
+    attn_out = MultiHeadAttention(num_heads=2, key_dim=gru_units, dropout=0.1)(
+        gru_out, gru_out
+    )
+    attn_pool = Concatenate()(
+        [GlobalAveragePooling1D()(attn_out), GlobalMaxPooling1D()(attn_out)]
     )
 
-    # Merge features
-    merged = Concatenate()([cnn_out, seq_feat])
-    merged = Dropout(dropout_rate)(merged)
+    all_features = Concatenate()([cnn_features, attn_pool])
+    dense1 = Dense(256, activation="relu", kernel_regularizer=l2(l2_reg))(all_features)
+    dense1 = BatchNormalization()(dense1)
+    dense1 = Dropout(0.5)(dense1)
 
-    # Dense head with L2 regularization and BatchNorm
-    x = Dense(256, activation="relu", kernel_regularizer=l2(l2_reg))(merged)
-    x = BatchNormalization()(x)
-    x = Dropout(dropout_rate)(x)
+    dense2 = Dense(128, activation="relu", kernel_regularizer=l2(l2_reg))(dense1)
+    dense2 = BatchNormalization()(dense2)
+    dense2 = Dropout(0.4)(dense2)
 
-    x = Dense(128, activation="relu", kernel_regularizer=l2(l2_reg))(x)
-    x = BatchNormalization()(x)
-    x = Dropout(dropout_rate)(x)
+    dense3 = Dense(64, activation="relu", kernel_regularizer=l2(l2_reg))(dense2)
+    dense3 = Dropout(0.3)(dense3)
 
-    x = Dense(64, activation="relu", kernel_regularizer=l2(l2_reg))(x)
-    x = Dropout(dropout_rate)(x)
+    out = Dense(1, activation="sigmoid", name="output")(dense3)
 
-    out = Dense(1, activation="sigmoid", name="output")(x)
+    model = Model(inputs=inp, outputs=out, name="hybrid_cnn_bilstm_gru_attention")
 
-    model = Model(inputs=inp, outputs=out, name="Hybrid_CNN_BiLSTM_GRU_Att")
     model.compile(
         optimizer=Adam(learning_rate=1e-3, clipnorm=1.0),
         loss="binary_crossentropy",
         metrics=["accuracy", Precision(name="precision"), Recall(name="recall")],
     )
+
     return model
 
 
-def to_tf_dataset(X, y, batch_size=BATCH_SIZE, shuffle=True):
-    """Convierte arrays de texto crudo en tf.data.Dataset (sin vectorizar)."""
-    ds = tf.data.Dataset.from_tensor_slices((X, y))
+def to_tf_dataset(texts, labels, vectorizer, batch_size=BATCH_SIZE, shuffle=True):
+    ds = tf.data.Dataset.from_tensor_slices((texts, labels))
     if shuffle:
-        ds = ds.shuffle(buffer_size=min(len(X), 10000), seed=SEED)
-    ds = ds.batch(batch_size).prefetch(tf.data.AUTOTUNE)
+        ds = ds.shuffle(buffer_size=min(len(texts), 10000), seed=SEED)
+    ds = ds.batch(batch_size)
+    ds = ds.map(lambda x, y: (vectorizer(x), y), num_parallel_calls=tf.data.AUTOTUNE)
+    ds = ds.prefetch(tf.data.AUTOTUNE)
     return ds
-
 
 
 def compute_class_weights(y):
@@ -248,6 +250,10 @@ if __name__ == "__main__":
     print("[INFO] Cargando datos...")
     train_df, valid_df, test_df = load_datasets()
 
+    # ✅ Validación de datos
+    if train_df.empty or valid_df.empty or test_df.empty:
+        raise ValueError("[ERROR] Uno o más datasets están vacíos")
+
     X_train, y_train = (
         train_df["texto"].astype(str).values,
         train_df["clase"].astype(int).values,
@@ -269,9 +275,8 @@ if __name__ == "__main__":
     X_train, X_valid, X_test = map(lemmatizer.transform, [X_train, X_valid, X_test])
 
     # Vectorización
-    print("[INFO] Preparando TextVectorization...")
-    vectorizer = prepare_vectorizer(X_train, max_tokens=30000, output_seq_len=200)
-    # Guardar vectorizer para producción
+    print("[INFO] Preparando vectorizador...")
+    vectorizer = prepare_vectorizer(X_train)
     with open(VECTORIZER_PATH, "wb") as f:
         pickle.dump(vectorizer, f)
     print(f"[INFO] Vectorizer guardado en {VECTORIZER_PATH}")
@@ -282,21 +287,14 @@ if __name__ == "__main__":
     vocab_size = len(vectorizer.get_vocabulary())
     print(f"[INFO] Vocab size real: {vocab_size}")
 
-    # sample weights
-    cw_dict = compute_class_weights(y_train)
-    print(f"[INFO] Class weights dict: {cw_dict}")
+    # ✅ Calcular class weights una sola vez
+    class_weights_dict = compute_class_weights(y_train)
 
     # Crear datasets
     print("[INFO] Creando datasets de TensorFlow...")
-    train_ds = (
-        to_tf_dataset(X_train, y_train).cache().prefetch(tf.data.AUTOTUNE)
-    )
-    valid_ds = (
-        to_tf_dataset(X_valid, y_valid).cache().prefetch(tf.data.AUTOTUNE)
-    )
-    test_ds = (
-        to_tf_dataset(X_test, y_test).cache().prefetch(tf.data.AUTOTUNE)
-    )
+    train_ds = to_tf_dataset(X_train, y_train, vectorizer)
+    valid_ds = to_tf_dataset(X_valid, y_valid, vectorizer)
+    test_ds = to_tf_dataset(X_test, y_test, vectorizer)
 
     all_combinations = {
         "filters": [96, 128, 160],
@@ -311,14 +309,7 @@ if __name__ == "__main__":
 
     # Construir modelo
     print("[INFO] Construyendo modelo híbrido CNN + BiLSTM + GRU + Atención...")
-    model = build_hybrid_model(
-        vocab_size=vocab_size,
-        embedding_matrix=embedding_matrix,
-        vectorizer=vectorizer,
-        sequence_length=200,
-        device_type=device,
-        params=params,
-    )
+    model = build_hybrid_model(vocab_size, embedding_matrix, params)
 
     # Compilar modelo con datos de ejemplo para mostrar arquitectura completa
     sample_batch = next(iter(train_ds.take(1)))
@@ -335,9 +326,6 @@ if __name__ == "__main__":
         ),
     ]
 
-    # Class weights
-    class_weights = compute_class_weights(y_train)
-
     # Entrenamiento
     print("[INFO] Entrenamiento fase 1 (embeddings congelados)...")
     history = model.fit(
@@ -345,15 +333,13 @@ if __name__ == "__main__":
         validation_data=valid_ds,
         epochs=15,
         callbacks=callbacks,
-        class_weight=cw_dict,
+        class_weight=class_weights_dict,  # ✅ Corregido
         verbose=1,
     )
 
     # Fine-tuning: unfreeze embedding and continue with lower LR
     print("[INFO] Descongelando embeddings para fine-tuning (fase 2)...")
-    for layer in model.layers:
-        if layer.name == "embedding":
-            layer.trainable = True
+    model.get_layer("embedding").trainable = True
 
     model.compile(
         optimizer=Adam(learning_rate=1e-4, clipnorm=1.0),
@@ -366,7 +352,7 @@ if __name__ == "__main__":
         validation_data=valid_ds,
         epochs=5,
         callbacks=callbacks,
-        class_weight=cw_dict,
+        class_weight=class_weights_dict,  # ✅ Corregido
         verbose=1,
     )
 
@@ -412,22 +398,7 @@ if __name__ == "__main__":
         filename="hybrid_cnn_bilstm_gru_attention_confusion_test.png",
     )
 
-    # Métricas detalladas
-    plot_metrics(
-        y_valid,
-        y_valid_pred,
-        dataset_name="Validación (Híbrido CNN+BiLSTM+GRU+Atención)",
-        filename="hybrid_cnn_bilstm_gru_attention_metrics_valid.png",
-    )
-    plot_metrics(
-        y_test,
-        y_test_pred,
-        dataset_name="Prueba (Híbrido CNN+BiLSTM+GRU+Atención)",
-        filename="hybrid_cnn_bilstm_gru_attention_metrics_test.png",
-    )
-
-    # Comparación de métricas entre Validación y Prueba
-    print("[INFO] Comparando métricas entre Validación y Prueba...")
+    # ✅ Métricas detalladas (sin duplicación)
     valid_metrics = plot_metrics(
         y_valid,
         y_valid_pred,
@@ -441,6 +412,8 @@ if __name__ == "__main__":
         filename="hybrid_cnn_bilstm_gru_attention_metrics_test.png",
     )
 
+    # Comparación de métricas entre Validación y Prueba
+    print("[INFO] Comparando métricas entre Validación y Prueba...")
     comp_df = pd.DataFrame(
         [valid_metrics, test_metrics], index=["Validación", "Prueba"]
     )
