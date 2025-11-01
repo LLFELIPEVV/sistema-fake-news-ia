@@ -1,6 +1,7 @@
 import os
 import json
 import random
+import itertools
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -142,20 +143,133 @@ def save_results(params, metrics, history_file):
         print("[INFO] Combinación de hiperparámetros ya registrada.")
 
 
-def get_random_hyperparams(param_space, history_file, max_attempts=50):
-    """Genera combinación aleatoria única (Keras)."""
+def get_random_hyperparams(
+    param_space, history_file, max_attempts=None, random_state=42
+):
+    """
+    Genera combinaciones únicas de hiperparámetros para Keras/TensorFlow.
+
+    Esta función primero intenta generar TODAS las combinaciones posibles del espacio
+    de búsqueda. Si hay demasiadas (>10000), usa muestreo aleatorio.
+
+    Args:
+        param_space: dict con listas de valores posibles para cada hiperparámetro
+                    Ejemplo: {'learning_rate': [0.001, 0.01], 'units': [64, 128]}
+        history_file: archivo JSON con historial de combinaciones probadas
+        max_attempts: número máximo de intentos para muestreo aleatorio (None = automático)
+        random_state: semilla para reproducibilidad
+
+    Returns:
+        dict: combinación de hiperparámetros única, o None si no hay más disponibles
+    """
     history = load_previous_results(history_file)
+
+    # Convertir historial a set de combinaciones
     tried_combinations = {_params_to_frozenset(h["params"]) for h in history}
 
-    print(f"[INFO] {len(tried_combinations)} combinaciones ya probadas.")
+    print(f"[INFO] {len(tried_combinations)} combinaciones únicas ya probadas.")
 
-    for attempt in range(max_attempts):
-        params = {key: random.choice(values) for key, values in param_space.items()}
-        combo = _params_to_frozenset(params)
+    # Calcular número total de combinaciones posibles
+    total_combinations = 1
+    for values in param_space.values():
+        total_combinations *= len(values)
 
-        if combo not in tried_combinations:
-            print(f"[INFO] Nueva combinación en intento {attempt + 1}")
+    print(f"[INFO] Espacio de búsqueda: {total_combinations:,} combinaciones posibles")
+
+    # Calcular saturación del espacio
+    if total_combinations > 0:
+        saturation_ratio = len(tried_combinations) / total_combinations
+        print(f"[INFO] Saturación del espacio: {saturation_ratio * 100:.2f}%")
+    else:
+        saturation_ratio = 0
+
+    # Estrategia 1: Si hay pocas combinaciones (<= 10000), usar búsqueda exhaustiva
+    if total_combinations <= 10000:
+        print("[INFO] Usando búsqueda EXHAUSTIVA (todas las combinaciones)")
+
+        # Generar todas las combinaciones posibles
+        keys = list(param_space.keys())
+        values = [param_space[key] for key in keys]
+        all_combinations = [
+            dict(zip(keys, combo)) for combo in itertools.product(*values)
+        ]
+
+        print(f"[INFO] {len(all_combinations)} combinaciones generadas")
+
+        # Filtrar las ya probadas
+        available_combinations = []
+        for params in all_combinations:
+            combo = _params_to_frozenset(params)
+            if combo not in tried_combinations:
+                available_combinations.append(params)
+
+        print(
+            f"[INFO] {len(available_combinations)} combinaciones no probadas encontradas"
+        )
+
+        if available_combinations:
+            # Establecer semilla para reproducibilidad
+            random.seed(random_state)
+            selected = random.choice(available_combinations)
+            print("[INFO] ✅ Combinación única seleccionada")
+            return selected
+        else:
+            print("[WARNING] ⚠️  Espacio de búsqueda completamente explorado")
+            print(
+                f"[INFO] Todas las {total_combinations} combinaciones ya fueron probadas"
+            )
+            return None
+
+    # Estrategia 2: Si hay muchas combinaciones, usar muestreo aleatorio inteligente
+    else:
+        print("[INFO] Espacio muy grande, usando MUESTREO ALEATORIO")
+
+        # Calcular max_attempts automáticamente si no se especificó
+        if max_attempts is None:
+            if saturation_ratio > 0.5:
+                max_attempts = 1000  # Espacio muy saturado
+            elif saturation_ratio > 0.1:
+                max_attempts = 500  # Moderadamente saturado
+            else:
+                max_attempts = 100  # Poco explorado
+
+        print(
+            f"[INFO] Intentando generar combinación única (máx {max_attempts} intentos)"
+        )
+
+        # Establecer semilla para reproducibilidad
+        random.seed(random_state)
+
+        for attempt in range(max_attempts):
+            params = {key: random.choice(values) for key, values in param_space.items()}
+            combo = _params_to_frozenset(params)
+
+            if combo not in tried_combinations:
+                print(
+                    f"[INFO] ✅ Nueva combinación encontrada en intento {attempt + 1}"
+                )
+                return params
+
+        # Si no se encontró combinación única después de max_attempts
+        print(
+            f"[WARNING] ⚠️  No se encontró combinación única en {max_attempts} intentos"
+        )
+
+        # Calcular combinaciones restantes estimadas
+        remaining = total_combinations - len(tried_combinations)
+        print(f"[INFO] Combinaciones restantes estimadas: {remaining:,}")
+
+        if saturation_ratio > 0.9:
+            print(
+                f"[WARNING] Espacio altamente saturado (>{saturation_ratio * 100:.1f}%)"
+            )
+            print("[INFO] Considera:")
+            print("       - Expandir el espacio de búsqueda")
+            print("       - Eliminar historial: rm {history_file}")
+            return None
+        else:
+            # Si la saturación no es crítica, devolver una combinación aleatoria
+            # (puede estar repetida, pero es poco probable)
+            params = {key: random.choice(values) for key, values in param_space.items()}
+            print("[INFO] ⚠️  Devolviendo combinación aleatoria (puede estar repetida)")
             return params
-
-    print(f"[WARNING] No se encontró combinación única en {max_attempts} intentos.")
-    return {key: random.choice(values) for key, values in param_space.items()}
