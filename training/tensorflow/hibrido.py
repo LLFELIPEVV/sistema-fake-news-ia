@@ -318,7 +318,7 @@ if __name__ == "__main__":
         "lstm_units": [64, 80, 96],
         "gru_units": [64, 80, 96],
         "dropout_rate": [0.3, 0.4, 0.5],
-        "l2_reg": l2([1e-4, 1e-5]),
+        "l2_reg": [1e-4, 1e-5],
         "kernel_sizes": [[3, 4, 5], [2, 3, 4], [3, 5, 7]],
     }
 
