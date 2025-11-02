@@ -20,13 +20,12 @@ from keras.layers import (
     GRU,
     Conv1D,
     GlobalMaxPooling1D,
+    GlobalAveragePooling1D,
     Dropout,
     BatchNormalization,
-    LayerNormalization,
     MultiHeadAttention,
     Input,
     Concatenate,
-    LeakyReLU,
 )
 from sklearn.metrics import classification_report, f1_score
 from sklearn.utils.class_weight import compute_class_weight
@@ -76,13 +75,14 @@ else:
 print(f"[INFO] Usando batch_size = {BATCH_SIZE} con {device} y {os.cpu_count()} hilos")
 
 # Configuración general
-BEST_MODEL_PATH = os.path.join(MODEL_DIR, "hybrid_optimized_best_model.keras")
-BEST_SCORE_PATH = os.path.join(MODEL_DIR, "hybrid_optimized_best_score.txt")
-VECTORIZER_PATH = os.path.join(MODEL_DIR, "text_vectorizer_hybrid.pkl")
-HISTORY_FILE = os.path.join(MODEL_DIR, "hybrid_optimized_history.json")
+BEST_MODEL_PATH = os.path.join(MODEL_DIR, "hybrid_fixed_best_model.keras")
+BEST_SCORE_PATH = os.path.join(MODEL_DIR, "hybrid_fixed_best_score.txt")
+VECTORIZER_PATH = os.path.join(MODEL_DIR, "text_vectorizer_hybrid_fixed.pkl")
+HISTORY_FILE = os.path.join(MODEL_DIR, "hybrid_fixed_history.json")
 
 SEQ_LEN = 200
 MAX_TOKENS = 30000
+EMBEDDING_DIM = 300
 SEED = 42
 tf.random.set_seed(SEED)
 np.random.seed(SEED)
@@ -100,118 +100,131 @@ def prepare_vectorizer(texts, max_tokens=MAX_TOKENS, output_seq_len=SEQ_LEN):
     return vectorizer
 
 
-def build_hybrid_model_optimized(vocab_size, embedding_matrix, params):
+def build_hybrid_model_fixed(vocab_size, embedding_matrix, params):
     """
-    Modelo híbrido SIMPLIFICADO y BALANCEADO inspirado en el CNN exitoso.
+    Modelo híbrido CORREGIDO que replica la arquitectura exitosa original.
 
-    Cambios clave:
-    1. CNN simplificado (solo MaxPooling, sin duplicar features)
-    2. Capas recurrentes más ligeras
-    3. Capas densas reducidas (128 → 64 como en CNN)
-    4. Regularización consistente (SpatialDropout + LayerNorm + BatchNorm)
-    5. Dropout adaptativo según device
+    Cambios críticos respecto al optimizado fallido:
+    1. ✅ Embeddings GloVe 300d (no 128d aleatorios)
+    2. ✅ CNN con padding='valid' (no 'same')
+    3. ✅ Concatenar TODAS las features RNN (max + avg pooling)
+    4. ✅ Mantener arquitectura de capas densas del original (256→128→64)
+    5. ✅ L2 regularization solo donde ayuda
     """
     cnn_filters = params.get("filters", 128)
-    rnn_units = params.get("rnn_units", 64)  # ✅ Mismo para LSTM y GRU
-    dropout_rate = params.get("dropout_rate", 0.4 if device == "GPU" else 0.3)
+    bilstm_units = params.get("lstm_units", 64)
+    gru_units = params.get("gru_units", 64)
+    dropout_rate = params.get("dropout_rate", 0.4)
     l2_reg = params.get("l2_reg", 1e-4)
-    kernel_sizes = params.get("kernel_sizes", (3, 4, 5))
+    cnn_kernel_sizes = params.get("kernel_sizes", [3, 4, 5])
 
-    inp = Input(shape=(SEQ_LEN,), name="input_text")
+    inputs = Input(shape=(SEQ_LEN,), name="input_text")
 
-    # Embedding (igual que CNN)
-    emb = Embedding(
+    # ✅ CRÍTICO: Embedding PRE-ENTRENADO con GloVe 300d
+    embedded = Embedding(
         input_dim=vocab_size,
-        output_dim=embedding_matrix.shape[1],
+        output_dim=EMBEDDING_DIM,
         weights=[embedding_matrix],
-        trainable=False,
+        trainable=False,  # Congelado en fase 1
         name="embedding",
-    )(inp)
+    )(inputs)
 
-    # ✅ SpatialDropout como en CNN
-    x = SpatialDropout1D(dropout_rate)(emb)
+    # Spatial dropout
+    embedded_dropped = SpatialDropout1D(0.2, name="spatial_dropout")(embedded)
 
     # =====================================
-    # RAMA CNN (SIMPLIFICADA - solo MaxPool)
+    # RAMA CNN
     # =====================================
     cnn_outputs = []
-    for ks in kernel_sizes:
+    for kernel_size in cnn_kernel_sizes:
         conv = Conv1D(
             filters=cnn_filters,
-            kernel_size=ks,
-            padding="same",
-            kernel_regularizer=l2(l2_reg),
-        )(x)
-        conv = LeakyReLU(alpha=0.1)(conv)  # ✅ LeakyReLU como en CNN
-        conv = BatchNormalization()(conv)
-        # ✅ SOLO MaxPooling (eliminar AvgPooling duplicado)
-        conv = GlobalMaxPooling1D()(conv)
-        cnn_outputs.append(conv)
+            kernel_size=kernel_size,
+            activation="relu",
+            padding="valid",
+            name=f"conv1d_{kernel_size}",
+        )(embedded_dropped)
 
-    cnn_features = Concatenate()(cnn_outputs)
+        conv = BatchNormalization(name=f"bn_conv_{kernel_size}")(conv)
 
-    # =====================================
-    # RAMA RNN (SIMPLIFICADA)
-    # =====================================
-    # ✅ Reducir recurrent_dropout (0.3 → 0.2)
-    rnn_out = Bidirectional(
-        LSTM(
-            rnn_units,
-            return_sequences=True,
-            dropout=dropout_rate * 0.5,  # ✅ Menos dropout
-            recurrent_dropout=0.2,  # ✅ Reducido de 0.3
-            kernel_regularizer=l2(l2_reg),
+        # ✅ Max + Avg pooling
+        pool_max = GlobalMaxPooling1D(name=f"global_max_pool_{kernel_size}")(conv)
+        pool_avg = GlobalAveragePooling1D(name=f"global_avg_pool_{kernel_size}")(conv)
+
+        cnn_feature = Concatenate(name=f"cnn_concat_{kernel_size}")(
+            [pool_max, pool_avg]
         )
-    )(x)
-    rnn_out = BatchNormalization()(rnn_out)
+        cnn_outputs.append(cnn_feature)
 
-    # ✅ GRU más ligero
-    rnn_out = GRU(
-        rnn_units,
+    cnn_features = Concatenate(name="cnn_features_concat")(cnn_outputs)
+
+    # =====================================
+    # RAMA RNN
+    # =====================================
+    bilstm_out = Bidirectional(
+        LSTM(
+            bilstm_units,
+            dropout=dropout_rate,
+            recurrent_dropout=0.3,
+            return_sequences=True,
+            name="bilstm",
+        ),
+        name="bidirectional_lstm",
+    )(embedded_dropped)
+
+    bilstm_out = BatchNormalization(name="bn_bilstm")(bilstm_out)
+
+    gru_out = GRU(
+        gru_units,
+        dropout=dropout_rate,
+        recurrent_dropout=0.3,
         return_sequences=True,
-        dropout=dropout_rate * 0.5,
-        recurrent_dropout=0.2,
-        kernel_regularizer=l2(l2_reg),
-    )(rnn_out)
-    rnn_out = BatchNormalization()(rnn_out)
+        name="gru",
+    )(bilstm_out)
+
+    gru_out = BatchNormalization(name="bn_gru")(gru_out)
 
     # =====================================
-    # ATENCIÓN (MEJORADA)
+    # ATENCIÓN
     # =====================================
-    # ✅ Más heads y key_dim ajustado
-    attn_out = MultiHeadAttention(
-        num_heads=4,  # ✅ Aumentado de 2 a 4
-        key_dim=rnn_units // 2,  # ✅ Más eficiente
-        dropout=0.1,
-    )(rnn_out, rnn_out)
+    attention_out = MultiHeadAttention(
+        num_heads=4, key_dim=gru_units, dropout=0.1, name="self_attention"
+    )(query=gru_out, value=gru_out, key=gru_out)
 
-    # ✅ Solo MaxPooling (consistente con CNN)
-    attn_features = GlobalMaxPooling1D()(attn_out)
+    attention_pooled = GlobalAveragePooling1D(name="attention_pooled")(attention_out)
+
+    # ✅ CRÍTICO: Agregar max/avg pooling del GRU
+    gru_max_pool = GlobalMaxPooling1D(name="gru_max_pool")(gru_out)
+    gru_avg_pool = GlobalAveragePooling1D(name="gru_avg_pool")(gru_out)
+
+    # ✅ Concatenar TODAS las features
+    all_features = Concatenate(name="all_features_concat")(
+        [
+            cnn_features,  # Features CNN
+            attention_pooled,  # Features con atención
+            gru_max_pool,  # GRU max pooling
+            gru_avg_pool,  # GRU average pooling
+        ]
+    )
 
     # =====================================
-    # FUSIÓN (SIMPLIFICADA)
+    # CAPAS DENSAS
     # =====================================
-    all_features = Concatenate()([cnn_features, attn_features])
+    dense1 = Dense(256, activation="relu", name="dense_1")(all_features)
+    dense1 = BatchNormalization(name="bn_dense1")(dense1)
+    dense1 = Dropout(0.5, name="dropout_1")(dense1)
 
-    # ✅ LayerNormalization como en CNN
-    all_features = LayerNormalization()(all_features)
+    dense2 = Dense(128, activation="relu", name="dense_2")(dense1)
+    dense2 = BatchNormalization(name="bn_dense2")(dense2)
+    dense2 = Dropout(0.4, name="dropout_2")(dense2)
 
-    # =====================================
-    # CAPAS DENSAS (IGUAL QUE CNN: 128 → 64)
-    # =====================================
-    x = Dense(128, kernel_regularizer=l2(l2_reg))(all_features)
-    x = LeakyReLU(alpha=0.1)(x)
-    x = BatchNormalization()(x)
-    x = Dropout(dropout_rate)(x)
-
-    x = Dense(64, kernel_regularizer=l2(l2_reg))(x)
-    x = LeakyReLU(alpha=0.1)(x)
-    x = Dropout(dropout_rate * 0.5)(x)
+    dense3 = Dense(64, activation="relu", name="dense_3")(dense2)
+    dense3 = Dropout(0.3, name="dropout_3")(dense3)
 
     # Output
-    output = Dense(1, activation="sigmoid", name="output")(x)
+    outputs = Dense(1, activation="sigmoid", name="output")(dense3)
 
-    model = Model(inputs=inp, outputs=output, name="hybrid_optimized")
+    model = Model(inputs=inputs, outputs=outputs, name="hybrid_fixed")
 
     model.compile(
         optimizer=Adam(learning_rate=1e-3, clipnorm=1.0),
@@ -281,7 +294,10 @@ if __name__ == "__main__":
     with open(VECTORIZER_PATH, "wb") as f:
         pickle.dump(vectorizer, f)
 
-    embedding_matrix = build_embedding_matrix(vectorizer)
+    # ✅ CRÍTICO: Cargar embeddings GloVe 300d
+    print("[INFO] Construyendo matriz de embeddings GloVe 300d...")
+    embedding_matrix = build_embedding_matrix(vectorizer, embedding_dim=EMBEDDING_DIM)
+
     vocab_size = len(vectorizer.get_vocabulary())
     print(f"[INFO] Vocab size real: {vocab_size}")
 
@@ -296,21 +312,22 @@ if __name__ == "__main__":
         to_tf_dataset(X_test, y_test, vectorizer).cache().prefetch(tf.data.AUTOTUNE)
     )
 
-    # ✅ Hiperparámetros simplificados (alineados con CNN)
+    # Hiperparámetros
     all_combinations = {
-        "filters": [96, 128, 160],  # Igual que CNN
-        "rnn_units": [64, 80],  # Simplificado
-        "dropout_rate": [0.3, 0.4, 0.5],  # Igual que CNN
-        "l2_reg": [1e-4, 1e-5],  # Igual que CNN
-        "kernel_sizes": [(3, 4, 5), (2, 3, 4), (3, 5, 7)],  # Igual que CNN
+        "filters": [96, 128, 160],
+        "lstm_units": [64, 80, 96],
+        "gru_units": [64, 80, 96],
+        "dropout_rate": [0.3, 0.4, 0.5],
+        "l2_reg": l2([1e-4, 1e-5]),
+        "kernel_sizes": [[3, 4, 5], [2, 3, 4], [3, 5, 7]],
     }
 
     params = get_random_hyperparams(all_combinations, HISTORY_FILE, max_attempts=50)
     print(f"[INFO] Hiperparámetros seleccionados: {params}")
 
     # Construir modelo
-    print("[INFO] Construyendo modelo híbrido optimizado...")
-    model = build_hybrid_model_optimized(vocab_size, embedding_matrix, params)
+    print("[INFO] Construyendo modelo híbrido CORREGIDO...")
+    model = build_hybrid_model_fixed(vocab_size, embedding_matrix, params)
 
     sample_batch = next(iter(train_ds.take(1)))
     model(sample_batch[0])
@@ -319,10 +336,19 @@ if __name__ == "__main__":
     # Callbacks
     callbacks = [
         EarlyStopping(
-            monitor="val_loss", patience=7, restore_best_weights=True, verbose=1
+            monitor="val_loss",
+            patience=14,
+            restore_best_weights=True,
+            verbose=1,
+            mode="min",
         ),
         ReduceLROnPlateau(
-            monitor="val_loss", factor=0.4, patience=3, min_lr=1e-6, verbose=1
+            monitor="val_loss",
+            factor=0.5,
+            patience=3,
+            min_lr=1e-6,
+            verbose=1,
+            mode="min",
         ),
     ]
 
@@ -347,7 +373,6 @@ if __name__ == "__main__":
         loss="binary_crossentropy",
         metrics=["accuracy", Precision(name="precision"), Recall(name="recall")],
     )
-
     history_ft = model.fit(
         train_ds,
         validation_data=valid_ds,
@@ -360,7 +385,7 @@ if __name__ == "__main__":
     # Visualizaciones
     plot_training_history(
         history,
-        filename="hybrid_optimized_training_history.png",
+        filename="hybrid_cnn_bilstm_gru_attention_training_history.png",
         metrics=("accuracy", "loss", "precision", "recall"),
     )
 
@@ -387,28 +412,28 @@ if __name__ == "__main__":
     plot_confusion_matrix(
         y_valid,
         y_valid_pred,
-        title="Matriz de confusión - Validación (Híbrido Optimizado)",
-        filename="hybrid_optimized_confusion_valid.png",
+        title="Matriz de confusión - Validación (Híbrido CNN+BiLSTM+GRU+Atención)",
+        filename="hybrid_cnn_bilstm_gru_attention_confusion_valid.png",
     )
     plot_confusion_matrix(
         y_test,
         y_test_pred,
-        title="Matriz de confusión - Prueba (Híbrido Optimizado)",
-        filename="hybrid_optimized_confusion_test.png",
+        title="Matriz de confusión - Prueba (Híbrido CNN+BiLSTM+GRU+Atención)",
+        filename="hybrid_cnn_bilstm_gru_attention_confusion_test.png",
     )
 
     # Métricas
     valid_metrics = plot_metrics(
         y_valid,
         y_valid_pred,
-        dataset_name="Validación (Híbrido Optimizado)",
-        filename="hybrid_optimized_metrics_valid.png",
+        dataset_name="Validación (Híbrido CNN+BiLSTM+GRU+Atención)",
+        filename="hybrid_cnn_bilstm_gru_attention_metrics_valid.png",
     )
     test_metrics = plot_metrics(
         y_test,
         y_test_pred,
-        dataset_name="Prueba (Híbrido Optimizado)",
-        filename="hybrid_optimized_metrics_test.png",
+        dataset_name="Prueba (Híbrido CNN+BiLSTM+GRU+Atención)",
+        filename="hybrid_cnn_bilstm_gru_attention_metrics_test.png",
     )
 
     # Comparación
@@ -417,13 +442,13 @@ if __name__ == "__main__":
     )
     fig, ax = plt.subplots(figsize=(10, 6))
     comp_df.plot(kind="bar", colormap="viridis", ax=ax)
-    ax.set_title("Comparación de métricas - Híbrido Optimizado")
+    ax.set_title("Comparación de métricas - Híbrido CNN+BiLSTM+GRU+Atención")
     ax.set_ylabel("Valor")
     ax.set_ylim(0, 1)
     plt.xticks(rotation=0)
     for container in ax.containers:
         ax.bar_label(container, fmt="%.2f", label_type="edge", fontsize=10)
-    save_figure(fig, "hybrid_optimized_comparison_valid_test.png")
+    save_figure(fig, "hybrid_cnn_bilstm_gru_attention_comparison_valid_test.png")
     plt.close(fig)
 
     print("[INFO] Proceso terminado.")
