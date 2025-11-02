@@ -1,232 +1,25 @@
-2025-11-01 18:43:49.396866: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-2025-11-01 18:43:50.853709: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-11-02 15:06:57.804660: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-11-02 15:07:14.261675: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
 [INFO] No se detectó GPU, usando CPU
 [INFO] Usando batch_size = 64 con CPU y 12 hilos
 [INFO] Cargando datos...
 [INFO] Tamaños - Train: 35511, Valid: 7610, Test: 7610
 [INFO] Preparando vectorizador...
-2025-11-01 18:46:01.923484: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+2025-11-02 15:09:53.777042: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+[INFO] Construyendo matriz de embeddings GloVe 300d...
 [INFO] Embeddings cargados correctamente: 12012
 [WARNING] Líneas omitidas por formato incorrecto: 29
 [INFO] Tamaño final de embedding_matrix: (30000, 300)
 [INFO] Vocab size real: 30000
-[INFO] 0 combinaciones únicas ya probadas.
-[INFO] Espacio de búsqueda: 108 combinaciones posibles
-[INFO] Saturación del espacio: 0.00%
-[INFO] Usando búsqueda EXHAUSTIVA (todas las combinaciones)
-[INFO] 108 combinaciones generadas
-[INFO] 108 combinaciones no probadas encontradas
-[INFO] ✅ Combinación única seleccionada
-[INFO] Hiperparámetros seleccionados: {'filters': 160, 'rnn_units': 64, 'dropout_rate': 0.4, 'l2_reg': 1e-05, 'kernel_sizes': (3, 4, 5)}
-[INFO] Construyendo modelo híbrido optimizado...
-C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\keras\src\layers\activations\leaky_relu.py:41: UserWarning: Argument `alpha` is deprecated. Use `negative_slope` instead.
-  warnings.warn(
-2025-11-01 18:48:17.895493: W tensorflow/core/kernels/data/cache_dataset_ops.cc:917] The calling iterator did not fully read the dataset being cached. In order to avoid unexpected truncation of the dataset, the partially cached contents of the dataset  will be discarded. This can happen if you have an input pipeline similar to `dataset.cache().take(k).repeat()`. You should use `dataset.take(k).cache().repeat()` instead.
-Model: "hybrid_optimized"
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃ Layer (type)                  ┃ Output Shape              ┃         Param # ┃ Connected to               ┃
-┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
-│ input_text (InputLayer)       │ (None, 200)               │               0 │ -                          │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ embedding (Embedding)         │ (None, 200, 300)          │       9,000,000 │ input_text[0][0]           │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ spatial_dropout1d             │ (None, 200, 300)          │               0 │ embedding[0][0]            │
-│ (SpatialDropout1D)            │                           │                 │                            │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ bidirectional (Bidirectional) │ (None, 200, 128)          │         186,880 │ spatial_dropout1d[0][0]    │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ conv1d (Conv1D)               │ (None, 200, 160)          │         144,160 │ spatial_dropout1d[0][0]    │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ conv1d_1 (Conv1D)             │ (None, 200, 160)          │         192,160 │ spatial_dropout1d[0][0]    │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ conv1d_2 (Conv1D)             │ (None, 200, 160)          │         240,160 │ spatial_dropout1d[0][0]    │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ batch_normalization_3         │ (None, 200, 128)          │             512 │ bidirectional[0][0]        │
-│ (BatchNormalization)          │                           │                 │                            │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ leaky_re_lu (LeakyReLU)       │ (None, 200, 160)          │               0 │ conv1d[0][0]               │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ leaky_re_lu_1 (LeakyReLU)     │ (None, 200, 160)          │               0 │ conv1d_1[0][0]             │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ leaky_re_lu_2 (LeakyReLU)     │ (None, 200, 160)          │               0 │ conv1d_2[0][0]             │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ gru (GRU)                     │ (None, 200, 64)           │          37,248 │ batch_normalization_3[0][… │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ batch_normalization           │ (None, 200, 160)          │             640 │ leaky_re_lu[0][0]          │
-│ (BatchNormalization)          │                           │                 │                            │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ batch_normalization_1         │ (None, 200, 160)          │             640 │ leaky_re_lu_1[0][0]        │
-│ (BatchNormalization)          │                           │                 │                            │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ batch_normalization_2         │ (None, 200, 160)          │             640 │ leaky_re_lu_2[0][0]        │
-│ (BatchNormalization)          │                           │                 │                            │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ batch_normalization_4         │ (None, 200, 64)           │             256 │ gru[0][0]                  │
-│ (BatchNormalization)          │                           │                 │                            │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ global_max_pooling1d          │ (None, 160)               │               0 │ batch_normalization[0][0]  │
-│ (GlobalMaxPooling1D)          │                           │                 │                            │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ global_max_pooling1d_1        │ (None, 160)               │               0 │ batch_normalization_1[0][… │
-│ (GlobalMaxPooling1D)          │                           │                 │                            │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ global_max_pooling1d_2        │ (None, 160)               │               0 │ batch_normalization_2[0][… │
-│ (GlobalMaxPooling1D)          │                           │                 │                            │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ multi_head_attention          │ (None, 200, 64)           │          33,216 │ batch_normalization_4[0][… │
-│ (MultiHeadAttention)          │                           │                 │ batch_normalization_4[0][… │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ concatenate (Concatenate)     │ (None, 480)               │               0 │ global_max_pooling1d[0][0… │
-│                               │                           │                 │ global_max_pooling1d_1[0]… │
-│                               │                           │                 │ global_max_pooling1d_2[0]… │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ global_max_pooling1d_3        │ (None, 64)                │               0 │ multi_head_attention[0][0] │
-│ (GlobalMaxPooling1D)          │                           │                 │                            │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ concatenate_1 (Concatenate)   │ (None, 544)               │               0 │ concatenate[0][0],         │
-│                               │                           │                 │ global_max_pooling1d_3[0]… │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ layer_normalization           │ (None, 544)               │           1,088 │ concatenate_1[0][0]        │
-│ (LayerNormalization)          │                           │                 │                            │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ dense (Dense)                 │ (None, 128)               │          69,760 │ layer_normalization[0][0]  │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ leaky_re_lu_3 (LeakyReLU)     │ (None, 128)               │               0 │ dense[0][0]                │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ batch_normalization_5         │ (None, 128)               │             512 │ leaky_re_lu_3[0][0]        │
-│ (BatchNormalization)          │                           │                 │                            │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ dropout_1 (Dropout)           │ (None, 128)               │               0 │ batch_normalization_5[0][… │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ dense_1 (Dense)               │ (None, 64)                │           8,256 │ dropout_1[0][0]            │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ leaky_re_lu_4 (LeakyReLU)     │ (None, 64)                │               0 │ dense_1[0][0]              │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ dropout_2 (Dropout)           │ (None, 64)                │               0 │ leaky_re_lu_4[0][0]        │
-├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
-│ output (Dense)                │ (None, 1)                 │              65 │ dropout_2[0][0]            │
-└───────────────────────────────┴───────────────────────────┴─────────────────┴────────────────────────────┘
- Total params: 9,916,193 (37.83 MB)
- Trainable params: 914,593 (3.49 MB)
- Non-trainable params: 9,001,600 (34.34 MB)
-[INFO] Distribución de clases: [14546 20965]
-[INFO] Class weights: {0: 1.2206448508180943, 1: 0.8469115191986645}
-[INFO] Entrenamiento fase 1 (embeddings congelados)...
-Epoch 1/15
-555/555 ━━━━━━━━━━━━━━━━━━━━ 378s 665ms/step - accuracy: 0.6890 - loss: 0.5891 - precision: 0.7365 - recall: 0.7367 - val_accuracy: 0.7996 - val_loss: 0.4489 - val_precision: 0.7735 - val_recall: 0.9341 - learning_rate: 0.0010
-Epoch 2/15
-555/555 ━━━━━━━━━━━━━━━━━━━━ 366s 660ms/step - accuracy: 0.7834 - loss: 0.4534 - precision: 0.8018 - recall: 0.8411 - val_accuracy: 0.8172 - val_loss: 0.3944 - val_precision: 0.7950 - val_recall: 0.9303 - learning_rate: 0.0010
-Epoch 3/15
-555/555 ━━━━━━━━━━━━━━━━━━━━ 367s 661ms/step - accuracy: 0.8096 - loss: 0.4167 - precision: 0.8191 - recall: 0.8696 - val_accuracy: 0.8302 - val_loss: 0.3784 - val_precision: 0.8129 - val_recall: 0.9254 - learning_rate: 0.0010
-Epoch 4/15
-555/555 ━━━━━━━━━━━━━━━━━━━━ 402s 724ms/step - accuracy: 0.8217 - loss: 0.3956 - precision: 0.8310 - recall: 0.8761 - val_accuracy: 0.8290 - val_loss: 0.3733 - val_precision: 0.8200 - val_recall: 0.9103 - learning_rate: 0.0010
-Epoch 5/15
-555/555 ━━━━━━━━━━━━━━━━━━━━ 367s 661ms/step - accuracy: 0.8326 - loss: 0.3763 - precision: 0.8434 - recall: 0.8798 - val_accuracy: 0.8321 - val_loss: 0.3707 - val_precision: 0.8057 - val_recall: 0.9430 - learning_rate: 0.0010
-Epoch 6/15
-555/555 ━━━━━━━━━━━━━━━━━━━━ 366s 659ms/step - accuracy: 0.8393 - loss: 0.3617 - precision: 0.8513 - recall: 0.8817 - val_accuracy: 0.8302 - val_loss: 0.3714 - val_precision: 0.8325 - val_recall: 0.8918 - learning_rate: 0.0010
-Epoch 7/15
-555/555 ━━━━━━━━━━━━━━━━━━━━ 366s 659ms/step - accuracy: 0.8486 - loss: 0.3496 - precision: 0.8595 - recall: 0.8889 - val_accuracy: 0.8334 - val_loss: 0.3831 - val_precision: 0.8155 - val_recall: 0.9277 - learning_rate: 0.0010
-Epoch 8/15
-555/555 ━━━━━━━━━━━━━━━━━━━━ 0s 629ms/step - accuracy: 0.8488 - loss: 0.3496 - precision: 0.8604 - recall: 0.8856
-Epoch 8: ReduceLROnPlateau reducing learning rate to 0.0004000000189989805.
-555/555 ━━━━━━━━━━━━━━━━━━━━ 365s 658ms/step - accuracy: 0.8537 - loss: 0.3375 - precision: 0.8687 - recall: 0.8860 - val_accuracy: 0.8357 - val_loss: 0.3840 - val_precision: 0.8213 - val_recall: 0.9225 - learning_rate: 0.0010
-Epoch 9/15
-555/555 ━━━━━━━━━━━━━━━━━━━━ 365s 657ms/step - accuracy: 0.8717 - loss: 0.3041 - precision: 0.8873 - recall: 0.8965 - val_accuracy: 0.8314 - val_loss: 0.4011 - val_precision: 0.8393 - val_recall: 0.8836 - learning_rate: 4.0000e-04
-Epoch 10/15
-555/555 ━━━━━━━━━━━━━━━━━━━━ 364s 657ms/step - accuracy: 0.8822 - loss: 0.2829 - precision: 0.9029 - recall: 0.8969 - val_accuracy: 0.8340 - val_loss: 0.4337 - val_precision: 0.8288 - val_recall: 0.9061 - learning_rate: 4.0000e-04
-Epoch 11/15
-555/555 ━━━━━━━━━━━━━━━━━━━━ 0s 627ms/step - accuracy: 0.8789 - loss: 0.2839 - precision: 0.9028 - recall: 0.8890
-Epoch 11: ReduceLROnPlateau reducing learning rate to 0.00016000000759959222.
-555/555 ━━━━━━━━━━━━━━━━━━━━ 364s 656ms/step - accuracy: 0.8874 - loss: 0.2690 - precision: 0.9125 - recall: 0.8952 - val_accuracy: 0.8301 - val_loss: 0.4551 - val_precision: 0.8273 - val_recall: 0.9001 - learning_rate: 4.0000e-04
-Epoch 12/15
-555/555 ━━━━━━━━━━━━━━━━━━━━ 364s 656ms/step - accuracy: 0.9014 - loss: 0.2447 - precision: 0.9247 - recall: 0.9069 - val_accuracy: 0.8229 - val_loss: 0.4789 - val_precision: 0.8424 - val_recall: 0.8611 - learning_rate: 1.6000e-04
-Epoch 12: early stopping
-Restoring model weights from the end of the best epoch: 5.
-[INFO] Iniciando fine-tuning de embeddings...
-Epoch 1/5
-555/555 ━━━━━━━━━━━━━━━━━━━━ 507s 896ms/step - accuracy: 0.8557 - loss: 0.3327 - precision: 0.8638 - recall: 0.8969 - val_accuracy: 0.8455 - val_loss: 0.3531 - val_precision: 0.8460 - val_recall: 0.9025 - learning_rate: 1.0000e-04
-Epoch 2/5
-555/555 ━━━━━━━━━━━━━━━━━━━━ 503s 907ms/step - accuracy: 0.8834 - loss: 0.2851 - precision: 0.8932 - recall: 0.9116 - val_accuracy: 0.8501 - val_loss: 0.3525 - val_precision: 0.8514 - val_recall: 0.9039 - learning_rate: 1.0000e-04
-Epoch 3/5
-555/555 ━━━━━━━━━━━━━━━━━━━━ 500s 901ms/step - accuracy: 0.9043 - loss: 0.2441 - precision: 0.9149 - recall: 0.9238 - val_accuracy: 0.8509 - val_loss: 0.3814 - val_precision: 0.8527 - val_recall: 0.9034 - learning_rate: 1.0000e-04
-Epoch 4/5
-555/555 ━━━━━━━━━━━━━━━━━━━━ 502s 904ms/step - accuracy: 0.9206 - loss: 0.2072 - precision: 0.9326 - recall: 0.9329 - val_accuracy: 0.8469 - val_loss: 0.4172 - val_precision: 0.8578 - val_recall: 0.8878 - learning_rate: 1.0000e-04
-Epoch 5/5
-555/555 ━━━━━━━━━━━━━━━━━━━━ 0s 874ms/step - accuracy: 0.9291 - loss: 0.1871 - precision: 0.9414 - recall: 0.9373
-Epoch 5: ReduceLROnPlateau reducing learning rate to 3.9999998989515007e-05.
-555/555 ━━━━━━━━━━━━━━━━━━━━ 501s 903ms/step - accuracy: 0.9364 - loss: 0.1735 - precision: 0.9484 - recall: 0.9436 - val_accuracy: 0.8564 - val_loss: 0.4527 - val_precision: 0.8567 - val_recall: 0.9087 - learning_rate: 1.0000e-04
-Restoring model weights from the end of the best epoch: 2.
-[INFO] Gráfico guardado en figures\hybrid_optimized_training_history.png
-
-=== Evaluación sobre Validación ===
-              precision    recall  f1-score   support
-
-           0     0.4004    0.3648    0.3817      3117
-           1     0.5849    0.6210    0.6024      4493
-
-    accuracy                         0.5160      7610
-   macro avg     0.4926    0.4929    0.4921      7610
-weighted avg     0.5093    0.5160    0.5120      7610
-
-F1 Macro: 0.4921
-F1 Weighted: 0.5120
-
-=== Evaluación sobre Prueba ===
-              precision    recall  f1-score   support
-
-           0     0.4041    0.3688    0.3856      3118
-           1     0.5869    0.6224    0.6041      4492
-
-    accuracy                         0.5185      7610
-   macro avg     0.4955    0.4956    0.4949      7610
-weighted avg     0.5120    0.5185    0.5146      7610
-
-F1 Macro: 0.4949
-F1 Weighted: 0.5146
-[INFO] Nuevo mejor modelo Keras guardado con score 0.4921
-[INFO] Modelo Keras cargado desde models\hybrid_optimized_best_model.keras
-
-=== Evaluación sobre Validación ===
-              precision    recall  f1-score   support
-
-           0     0.4004    0.3648    0.3817      3117
-           1     0.5849    0.6210    0.6024      4493
-
-    accuracy                         0.5160      7610
-   macro avg     0.4926    0.4929    0.4921      7610
-weighted avg     0.5093    0.5160    0.5120      7610
-
-F1 Macro: 0.4921
-F1 Weighted: 0.5120
-
-=== Evaluación sobre Prueba ===
-              precision    recall  f1-score   support
-
-           0     0.4041    0.3688    0.3856      3118
-           1     0.5869    0.6224    0.6041      4492
-
-    accuracy                         0.5185      7610
-   macro avg     0.4955    0.4956    0.4949      7610
-weighted avg     0.5120    0.5185    0.5146      7610
-
-F1 Macro: 0.4949
-F1 Weighted: 0.5146
-[INFO] Gráfico guardado en figures\hybrid_optimized_confusion_valid.png
-[INFO] Gráfico guardado en figures\hybrid_optimized_confusion_test.png
-C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\training\utils_common.py:69: FutureWarning:
-
-Passing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `x` variable to `hue` and set `legend=False` for the same effect.
-
-  sns.barplot(
-[INFO] Gráfico guardado en figures\hybrid_optimized_metrics_valid.png
-C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\training\utils_common.py:69: FutureWarning:
-
-Passing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `x` variable to `hue` and set `legend=False` for the same effect.
-
-  sns.barplot(
-[INFO] Gráfico guardado en figures\hybrid_optimized_metrics_test.png
-[INFO] Gráfico guardado en figures\hybrid_optimized_comparison_valid_test.png
-[INFO] Proceso terminado.
-[INFO] F1 Score Final - Validación: 0.4921, Prueba: 0.4949
-[INFO] Nueva combinación registrada en models\hybrid_optimized_history.json
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\training\tensorflow\hibrido.py", line 321, in <module>
+    "l2_reg": l2([1e-4, 1e-5]),
+              ^^^^^^^^^^^^^^^^
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\keras\src\regularizers\regularizers.py", line 261, in __init__
+    validate_float_arg(l2, name="l2")
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\keras\src\regularizers\regularizers.py", line 348, in validate_float_arg
+    raise ValueError(
+ValueError: Invalid value for argument l2: expected a non-negative float.Received: l2=[0.0001, 1e-05]
