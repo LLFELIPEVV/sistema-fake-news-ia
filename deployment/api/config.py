@@ -8,6 +8,12 @@ DEFAULT_MODEL = "CNN"
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
 MODELS_DIR = os.path.join(PROJECT_DIR, "models")
+archivos = {
+    "Naive Bayes": "naive_bayes_best_model.pkl",
+    "Random Forest": "random_forest_best_model.pkl",
+    "CNN": "cnn_best_model.keras",
+    "Hibrido": "hybrid_cnn_bilstm_gru_attention_best_model.keras",
+}
 
 MODELS_ENABLED = {
     "Naive Bayes": True,
