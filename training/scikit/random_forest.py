@@ -31,6 +31,7 @@ SPANISH_STOPWORDS = list(stopwords.stopwords("es"))
 RANDOM_STATE = 42
 BEST_MODEL_PATH = os.path.join(MODEL_DIR, "random_forest_best_model.pkl")
 BEST_SCORE_PATH = os.path.join(MODEL_DIR, "random_forest_best_score.txt")
+VECTORIZER_PATH = os.path.join(MODEL_DIR, "tfidf_vectorizer.pkl")
 HISTORY_FILE = os.path.join(MODEL_DIR, "rf_hyperparam_history.json")
 
 
@@ -120,6 +121,12 @@ if __name__ == "__main__":
     )
     print("\n🔄 Cargando modelo guardado desde disco...")
     loaded_best_model = joblib.load(BEST_MODEL_PATH)
+
+    # Guardar vectorizador TF-IDF
+    VECTORIZER_PATH = os.path.join(MODEL_DIR, "tfidf_vectorizer.pkl")
+    tfidf_vectorizer = best_model.named_steps["tfidf"]
+    joblib.dump(tfidf_vectorizer, VECTORIZER_PATH)
+    print(f"✅ Vectorizador TF-IDF guardado en: {VECTORIZER_PATH}")
 
     # Evaluación en validación
     y_valid_pred = loaded_best_model.predict(X_valid)

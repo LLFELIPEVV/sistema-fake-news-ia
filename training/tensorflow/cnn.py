@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from keras import Model
 from keras.regularizers import l2
 from keras.optimizers import Adam
+from keras.models import Sequential
 from keras.metrics import Precision, Recall
 from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from keras.layers import (
@@ -80,6 +81,7 @@ np.random.seed(SEED)
 # Configuración general
 BEST_MODEL_PATH = os.path.join(MODEL_DIR, "cnn_best_model.keras")
 BEST_SCORE_PATH = os.path.join(MODEL_DIR, "cnn_best_score.txt")
+VECTORIZER_PATH = os.path.join(MODEL_DIR, "text_vectorizer_keras")
 HISTORY_FILE = os.path.join(MODEL_DIR, "cnn_hyperparam_history.json")
 
 
@@ -333,6 +335,18 @@ if __name__ == "__main__":
     )
 
     save_best_model_keras(model, f1_valid, BEST_SCORE_PATH, BEST_MODEL_PATH)
+    # ==============================
+    # 💾 Guardar vectorizador
+    # ==============================
+    print("[INFO] Guardando vectorizador TextVectorization...")
+
+    # 1. Empaquetar el vectorizador en un modelo funcional
+    vectorizer_model = Sequential([vectorizer])
+
+    # 2. Guardar con formato TensorFlow SavedModel
+    vectorizer_model.save(VECTORIZER_PATH)
+
+    print(f"✅ Vectorizador guardado en: {VECTORIZER_PATH}")
     best_model = load_best_model_keras(BEST_MODEL_PATH)
     y_valid_pred, y_valid_proba, f1_valid = evaluate_model(
         best_model, valid_ds, y_valid, "Validación"
