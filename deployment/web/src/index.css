@@ -207,3 +207,186 @@ form.w-100 {
         padding: 0.6rem 0.8rem;
     }
 }
+
+/* Resultado */
+/* === Contenedor general adaptable === */
+.container-resultado {
+    width: 100%;
+    min-height: calc(var(--vh, 1vh) * 100); /* altura real en móviles */
+    background: linear-gradient(160deg, #121212, #2b2b2b);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* evita recorte */
+    padding: 2rem 1rem;
+    color: #f4f4f4;
+    box-sizing: border-box;
+    overflow-y: auto; /* scroll si el contenido crece */
+}
+
+/* === Main === */
+.main-resultado {
+    width: 100%;
+    max-width: 1200px;
+    min-height: 90%;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+/* === Título y botón volver === */
+.titulo-resultado {
+    font-size: 2.2rem;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+}
+
+.btn-volver {
+    align-self: flex-start;
+    background: none;
+    border: none;
+    color: #00ffc3;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.3s;
+    margin-bottom: 1.5rem;
+}
+
+.btn-volver:hover {
+    color: #00a373;
+}
+
+/* === GRID DE 3 COLUMNAS === */
+.grid-resultado {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* === FORMULARIO === */
+.form-resultado {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.textarea-resultado {
+    background-color: #2b2b2b;
+    color: #f4f4f4;
+    border: 1px solid #007b5e;
+    border-radius: 10px;
+    resize: none;
+    padding: 1rem;
+    min-height: 180px;
+    min-width: 100%;
+}
+
+.textarea-resultado::placeholder {
+    color: #cccccc;
+    opacity: 0.9;
+}
+
+.textarea-resultado:focus {
+    outline: 3px solid #00ffc3;
+    border-color: #00a373;
+    box-shadow: 0 0 8px #00a373;
+}
+
+.select-resultado {
+    background-color: #2b2b2b;
+    color: #f4f4f4;
+    border: 1px solid #007b5e;
+    border-radius: 10px;
+    padding: 0.7rem;
+}
+
+.select-resultado:focus {
+    outline: 3px solid #00ffc3;
+}
+
+/* === GRÁFICO === */
+.grafico-resultado {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 250px;
+}
+
+/* === DATOS === */
+.datos-resultado {
+    text-align: left;
+    font-size: 1rem;
+    background-color: rgba(0, 0, 0, 0.25);
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.datos-resultado h2 {
+    font-size: 1.4rem;
+    color: #00ffc3;
+}
+
+.probabilidad-principal {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.resultado-item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 0;
+}
+
+/* === RESPONSIVIDAD === */
+@media (max-width: 992px) {
+    .grid-resultado {
+        grid-template-columns: 1fr;
+        gap: 1.5rem 0rem;
+    }
+
+    .grafico-resultado {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 768px) {
+    .grid-resultado {
+        grid-template-columns: 1fr;
+    }
+
+    .main-resultado {
+        padding: 1.2rem;
+        min-height: auto;
+    }
+
+    .titulo-resultado {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+
+    .btn-volver {
+        margin: 0 auto 1rem auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-resultado {
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .titulo-resultado {
+        font-size: 1.6rem;
+    }
+
+    .datos-resultado {
+        font-size: 0.95rem;
+        padding: 1rem;
+    }
+}
