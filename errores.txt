@@ -1,25 +1,181 @@
-2025-11-02 15:06:57.804660: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-2025-11-02 15:07:14.261675: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-11-05 11:03:37.090267: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-11-05 11:03:51.736948: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
 [INFO] No se detectó GPU, usando CPU
 [INFO] Usando batch_size = 64 con CPU y 12 hilos
 [INFO] Cargando datos...
 [INFO] Tamaños - Train: 35511, Valid: 7610, Test: 7610
-[INFO] Preparando vectorizador...
-2025-11-02 15:09:53.777042: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+[INFO] Preparando vectorizador TextVectorization...
+2025-11-05 11:06:23.053932: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-[INFO] Construyendo matriz de embeddings GloVe 300d...
-[INFO] Embeddings cargados correctamente: 12012
-[WARNING] Líneas omitidas por formato incorrecto: 29
-[INFO] Tamaño final de embedding_matrix: (30000, 300)
 [INFO] Vocab size real: 30000
+[INFO] Embeddings cargados correctamente: 12012
+[WARNING] Líneas omitidas por formato incorrecto: 29 
+[INFO] Tamaño final de embedding_matrix: (30000, 300)
+[INFO] 8 combinaciones únicas ya probadas.
+[INFO] Espacio de búsqueda: 108 combinaciones posibles
+[INFO] Saturación del espacio: 7.41%
+[INFO] Usando búsqueda EXHAUSTIVA (todas las combinaciones)
+[INFO] 108 combinaciones generadas
+[INFO] 100 combinaciones no probadas encontradas
+[INFO] ✅ Combinación única seleccionada
+[INFO] Hiperparámetros seleccionados: {'num_filters': 160, 'kernel_sizes': (3, 4, 5), 'dropout_rate': 0.5, 'l2_reg': 1e-05, 'embedding_dim': 300}
+[INFO] Construyendo modelo CNN...
+C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\keras\src\layers\activations\leaky_relu.py:41: UserWarning: Argument `alpha` is deprecated. Use `negative_slope` instead.
+  warnings.warn(
+2025-11-05 11:08:40.551916: W tensorflow/core/kernels/data/cache_dataset_ops.cc:917] The calling iterator did not fully read the dataset being cached. In order to avoid unexpected truncation of the dataset, the partially cached contents of the dataset  will be discarded. This can happen if you have an input pipeline similar to `dataset.cache().take(k).repeat()`. You should use `dataset.take(k).cache().repeat()` instead.
+Model: "functional"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Layer (type)                  ┃ Output Shape              ┃         Param # ┃ Connected to               ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ input_layer (InputLayer)      │ (None, 200)               │               0 │ -                          │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ embedding (Embedding)         │ (None, 200, 300)          │       9,000,000 │ input_layer[0][0]          │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ spatial_dropout1d             │ (None, 200, 300)          │               0 │ embedding[0][0]            │
+│ (SpatialDropout1D)            │                           │                 │                            │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ conv1d (Conv1D)               │ (None, 200, 160)          │         144,160 │ spatial_dropout1d[0][0]    │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ conv1d_1 (Conv1D)             │ (None, 200, 160)          │         192,160 │ spatial_dropout1d[0][0]    │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ conv1d_2 (Conv1D)             │ (None, 200, 160)          │         240,160 │ spatial_dropout1d[0][0]    │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ leaky_re_lu (LeakyReLU)       │ (None, 200, 160)          │               0 │ conv1d[0][0]               │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ leaky_re_lu_1 (LeakyReLU)     │ (None, 200, 160)          │               0 │ conv1d_1[0][0]             │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ leaky_re_lu_2 (LeakyReLU)     │ (None, 200, 160)          │               0 │ conv1d_2[0][0]             │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ batch_normalization           │ (None, 200, 160)          │             640 │ leaky_re_lu[0][0]          │
+│ (BatchNormalization)          │                           │                 │                            │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ batch_normalization_1         │ (None, 200, 160)          │             640 │ leaky_re_lu_1[0][0]        │
+│ (BatchNormalization)          │                           │                 │                            │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ batch_normalization_2         │ (None, 200, 160)          │             640 │ leaky_re_lu_2[0][0]        │
+│ (BatchNormalization)          │                           │                 │                            │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ global_max_pooling1d          │ (None, 160)               │               0 │ batch_normalization[0][0]  │
+│ (GlobalMaxPooling1D)          │                           │                 │                            │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ global_max_pooling1d_1        │ (None, 160)               │               0 │ batch_normalization_1[0][… │
+│ (GlobalMaxPooling1D)          │                           │                 │                            │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ global_max_pooling1d_2        │ (None, 160)               │               0 │ batch_normalization_2[0][… │
+│ (GlobalMaxPooling1D)          │                           │                 │                            │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ concatenate (Concatenate)     │ (None, 480)               │               0 │ global_max_pooling1d[0][0… │
+│                               │                           │                 │ global_max_pooling1d_1[0]… │
+│                               │                           │                 │ global_max_pooling1d_2[0]… │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ layer_normalization           │ (None, 480)               │             960 │ concatenate[0][0]          │
+│ (LayerNormalization)          │                           │                 │                            │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ dense (Dense)                 │ (None, 128)               │          61,568 │ layer_normalization[0][0]  │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ leaky_re_lu_3 (LeakyReLU)     │ (None, 128)               │               0 │ dense[0][0]                │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ dropout (Dropout)             │ (None, 128)               │               0 │ leaky_re_lu_3[0][0]        │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ dense_1 (Dense)               │ (None, 64)                │           8,256 │ dropout[0][0]              │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ leaky_re_lu_4 (LeakyReLU)     │ (None, 64)                │               0 │ dense_1[0][0]              │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ dropout_1 (Dropout)           │ (None, 64)                │               0 │ leaky_re_lu_4[0][0]        │
+├───────────────────────────────┼───────────────────────────┼─────────────────┼────────────────────────────┤
+│ dense_2 (Dense)               │ (None, 1)                 │              65 │ dropout_1[0][0]            │
+└───────────────────────────────┴───────────────────────────┴─────────────────┴────────────────────────────┘
+ Total params: 9,649,249 (36.81 MB)
+ Trainable params: 648,289 (2.47 MB)
+ Non-trainable params: 9,000,960 (34.34 MB)
+[INFO] Distribución de clases: [14546 20965]
+[INFO] Pesos de clase: {0: 1.2206448508180943, 1: 0.8469115191986645}
+[INFO] Entrenando modelo CNN (fase 1: embeddings congelados)...
+Epoch 1/15
+555/555 ━━━━━━━━━━━━━━━━━━━━ 75s 130ms/step - accuracy: 0.6586 - loss: 0.6059 - precision: 0.6997 - recall: 0.7388 - val_accuracy: 0.7636 - val_loss: 0.4971 - val_precision: 0.7213 - val_recall: 0.9771 - learning_rate: 0.0010
+Epoch 2/15
+555/555 ━━━━━━━━━━━━━━━━━━━━ 72s 129ms/step - accuracy: 0.7623 - loss: 0.4881 - precision: 0.7728 - recall: 0.8462 - val_accuracy: 0.8138 - val_loss: 0.4164 - val_precision: 0.7822 - val_recall: 0.9488 - learning_rate: 0.0010
+Epoch 3/15
+555/555 ━━━━━━━━━━━━━━━━━━━━ 71s 128ms/step - accuracy: 0.7909 - loss: 0.4466 - precision: 0.7998 - recall: 0.8613 - val_accuracy: 0.8244 - val_loss: 0.3965 - val_precision: 0.7930 - val_recall: 0.9508 - learning_rate: 0.0010
+Epoch 4/15
+555/555 ━━━━━━━━━━━━━━━━━━━━ 71s 129ms/step - accuracy: 0.8078 - loss: 0.4231 - precision: 0.8134 - recall: 0.8753 - val_accuracy: 0.8298 - val_loss: 0.3804 - val_precision: 0.8032 - val_recall: 0.9428 - learning_rate: 0.0010
+Epoch 5/15
+555/555 ━━━━━━━━━━━━━━━━━━━━ 71s 129ms/step - accuracy: 0.8187 - loss: 0.4065 - precision: 0.8239 - recall: 0.8813 - val_accuracy: 0.8360 - val_loss: 0.3706 - val_precision: 0.8136 - val_recall: 0.9368 - learning_rate: 0.0010
+Epoch 6/15
+555/555 ━━━━━━━━━━━━━━━━━━━━ 71s 129ms/step - accuracy: 0.8242 - loss: 0.3980 - precision: 0.8301 - recall: 0.8830 - val_accuracy: 0.8335 - val_loss: 0.3730 - val_precision: 0.8027 - val_recall: 0.9519 - learning_rate: 0.0010
+Epoch 7/15
+555/555 ━━━━━━━━━━━━━━━━━━━━ 71s 129ms/step - accuracy: 0.8292 - loss: 0.3870 - precision: 0.8348 - recall: 0.8860 - val_accuracy: 0.8406 - val_loss: 0.3689 - val_precision: 0.8079 - val_recall: 0.9577 - learning_rate: 0.0010
+Epoch 8/15
+555/555 ━━━━━━━━━━━━━━━━━━━━ 72s 129ms/step - accuracy: 0.8373 - loss: 0.3799 - precision: 0.8416 - recall: 0.8923 - val_accuracy: 0.8414 - val_loss: 0.3692 - val_precision: 0.8146 - val_recall: 0.9468 - learning_rate: 0.0010
+Epoch 9/15
+555/555 ━━━━━━━━━━━━━━━━━━━━ 72s 129ms/step - accuracy: 0.8418 - loss: 0.3691 - precision: 0.8464 - recall: 0.8944 - val_accuracy: 0.8384 - val_loss: 0.3676 - val_precision: 0.8233 - val_recall: 0.9248 - learning_rate: 0.0010
+Epoch 10/15
+555/555 ━━━━━━━━━━━━━━━━━━━━ 71s 129ms/step - accuracy: 0.8443 - loss: 0.3663 - precision: 0.8512 - recall: 0.8922 - val_accuracy: 0.8396 - val_loss: 0.3750 - val_precision: 0.8041 - val_recall: 0.9628 - learning_rate: 0.0010
+Epoch 11/15
+555/555 ━━━━━━━━━━━━━━━━━━━━ 72s 129ms/step - accuracy: 0.8487 - loss: 0.3577 - precision: 0.8559 - recall: 0.8943 - val_accuracy: 0.8419 - val_loss: 0.3837 - val_precision: 0.8133 - val_recall: 0.9504 - learning_rate: 0.0010
+Epoch 12/15
+555/555 ━━━━━━━━━━━━━━━━━━━━ 0s 123ms/step - accuracy: 0.8457 - loss: 0.3615 - precision: 0.8577 - recall: 0.8830  
+Epoch 12: ReduceLROnPlateau reducing learning rate to 0.0004000000189989805.
+555/555 ━━━━━━━━━━━━━━━━━━━━ 72s 129ms/step - accuracy: 0.8522 - loss: 0.3514 - precision: 0.8659 - recall: 0.8870 - val_accuracy: 0.8431 - val_loss: 0.3940 - val_precision: 0.8128 - val_recall: 0.9539 - learning_rate: 0.0010
+Epoch 13/15
+555/555 ━━━━━━━━━━━━━━━━━━━━ 72s 129ms/step - accuracy: 0.8643 - loss: 0.3270 - precision: 0.8776 - recall: 0.8950 - val_accuracy: 0.8375 - val_loss: 0.3896 - val_precision: 0.8222 - val_recall: 0.9245 - learning_rate: 4.0000e-04
+Epoch 14/15
+555/555 ━━━━━━━━━━━━━━━━━━━━ 72s 129ms/step - accuracy: 0.8707 - loss: 0.3140 - precision: 0.8855 - recall: 0.8970 - val_accuracy: 0.8423 - val_loss: 0.4083 - val_precision: 0.8221 - val_recall: 0.9352 - learning_rate: 4.0000e-04
+Epoch 15/15
+555/555 ━━━━━━━━━━━━━━━━━━━━ 0s 123ms/step - accuracy: 0.8694 - loss: 0.3180 - precision: 0.8851 - recall: 0.8929  
+Epoch 15: ReduceLROnPlateau reducing learning rate to 0.00016000000759959222.
+555/555 ━━━━━━━━━━━━━━━━━━━━ 72s 129ms/step - accuracy: 0.8758 - loss: 0.3048 - precision: 0.8925 - recall: 0.8977 - val_accuracy: 0.8401 - val_loss: 0.4183 - val_precision: 0.8207 - val_recall: 0.9330 - learning_rate: 4.0000e-04
+Restoring model weights from the end of the best epoch: 9.
+[INFO] Iniciando fine-tuning de embeddings...
+Epoch 1/5
+555/555 ━━━━━━━━━━━━━━━━━━━━ 117s 206ms/step - accuracy: 0.8563 - loss: 0.3403 - precision: 0.8603 - recall: 0.9033 - val_accuracy: 0.8481 - val_loss: 0.3610 - val_precision: 0.8373 - val_recall: 0.9219 - learning_rate: 1.0000e-04
+Epoch 2/5
+555/555 ━━━━━━━━━━━━━━━━━━━━ 114s 206ms/step - accuracy: 0.8801 - loss: 0.2984 - precision: 0.8846 - recall: 0.9163 - val_accuracy: 0.8552 - val_loss: 0.3568 - val_precision: 0.8469 - val_recall: 0.9212 - learning_rate: 1.0000e-04
+Epoch 3/5
+555/555 ━━━━━━━━━━━━━━━━━━━━ 114s 206ms/step - accuracy: 0.8961 - loss: 0.2688 - precision: 0.9014 - recall: 0.9252 - val_accuracy: 0.8594 - val_loss: 0.3678 - val_precision: 0.8492 - val_recall: 0.9263 - learning_rate: 1.0000e-04
+Epoch 4/5
+555/555 ━━━━━━━━━━━━━━━━━━━━ 114s 206ms/step - accuracy: 0.9094 - loss: 0.2399 - precision: 0.9170 - recall: 0.9307 - val_accuracy: 0.8577 - val_loss: 0.3855 - val_precision: 0.8545 - val_recall: 0.9148 - learning_rate: 1.0000e-04
+Epoch 5/5
+555/555 ━━━━━━━━━━━━━━━━━━━━ 0s 199ms/step - accuracy: 0.9142 - loss: 0.2306 - precision: 0.9231 - recall: 0.9309  
+Epoch 5: ReduceLROnPlateau reducing learning rate to 3.9999998989515007e-05.
+555/555 ━━━━━━━━━━━━━━━━━━━━ 114s 206ms/step - accuracy: 0.9199 - loss: 0.2174 - precision: 0.9287 - recall: 0.9363 - val_accuracy: 0.8598 - val_loss: 0.4071 - val_precision: 0.8541 - val_recall: 0.9197 - learning_rate: 1.0000e-04
+Restoring model weights from the end of the best epoch: 2.
+[INFO] Gráfico guardado en figures\cnn_training_history.png
+
+=== Evaluación sobre Validación ===
+              precision    recall  f1-score   support
+
+           0     0.8700    0.7600    0.8113      3117
+           1     0.8469    0.9212    0.8825      4493
+
+    accuracy                         0.8552      7610
+   macro avg     0.8585    0.8406    0.8469      7610
+weighted avg     0.8564    0.8552    0.8533      7610
+
+F1 Macro: 0.8469
+F1 Weighted: 0.8533
+
+=== Evaluación sobre Prueba ===
+              precision    recall  f1-score   support
+
+           0     0.8647    0.7585    0.8081      3118
+           1     0.8455    0.9176    0.8801      4492
+
+    accuracy                         0.8524      7610
+   macro avg     0.8551    0.8381    0.8441      7610
+weighted avg     0.8534    0.8524    0.8506      7610
+
+F1 Macro: 0.8441
+F1 Weighted: 0.8506
+[INFO] El modelo Keras (0.8469) no supera al mejor (0.8619).
+[INFO] Guardando vectorizador TextVectorization...
 Traceback (most recent call last):
   File "<frozen runpy>", line 198, in _run_module_as_main
   File "<frozen runpy>", line 88, in _run_code
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\training\tensorflow\hibrido.py", line 321, in <module>
-    "l2_reg": l2([1e-4, 1e-5]),
-              ^^^^^^^^^^^^^^^^
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\keras\src\regularizers\regularizers.py", line 261, in __init__
-    validate_float_arg(l2, name="l2")
-  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\keras\src\regularizers\regularizers.py", line 348, in validate_float_arg
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\training\tensorflow\cnn.py", line 347, in <module>
+    vectorizer_model.save(VECTORIZER_PATH)
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\keras\src\utils\traceback_utils.py", line 122, in error_handler
+    raise e.with_traceback(filtered_tb) from None
+  File "C:\Users\Juliana\Documents\IA\sistema-fake-news-ia\.venv\Lib\site-packages\keras\src\saving\saving_api.py", line 114, in save_model
     raise ValueError(
-ValueError: Invalid value for argument l2: expected a non-negative float.Received: l2=[0.0001, 1e-05]
+ValueError: Invalid filepath extension for saving. Please add either a `.keras` extension for the native Keras format (recommended) or a `.h5` extension. Use `model.export(filepath)` if you want to export a SavedModel for use with TFLite/TFServing/etc. Received: filepath=models\text_vectorizer_keras.
