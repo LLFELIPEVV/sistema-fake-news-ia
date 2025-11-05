@@ -39,6 +39,21 @@ export function Index() {
                         </small>
                     </div>
 
+                    <select
+                        className="form-select select-index mb-4"
+                        aria-label="Seleccionar modelo de detección"
+                        defaultValue="Hibrido"
+                    >
+                        <option value="Hibrido">
+                            Mejor detección de Fake News
+                        </option>
+                        <option value="Random Forest">
+                            Mejor detección de Real News
+                        </option>
+                        <option value="CNN">Mejor modelo general</option>
+                        <option value="Naive Bayes">Modelo más rápido</option>
+                    </select>
+
                     <button
                         type="submit"
                         className="btn btn-success btn-lg px-5"
