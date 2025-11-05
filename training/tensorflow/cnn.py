@@ -81,7 +81,7 @@ np.random.seed(SEED)
 # Configuración general
 BEST_MODEL_PATH = os.path.join(MODEL_DIR, "cnn_best_model.keras")
 BEST_SCORE_PATH = os.path.join(MODEL_DIR, "cnn_best_score.txt")
-VECTORIZER_PATH = os.path.join(MODEL_DIR, "text_vectorizer_keras")
+VECTORIZER_PATH = os.path.join(MODEL_DIR, "text_vectorizer_keras.keras")
 HISTORY_FILE = os.path.join(MODEL_DIR, "cnn_hyperparam_history.json")
 
 
@@ -227,9 +227,9 @@ if __name__ == "__main__":
         f"[INFO] Tamaños - Train: {len(X_train)}, Valid: {len(X_valid)}, Test: {len(X_test)}"
     )
 
-    # Lematización
-    lemmatizer = Lemmatizer()
-    X_train, X_valid, X_test = map(lemmatizer.transform, [X_train, X_valid, X_test])
+    # Lematización Opcional, en algunos casos empeora el rendimiento.
+    # lemmatizer = Lemmatizer()
+    # X_train, X_valid, X_test = map(lemmatizer.transform, [X_train, X_valid, X_test])
 
     print("[INFO] Preparando vectorizador TextVectorization...")
     vectorizer = prepare_vectorizer(X_train)
