@@ -1,0 +1,160 @@
+{
+    "/predict": {
+        "timestamp": "2025-11-07 12:45:12",
+        "status_code": 200,
+        "response": {
+            "prediction": "real",
+            "confidence": 0.6942,
+            "model_used": "CNN",
+            "inference_time_ms": 59324.275,
+            "tokens_count": 10,
+            "prediction_id": "pred_1762537511955"
+        }
+    },
+    "/confidence/pred_1762536423631": {
+        "timestamp": "2025-11-07 12:27:03",
+        "status_code": 200,
+        "response": {
+            "prediction_id": "pred_1762536423631",
+            "prediction": "real",
+            "confidence": 0.7789,
+            "model_used": "CNN",
+            "timestamp": "2025-11-07T12:27:03.631473"
+        }
+    },
+    "/models": {
+        "timestamp": "2025-11-07 12:45:58",
+        "status_code": 200,
+        "response": {
+            "models": [
+                {
+                    "name": "Naive Bayes",
+                    "description": "Clasificador probabilístico basado en teorema de Bayes con TF-IDF.",
+                    "type": "Machine Learning",
+                    "status": true,
+                    "size_mb": 22.32,
+                    "last_used": "N/A"
+                },
+                {
+                    "name": "Random Forest",
+                    "description": "Modelo de ensamble de árboles de decisión con TF-IDF.",
+                    "type": "Machine Learning",
+                    "status": true,
+                    "size_mb": 35.36,
+                    "last_used": "N/A"
+                },
+                {
+                    "name": "CNN",
+                    "description": "Red neuronal convolucional para clasificación de texto.",
+                    "type": "Deep Learning",
+                    "status": true,
+                    "size_mb": 110.52,
+                    "last_used": "2025-11-07 12:45:57"
+                },
+                {
+                    "name": "Hibrido",
+                    "description": "Modelo híbrido CNN + BiLSTM + GRU con mecanismo de atención.",
+                    "type": "Deep Learning",
+                    "status": true,
+                    "size_mb": 52.02,
+                    "last_used": "N/A"
+                }
+            ]
+        }
+    },
+    "/reload": {
+        "timestamp": "2025-11-07 12:46:20",
+        "status_code": 200,
+        "response": {
+            "status": "success",
+            "message": "Modelo 'CNN' recargado correctamente.",
+            "reload_time_ms": 20237.489
+        }
+    },
+    "/metrics": {
+        "timestamp": "2025-11-07 12:46:21",
+        "status_code": 200,
+        "response": {
+            "metrics": {
+                "model": "CNN",
+                "accuracy": 0.8634691195795007,
+                "precision": 0.8474542161400684,
+                "recall": 0.9374443455031166,
+                "f1_score": 0.8901807419934468,
+                "auc": 0.9215264811164543,
+                "updated_at": "2025-10-17 07:51:55"
+            }
+        }
+    },
+    "/health": {
+        "timestamp": "2025-11-07 12:46:21",
+        "status_code": 200,
+        "response": {
+            "status": "ok",
+            "uptime": "0h 2m 10s",
+            "framework": "FastAPI",
+            "tensorflow_version": "2.20.0",
+            "gpu_available": false,
+            "loaded_models": [
+                "Naive Bayes",
+                "Random Forest",
+                "CNN",
+                "Hibrido"
+            ]
+        }
+    },
+    "/logs": {
+        "timestamp": "2025-11-07 12:46:21",
+        "status_code": 200,
+        "response": {
+            "logs": [
+                {
+                    "timestamp": "2025-11-07 12:45:57",
+                    "model": "CNN",
+                    "text": "Test para confianza",
+                    "prediction": "real",
+                    "confidence": 0.7789
+                },
+                {
+                    "timestamp": "2025-11-07 12:45:11",
+                    "model": "CNN",
+                    "text": "Los científicos descubren una nueva forma de producir energía limpia.",
+                    "prediction": "real",
+                    "confidence": 0.6942
+                },
+                {
+                    "timestamp": "2025-11-07 12:27:03",
+                    "model": "CNN",
+                    "text": "Test para confianza",
+                    "prediction": "real",
+                    "confidence": 0.7789
+                },
+                {
+                    "timestamp": "2025-11-07 12:27:01",
+                    "model": "CNN",
+                    "text": "Los científicos descubren una nueva forma de producir energía limpia.",
+                    "prediction": "real",
+                    "confidence": 0.6942
+                },
+                {
+                    "timestamp": "2025-11-06 13:17:26",
+                    "model": "CNN",
+                    "text": "Test para confianza",
+                    "prediction": "real",
+                    "confidence": 0.7789
+                }
+            ]
+        }
+    },
+    "/confidence/pred_1762537557666": {
+        "timestamp": "2025-11-07 12:45:58",
+        "status_code": 200,
+        "response": {
+            "prediction_id": "pred_1762537557666",
+            "prediction": "real",
+            "confidence": 0.7789,
+            "model_used": "CNN",
+            "timestamp": "2025-11-07T12:45:57.666031"
+        }
+    }
+}

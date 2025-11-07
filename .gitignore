@@ -143,6 +143,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.venv_prod/
 
 # Spyder project settings
 .spyderproject
@@ -209,3 +210,10 @@ __marimo__/
 # Datasets
 datasets/
 data/
+
+glove.840B.300d/
+models/beto_pytorch_best_model.pt
+models/mbert_pytorch_best_model.pt
+
+deployment/web
+

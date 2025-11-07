@@ -1,0 +1,44 @@
+[
+  {
+    "timestamp": "2025-11-06 13:17:24",
+    "model": "CNN",
+    "text": "Los científicos descubren una nueva forma de producir energía limpia.",
+    "prediction": "real",
+    "confidence": 0.6942
+  },
+  {
+    "timestamp": "2025-11-06 13:17:26",
+    "model": "CNN",
+    "text": "Test para confianza",
+    "prediction": "real",
+    "confidence": 0.7789
+  },
+  {
+    "timestamp": "2025-11-07 12:27:01",
+    "model": "CNN",
+    "text": "Los científicos descubren una nueva forma de producir energía limpia.",
+    "prediction": "real",
+    "confidence": 0.6942
+  },
+  {
+    "timestamp": "2025-11-07 12:27:03",
+    "model": "CNN",
+    "text": "Test para confianza",
+    "prediction": "real",
+    "confidence": 0.7789
+  },
+  {
+    "timestamp": "2025-11-07 12:45:11",
+    "model": "CNN",
+    "text": "Los científicos descubren una nueva forma de producir energía limpia.",
+    "prediction": "real",
+    "confidence": 0.6942
+  },
+  {
+    "timestamp": "2025-11-07 12:45:57",
+    "model": "CNN",
+    "text": "Test para confianza",
+    "prediction": "real",
+    "confidence": 0.7789
+  }
+]
