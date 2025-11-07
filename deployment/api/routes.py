@@ -1,10 +1,17 @@
 import os
-import time
+import csv
 import json
+import time
 
 from datetime import datetime
 from fastapi import APIRouter, HTTPException, Query
-from deployment.api.config import DEFAULT_MODEL, MODELS_ENABLED, MODELS_DIR, archivos
+from deployment.api.config import (
+    DEFAULT_MODEL,
+    MODELS_ENABLED,
+    MODELS_DIR,
+    METRICS_DIR,
+    archivos,
+)
 from deployment.api.models import (
     predict_text,
     get_file_size_mb,
@@ -30,6 +37,8 @@ router = APIRouter()
 
 # Variables globales para tracking
 LOGS_FILE = os.path.join(MODELS_DIR, "logs.json")
+METRICS = os.path.join(METRICS_DIR, "model_evaluation_results.csv")
+
 models_cache = {}
 start_time = time.time()
 prediction_history = {}
@@ -247,16 +256,45 @@ def get_metrics(
     if model not in MODELS_ENABLED:
         raise HTTPException(status_code=400, detail=f"Modelo '{model}' no existe.")
 
-    metrics_path = os.path.join(MODELS_DIR, f"{model}_metrics.json")
-    if not os.path.exists(metrics_path):
+    if not os.path.exists(METRICS):
         raise HTTPException(
             status_code=404, detail=f"No se encontraron métricas para '{model}'."
         )
 
     try:
-        with open(metrics_path, "r", encoding="utf-8") as f:
-            metrics_data = json.load(f)
-        return MetricsResponse(metrics=MetricsInfo(**metrics_data))
+        with open(METRICS, "r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            metrics_data = None
+            for row in reader:
+                if row.get("Modelo") == model:
+                    metrics_data = row
+                    break
+
+            if not metrics_data:
+                raise HTTPException(
+                    status_code=404, detail=f"No hay métricas para '{model}'."
+                )
+        mapping = {
+            "Modelo": "model",
+            "Test_Accuracy": "accuracy",
+            "Test_Precision": "precision",
+            "Test_Recall": "recall",
+            "Test_F1": "f1_score",
+            "Test_ROC_AUC": "auc",
+        }
+
+        normalized = {
+            mapping.get(k, k): float(v) if v.replace(".", "", 1).isdigit() else v
+            for k, v in metrics_data.items()
+        }
+        if "updated_at" not in normalized or not normalized["updated_at"]:
+            mod_time = os.path.getmtime(METRICS)
+            normalized["updated_at"] = datetime.fromtimestamp(mod_time).strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+
+        # Validar y retornar
+        return MetricsResponse(metrics=MetricsInfo(**normalized))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error leyendo métricas: {e}")
 
@@ -315,7 +353,10 @@ def save_logs_to_file():
     try:
         with open(LOGS_FILE, "w", encoding="utf-8") as f:
             json.dump(
-                [log.dict() for log in logs_storage], f, ensure_ascii=False, indent=2
+                [log.model_dump() for log in logs_storage],
+                f,
+                ensure_ascii=False,
+                indent=2,
             )
     except Exception as e:
         print(f"⚠️ No se pudieron guardar los logs: {e}")

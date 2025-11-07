@@ -8,6 +8,7 @@ DEFAULT_MODEL = "CNN"
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
 MODELS_DIR = os.path.join(PROJECT_DIR, "models")
+METRICS_DIR = os.path.join(PROJECT_DIR, "reports")
 archivos = {
     "Naive Bayes": "naive_bayes_best_model.pkl",
     "Random Forest": "random_forest_best_model.pkl",
