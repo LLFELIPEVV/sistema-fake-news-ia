@@ -84,18 +84,51 @@ def guardar_parquet(dataframe: pd.DataFrame, ruta: Path):
 
 
 def normalizar_dataframe(df: pd.DataFrame) -> pd.DataFrame:
-    df = df.dropna(subset=["texto", "clase"])
+    df = df.copy()
+
+    # Detectar columnas
+    columnas = df.columns.tolist()
+    tiene_texto = "texto" in columnas
+    tiene_clase = "clase" in columnas
+
+    # Validar columnas esenciales
+    if not tiene_texto:
+        raise ValueError("El DataFrame debe contener la columna 'texto'.")
+
+    # Dropna selectivo
+    if tiene_clase:
+        df = df.dropna(subset=["texto", "clase"])
+    else:
+        df = df.dropna(subset=["texto"])
+
+    # Eliminar duplicados por texto
     df = df.drop_duplicates(subset=["texto"])
-    df = df[df["texto"].str.strip() != ""]
+
+    # Eliminar textos vacíos o en blanco
+    df = df[df["texto"].astype(str).str.strip() != ""]
+
+    # Normalizar codificación
     df["texto"] = df["texto"].apply(
-        lambda x: x.encode("utf-8", "ignore").decode("utf-8", "ignore")
+        lambda x: str(x).encode("utf-8", "ignore").decode("utf-8", "ignore")
     )
+
     print(f"✅ Registros después de la normalización: {len(df)}")
+
+    # Si tiene clases, mostrar resumen
+    if tiene_clase:
+        print("✅ Registros por clase después de la normalización:")
+        print(df["clase"].value_counts(dropna=False))
+
     return df
 
 
 def estandarizar_texto(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
+
+    # Verificar existencia de columna texto
+    if "texto" not in df.columns:
+        raise ValueError("El DataFrame debe contener la columna 'texto'.")
+
     patrones = {
         r"[^\w\s]": "",
         r"\s+": " ",
@@ -107,22 +140,29 @@ def estandarizar_texto(df: pd.DataFrame) -> pd.DataFrame:
         r"\d+": " <NUM> ",
     }
 
-    df["texto"] = df["texto"].str.lower()
+    # Limpieza general
+    df["texto"] = df["texto"].astype(str).str.lower()
     df["texto"] = (
         df["texto"]
         .str.normalize("NFKD")
         .str.encode("ascii", errors="ignore")
         .str.decode("utf-8")
     )
+
     for patron, reemplazo in patrones.items():
         df["texto"] = df["texto"].str.replace(patron, reemplazo, regex=True)
 
+    # Filtrar textos muy cortos
     df["texto"] = df["texto"].str.strip()
     df = df[df["texto"].str.split().str.len() > 2]
 
     print(f"✅ Registros después de la estandarización: {len(df)}")
-    print("✅ Registros por clase después de la estandarización:")
-    print(df["clase"].value_counts(normalize=True))
+
+    # Si hay columna clase, mostrar resumen
+    if "clase" in df.columns:
+        print("✅ Registros por clase después de la estandarización:")
+        print(df["clase"].value_counts(normalize=True))
+
     return df
 
 
