@@ -1,12 +1,14 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { PieChart } from "@mui/x-charts";
+import { useNavigate } from "react-router-dom";
 
 export function Resultado() {
     const navigate = useNavigate();
     const fake = 50;
     const real = 50;
-    const texto =
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam odio cumque sunt voluptate dolorum animi sint dolore sequi doloremque expedita nemo similique, aut, vitae nisi, voluptatem qui! Magnam, maiores ea?";
+    const [texto, setTexto] = useState(
+        location.state?.newsText || "No se cargo la noticia correctamente..."
+    );
 
     return (
         <div
@@ -45,7 +47,8 @@ export function Resultado() {
                             aria-describedby="ayuda-noticia"
                             aria-required="true"
                             value={texto}
-                        ></textarea>
+                            onChange={(e) => setTexto(e.target.value)}
+                        />
 
                         <select
                             className="form-select select-resultado mb-3"
@@ -59,8 +62,21 @@ export function Resultado() {
                                 Mejor detección de Real News
                             </option>
                             <option value="CNN">Mejor modelo general</option>
+                            <option value="CNN">
+                                Mejor en detección equilibrada de ambos tipos de
+                                noticias
+                            </option>
                             <option value="Naive Bayes">
-                                Modelo más rápido
+                                Mejor en rapidez y eficiencia
+                            </option>
+                            <option value="Naive Bayes">
+                                Mejor en estabilidad y reproducibilidad
+                            </option>
+                            <option value="Random Forest">
+                                Modelo con menor sobreajuste
+                            </option>
+                            <option value="CNN">
+                                Mejor en consistencia general
                             </option>
                         </select>
 
