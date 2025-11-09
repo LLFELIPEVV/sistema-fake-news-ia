@@ -1,0 +1,82 @@
+[
+  {
+    "timestamp": "2025-10-29T15:43:29.017106",
+    "params": {
+      "num_filters": 64,
+      "kernel_sizes": [
+        2,
+        3,
+        4
+      ],
+      "dropout_rate": 0.3,
+      "l2_reg": 0.001,
+      "embedding_dim": 300
+    },
+    "metrics": {
+      "f1_valid": 0.8476632750094537,
+      "f1_test": 0.8445481811269031,
+      "device": "CPU",
+      "batch_size": 64
+    }
+  },
+  {
+    "timestamp": "2025-10-30T09:44:08.592303",
+    "params": {
+      "num_filters": 96,
+      "kernel_sizes": [
+        3,
+        5,
+        7
+      ],
+      "dropout_rate": 0.3,
+      "l2_reg": 0.001,
+      "embedding_dim": 300
+    },
+    "metrics": {
+      "f1_valid": 0.8476632750094537,
+      "f1_test": 0.8445481811269031,
+      "device": "CPU",
+      "batch_size": 64
+    }
+  },
+  {
+    "timestamp": "2025-10-30T14:58:24.599340",
+    "params": {
+      "num_filters": 64,
+      "kernel_sizes": [
+        2,
+        3,
+        4
+      ],
+      "dropout_rate": 0.4,
+      "l2_reg": 0.001,
+      "embedding_dim": 300
+    },
+    "metrics": {
+      "f1_valid": 0.8607511755723959,
+      "f1_test": 0.8592654000009827,
+      "device": "CPU",
+      "batch_size": 64
+    }
+  },
+  {
+    "timestamp": "2025-10-31T09:00:40.638102",
+    "params": {
+      "num_filters": 160,
+      "kernel_sizes": [
+        3,
+        4,
+        5
+      ],
+      "dropout_rate": 0.4,
+      "l2_reg": 1e-05,
+      "embedding_dim": 300
+    },
+    "metrics": {
+      "f1_valid": 0.8607511755723959,
+      "f1_test": 0.8592654000009827,
+      "device": "CPU",
+      "batch_size": 64
+    }
+  }
+]

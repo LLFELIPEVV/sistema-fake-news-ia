@@ -1,15 +1,20 @@
 import os
+import gc
 import time
+import torch
+import psutil
 import joblib
 import warnings
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import tensorflow as tf
 import matplotlib.pyplot as plt
 
 
 from scipy import stats
 from keras.models import load_model
+from keras.backend import clear_session
 from keras.layers import TextVectorization
 from training.utils_common import load_datasets
 from sklearn.metrics import (
@@ -31,6 +36,42 @@ plt.style.use("seaborn-v0_8")
 sns.set_palette("husl")
 plt.rcParams["figure.dpi"] = 100
 plt.rcParams["savefig.dpi"] = 600
+
+# ===============================
+# CONFIGURACIONES DE RENDIMIENTO
+# ===============================
+num_threads = max(4, psutil.cpu_count(logical=True))
+os.environ["OMP_NUM_THREADS"] = str(num_threads)
+os.environ["TF_NUM_INTRAOP_THREADS"] = str(num_threads)
+os.environ["TF_NUM_INTEROP_THREADS"] = str(num_threads)
+os.environ["TOKENIZERS_PARALLELISM"] = "true"
+
+tf.config.threading.set_intra_op_parallelism_threads(num_threads)
+tf.config.threading.set_inter_op_parallelism_threads(num_threads)
+
+print(f"🧩 CPU optimizado: usando {num_threads} threads paralelos")
+
+
+# --- Función auxiliar para estimar RAM disponible ---
+def available_memory_gb():
+    return psutil.virtual_memory().available / (1024**3)
+
+
+# --- Liberar todo lo posible entre frameworks ---
+def clear_memory(full=True):
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+        torch.cuda.ipc_collect()
+    if full:
+        clear_session()
+    gc.collect()
+
+
+def to_text_list(batch):
+    if isinstance(batch, (pd.Series, np.ndarray)):
+        batch = batch.tolist()
+    return [str(x) for x in batch]
 
 
 class AdvancedModelEvaluator:
@@ -88,6 +129,9 @@ class AdvancedModelEvaluator:
                     "y_proba": y_proba,
                 }
 
+        del X, y, y_pred, y_proba
+        gc.collect()
+
         self.confusion_matrices[name] = cm_dict
 
         # Indicadores avanzados
@@ -96,6 +140,7 @@ class AdvancedModelEvaluator:
 
         self.results.append(model_results)
         print(f"✅ {name} evaluado")
+        clear_memory()
         return model
 
     @staticmethod
@@ -135,7 +180,14 @@ class AdvancedModelEvaluator:
             X_vec = vectorizer(np.array(X)).numpy()
 
             start_time = time.time()
-            y_proba = model.predict(X_vec, verbose=0, batch_size=512).flatten()
+            # Lote dinámico para no saturar RAM/GPU
+            adaptive_batch = min(
+                256, max(32, int(len(X_vec) / (available_memory_gb() * 50 + 1)))
+            )
+            y_proba = model.predict(
+                X_vec, verbose=0, batch_size=adaptive_batch
+            ).flatten()
+
             y_pred = (y_proba > 0.5).astype(int)
             prediction_time = time.time() - start_time
 
@@ -155,6 +207,10 @@ class AdvancedModelEvaluator:
                     "y_proba": y_proba,
                 }
 
+        gc.collect()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+
         self.confusion_matrices[name] = cm_dict
 
         advanced_indicators = self._calculate_advanced_indicators(model_results)
@@ -162,6 +218,7 @@ class AdvancedModelEvaluator:
 
         self.results.append(model_results)
         print(f"✅ {name} evaluado")
+        clear_memory()
         return model
 
     def _calculate_extended_metrics(self, y_true, y_pred, y_proba, prediction_time):
@@ -1523,12 +1580,20 @@ def main():
         else:
             print(f"⚠️  Modelo no encontrado: {path}")
 
+    # Pausa ligera para liberar CPU
+    time.sleep(2)
+    clear_memory()
+
     # Evaluar keras models
     for name, path in keras_models.items():
         if os.path.exists(path):
             evaluator.evaluate_keras_model_complete(name, path)
         else:
             print(f"⚠️  Modelo no encontrado: {path}")
+
+    # Pausa ligera para liberar CPU
+    time.sleep(2)
+    clear_memory()
 
     # Generar reporte completo
     print("\n" + "=" * 100)

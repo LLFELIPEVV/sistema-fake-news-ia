@@ -1,8 +1,11 @@
 import os
+import json
+import spacy
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.metrics import (
     confusion_matrix,
     accuracy_score,
@@ -74,3 +77,32 @@ def plot_metrics(y_true, y_pred, dataset_name="Validación", filename=None):
     plt.close(fig)
 
     return metrics
+
+
+class Lemmatizer(BaseEstimator, TransformerMixin):
+    def __init__(self):
+        self.nlp = spacy.load("es_core_news_sm", disable=["parser", "ner"])
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        return [" ".join([token.lemma_ for token in self.nlp(text)]) for text in X]
+
+
+# =============================
+# FUNCIONES DE REGISTRO
+# =============================
+def load_previous_results(history_file):
+    """Carga combinaciones ya probadas de hiperparámetros."""
+    if os.path.exists(history_file):
+        with open(history_file, "r", encoding="utf8") as f:
+            return json.load(f)
+    return []
+
+
+def _params_to_frozenset(params):
+    """Convierte un diccionario de parámetros a frozenset hashable."""
+    return frozenset(
+        (k, tuple(v) if isinstance(v, (list, tuple)) else v) for k, v in params.items()
+    )

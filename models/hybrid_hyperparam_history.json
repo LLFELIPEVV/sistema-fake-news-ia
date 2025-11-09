@@ -1,0 +1,44 @@
+[
+  {
+    "timestamp": "2025-10-29T20:05:35.783658",
+    "params": {
+      "filters": 160,
+      "lstm_units": 64,
+      "gru_units": 96,
+      "dropout_rate": 0.5,
+      "l2_reg": 0.0001
+    },
+    "metrics": {
+      "f1_valid": 0.5035392621153851,
+      "f1_test": 0.5099174622350656,
+      "params": {
+        "filters": 160,
+        "lstm_units": 64,
+        "gru_units": 96,
+        "dropout_rate": 0.5,
+        "l2_reg": 0.0001
+      }
+    }
+  },
+  {
+    "timestamp": "2025-10-30T13:25:48.281835",
+    "params": {
+      "filters": 160,
+      "lstm_units": 96,
+      "gru_units": 96,
+      "dropout_rate": 0.5,
+      "l2_reg": 0.001
+    },
+    "metrics": {
+      "f1_valid": 0.5035392621153851,
+      "f1_test": 0.5099174622350656,
+      "params": {
+        "filters": 160,
+        "lstm_units": 96,
+        "gru_units": 96,
+        "dropout_rate": 0.5,
+        "l2_reg": 0.001
+      }
+    }
+  }
+]

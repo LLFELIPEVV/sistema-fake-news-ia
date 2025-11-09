@@ -31,7 +31,10 @@ from training.tensorflow.utils_keras import (
     save_best_model_keras,
     plot_training_history,
     load_best_model_keras,
-)
+    build_embedding_matrix,
+    get_random_hyperparams,
+    save_results,
+    )
 from training.utils_common import (
     load_datasets,
     plot_confusion_matrix,
@@ -82,6 +85,7 @@ BEST_MODEL_PATH = os.path.join(
 BEST_SCORE_PATH = os.path.join(
     MODEL_DIR, "hybrid_cnn_bilstm_gru_attention_best_score.txt"
 )
+HISTORY_FILE = os.path.join(MODEL_DIR, "hybrid_history.json")
 SEED = 42
 tf.random.set_seed(SEED)
 np.random.seed(SEED)
@@ -103,6 +107,7 @@ def prepare_vectorizer(texts, max_tokens=30000, output_seq_len=200):
 def build_hybrid_model(
     vocab_size,
     embedding_dim=128,
+    embedding_matrix=None,
     sequence_length=200,
     cnn_filters=128,
     cnn_kernel_sizes=[3, 4, 5],
@@ -127,13 +132,22 @@ def build_hybrid_model(
     inputs = Input(shape=(sequence_length,), name="input_text")
 
     # Embedding layer
-    embedded = Embedding(
-        input_dim=vocab_size,
-        output_dim=embedding_dim,
-        input_length=sequence_length,
-        mask_zero=False,
-        name="embedding",
-    )(inputs)
+    if embedding_matrix is not None:
+        embedded = Embedding(
+            input_dim=vocab_size,
+            output_dim=embedding_dim,
+            weights=[embedding_matrix],
+            trainable=False,
+            name="embedding",
+        )(inputs)
+    else:
+        embedded = Embedding(
+            input_dim=vocab_size,
+            output_dim=embedding_dim,
+            input_length=sequence_length,
+            mask_zero=False,
+            name="embedding",
+        )(inputs)
 
     # Spatial dropout para regularización en embeddings
     embedded_dropped = SpatialDropout1D(0.2, name="spatial_dropout")(embedded)
@@ -288,15 +302,15 @@ if __name__ == "__main__":
     print("[INFO] Cargando datos...")
     train_df, valid_df, test_df = load_datasets()
 
-    X_train_texts = train_df["texto"].astype(str).values
+    X_train = train_df["texto"].astype(str).values
     y_train = train_df["clase"].astype(int).values
-    X_valid_texts = valid_df["texto"].astype(str).values
+    X_valid = valid_df["texto"].astype(str).values
     y_valid = valid_df["clase"].astype(int).values
-    X_test_texts = test_df["texto"].astype(str).values
+    X_test = test_df["texto"].astype(str).values
     y_test = test_df["clase"].astype(int).values
 
     print(
-        f"[INFO] Tamaños - Train: {len(X_train_texts)}, Valid: {len(X_valid_texts)}, Test: {len(X_test_texts)}"
+        f"[INFO] Tamaños - Train: {len(X_train)}, Valid: {len(X_valid)}, Test: {len(X_test)}"
     )
 
     # Vectorización
@@ -304,36 +318,58 @@ if __name__ == "__main__":
     MAX_TOKENS = 30000
     SEQ_LEN = 200
     vectorizer = prepare_vectorizer(
-        X_train_texts, max_tokens=MAX_TOKENS, output_seq_len=SEQ_LEN
+        X_train, max_tokens=MAX_TOKENS, output_seq_len=SEQ_LEN
     )
 
     # Tamaño de vocabulario real
     vocab_size = len(vectorizer.get_vocabulary())
     print(f"[INFO] Vocab size real: {vocab_size}")
+    embedding_matrix = build_embedding_matrix(vectorizer)
 
     # Crear datasets
     print("[INFO] Creando datasets de TensorFlow...")
     train_ds = to_tf_dataset(
-        X_train_texts, y_train, vectorizer, batch_size=BATCH_SIZE, shuffle=True
+        X_train, y_train, vectorizer, batch_size=BATCH_SIZE, shuffle=True
     )
     valid_ds = to_tf_dataset(
-        X_valid_texts, y_valid, vectorizer, batch_size=BATCH_SIZE, shuffle=False
+        X_valid, y_valid, vectorizer, batch_size=BATCH_SIZE, shuffle=False
     )
     test_ds = to_tf_dataset(
-        X_test_texts, y_test, vectorizer, batch_size=BATCH_SIZE, shuffle=False
+        X_test, y_test, vectorizer, batch_size=BATCH_SIZE, shuffle=False
     )
 
+    # Hiperparámetros
+    all_combinations = {
+        "filters": [96, 128, 160],
+        "lstm_units": [64, 80, 96],
+        "gru_units": [64, 80, 96],
+        "dropout_rate": [0.3, 0.4, 0.5],
+        "l2_reg": [1e-4, 1e-5],
+        "kernel_sizes": [[3, 4, 5], [2, 3, 4], [3, 5, 7]],
+    }
+
+    params = get_random_hyperparams(all_combinations, HISTORY_FILE, max_attempts=50)
+    print(f"[INFO] Hiperparámetros seleccionados: {params}")
+
+    cnn_filters = params.get("filters", 128)
+    bilstm_units = params.get("lstm_units", 64)
+    gru_units = params.get("gru_units", 64)
+    dropout_rate = params.get("dropout_rate", 0.4)
+    l2_reg = params.get("l2_reg", 1e-4)
+    cnn_kernel_sizes = params.get("kernel_sizes", [3, 4, 5])
+    
     # Construir modelo
     print("[INFO] Construyendo modelo híbrido CNN + BiLSTM + GRU + Atención...")
     model = build_hybrid_model(
         vocab_size=vocab_size,
-        embedding_dim=128,
+        embedding_dim=300,
+        embedding_matrix=embedding_matrix,
         sequence_length=SEQ_LEN,
-        cnn_filters=128,
-        cnn_kernel_sizes=[3, 4, 5],
-        bilstm_units=64,
-        gru_units=64,
-        dropout_rate=0.4,
+        cnn_filters=cnn_filters,
+        cnn_kernel_sizes=cnn_kernel_sizes,
+        bilstm_units=bilstm_units,
+        gru_units=gru_units,
+        dropout_rate=dropout_rate,
     )
 
     # Compilar modelo con datos de ejemplo para mostrar arquitectura completa
@@ -375,6 +411,23 @@ if __name__ == "__main__":
         verbose=1,
     )
 
+    # Fase 2: Fine-tuning
+    print("[INFO] Iniciando fine-tuning de embeddings...")
+    model.get_layer("embedding").trainable = True
+    model.compile(
+        optimizer=Adam(learning_rate=1e-4, clipnorm=1.0),
+        loss="binary_crossentropy",
+        metrics=["accuracy", Precision(name="precision"), Recall(name="recall")],
+    )
+    history_ft = model.fit(
+        train_ds,
+        validation_data=valid_ds,
+        epochs=5,
+        callbacks=callbacks,
+        class_weight=class_weights,
+        verbose=1,
+    )
+    
     # Guardar historial de entrenamiento
     plot_training_history(
         history,
@@ -469,3 +522,12 @@ if __name__ == "__main__":
     print("[INFO] Proceso terminado.")
     print(f"[INFO] F1 Score Final - Validación: {f1_valid:.4f}, Prueba: {f1_test:.4f}")
     print(f"[INFO] Modelo híbrido guardado en: {BEST_MODEL_PATH}")
+    
+    metrics = {
+        "f1_valid": float(f1_valid),
+        "f1_test": float(f1_test),
+        "device": device,
+        "batch_size": BATCH_SIZE,
+    }
+    
+    save_results(params, metrics, HISTORY_FILE)

@@ -6,67 +6,90 @@ import stopwordsiso as stopwords
 
 from scipy.stats import loguniform
 from sklearn.pipeline import Pipeline
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.naive_bayes import ComplementNB
+from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report
-from sklearn.model_selection import RandomizedSearchCV
 from sklearn.feature_extraction.text import TfidfVectorizer
 from training.utils_common import (
     MODEL_DIR,
     load_datasets,
     plot_confusion_matrix,
     plot_metrics,
+    Lemmatizer,
 )
 from training.scikit.utils_scikit import (
     save_figure,
     plot_grid_search_results,
     save_best_model_sklearn,
+    get_unique_param_samples,
+    save_results,
 )
 
-# Stopwords en español
+RANDOM_STATE = 42
 SPANISH_STOPWORDS = list(stopwords.stopwords("es"))
-
 BEST_MODEL_PATH = os.path.join(MODEL_DIR, "naive_bayes_best_model.pkl")
 BEST_SCORE_PATH = os.path.join(MODEL_DIR, "naive_bayes_best_score.txt")
+HISTORY_FILE = os.path.join(MODEL_DIR, "nb_hyperparam_history.json")
 
 
 def build_pipeline():
-    """Construye un pipeline con TF-IDF y Naive Bayes."""
+    """Construye pipeline con lematización, TF-IDF y ComplementNB."""
     return Pipeline(
         steps=[
-            ("tfidf", TfidfVectorizer(stop_words=SPANISH_STOPWORDS)),
+            ("lemmatizer", Lemmatizer()),
             (
-                "clf",
-                MultinomialNB(),
+                "tfidf",
+                TfidfVectorizer(
+                    stop_words=SPANISH_STOPWORDS,
+                    ngram_range=(1, 2),  # unigrama + bigrama
+                    max_df=0.85,  # ignora palabras muy frecuentes
+                    min_df=3,  # ignora palabras raras
+                    sublinear_tf=True,  # suavizado logarítmico
+                    norm="l2",  # regularización L2
+                    lowercase=True,
+                    max_features=30000,
+                    smooth_idf=True,
+                    use_idf=True,
+                ),
             ),
+            ("clf", ComplementNB(alpha=0.3, norm=True)),  # robusto al desbalance
         ],
-        memory="__cache__",
+        memory="__cache__",  # cache para eficiencia
     )
 
 
 def optimize_nb(X_train, y_train):
-    """Optimiza hiperparámetros de Naive Bayes con RandomizedSearchCV."""
+    """Optimiza hiperparámetros de ComplementNB con RandomizedSearchCV."""
     pipeline = build_pipeline()
 
-    param_distributions = {
-        "clf__alpha": loguniform(1e-3, 1e1),  # suavizado de Laplace
-        "tfidf__max_features": [20000, 50000],
+    base_param_distributions = {
+        "clf__alpha": loguniform(1e-3, 5),
+        "clf__norm": [True, False],
         "tfidf__ngram_range": [(1, 1), (1, 2)],
+        "tfidf__max_features": [10000, 20000, 30000],
+        "tfidf__sublinear_tf": [True, False],
+        "tfidf__smooth_idf": [True, False],
+        "tfidf__min_df": [3, 5, 10],
     }
 
-    random_search = RandomizedSearchCV(
+    # Generar combinaciones únicas
+    unique_params = get_unique_param_samples(
+        base_param_distributions, HISTORY_FILE, n_iter=12, random_state=RANDOM_STATE
+    )
+
+    grid_search = GridSearchCV(
         pipeline,
-        param_distributions=param_distributions,
-        n_iter=75,
+        param_grid=unique_params,  # Lista de diccionarios
         cv=3,
-        scoring="f1_weighted",
+        scoring="f1_macro",
         n_jobs=-1,
         verbose=3,
-        random_state=42,
         return_train_score=True,
     )
 
-    random_search.fit(X_train, y_train)
-    return random_search
+    grid_search.fit(X_train, y_train)
+    save_results(grid_search.cv_results_, HISTORY_FILE, "f1_macro")
+    return grid_search
 
 
 if __name__ == "__main__":
