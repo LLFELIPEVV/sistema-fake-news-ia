@@ -174,11 +174,15 @@ def predict_text(texts, model_name):
                 )
 
         else:
-            # Preprocesar y predecir con Scikit-Learn
-            X = preprocess_for_sklearn(texts, modelo.vectorizer)
-            y_pred = modelo.modelo.predict_proba(X)
+            # Preprocesar mínimamente el texto (sin re-vectorizar)
+            df = pd.DataFrame({"texto": [texts]})
+            df = normalizar_dataframe(df)
+            df = estandarizar_texto(df)
+            texto_limpio = df["texto"].iloc[0]
 
-            # Para sklearn, la clase 1 suele ser la positiva (real)
+            # El pipeline interno se encarga de lematizar + vectorizar
+            y_pred = modelo.modelo.predict_proba([texto_limpio])
+
             confidence = (
                 float(y_pred[0][1])
                 if y_pred.shape[1] == 2

@@ -1,14 +1,44 @@
-import { useState } from "react";
 import { PieChart } from "@mui/x-charts";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export function Resultado() {
     const navigate = useNavigate();
-    const fake = 50;
-    const real = 50;
+    const location = useLocation();
+
+    // Extraer datos enviados desde handleSubmit
+    const { result, newsText, model } = location.state || {};
+
+    // Datos de la API
+    const prediction = result.prediction || "desconocido";
+    const confidence = result.confidence || 0;
+    const modelUsed = result.model_used || model || "No especificado";
+    const inferenceTime = result.inference_time_ms?.toFixed(0) || 0;
+
+    // Calcular porcentajes correctamente
+    let fake = 0;
+    let real = 0;
+
+    if (prediction === "fake") {
+        fake = confidence * 100;
+        real = (1 - confidence) * 100;
+    } else if (prediction === "real") {
+        real = confidence * 100;
+        fake = (1 - confidence) * 100;
+    } else {
+        // Caso desconocido o error
+        fake = 50;
+        real = 50;
+    }
+
     const [texto, setTexto] = useState(
-        location.state?.newsText || "No se cargo la noticia correctamente..."
+        newsText || "No se cargó la noticia correctamente..."
     );
+
+    // En caso de que alguien acceda directo a /resultado sin pasar por /form
+    useEffect(() => {
+        if (!result) navigate("/");
+    }, [result, navigate]);
 
     return (
         <div
