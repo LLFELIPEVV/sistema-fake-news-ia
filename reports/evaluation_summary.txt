@@ -14,8 +14,8 @@ Modelo: SVC
   Confianza: Alto
 --------------------------------------------------------------------------------
 Modelo: Naive Bayes
-  Test Accuracy: 0.8200
-  Test F1: 0.8614
+  Test Accuracy: 0.8142
+  Test F1: 0.8546
   Problema: Good_Fit
   Confianza: Alto
 --------------------------------------------------------------------------------
@@ -26,8 +26,8 @@ Modelo: Decision Tree
   Confianza: Alto
 --------------------------------------------------------------------------------
 Modelo: Random Forest
-  Test Accuracy: 0.8339
-  Test F1: 0.8735
+  Test Accuracy: 0.8397
+  Test F1: 0.8782
   Problema: Good_Fit
   Confianza: Alto
 --------------------------------------------------------------------------------
@@ -50,14 +50,14 @@ Modelo: GRU
   Confianza: Alto
 --------------------------------------------------------------------------------
 Modelo: CNN
-  Test Accuracy: 0.8635
-  Test F1: 0.8902
-  Problema: Slight_Overfitting
-  Confianza: Alto
+  Test Accuracy: 0.5392
+  Test F1: 0.6517
+  Problema: Severe_Underfitting
+  Confianza: Bajo
 --------------------------------------------------------------------------------
 Modelo: Hibrido
-  Test Accuracy: 0.8577
-  Test F1: 0.8828
+  Test Accuracy: 0.8469
+  Test F1: 0.8719
   Problema: Slight_Overfitting
   Confianza: Alto
 --------------------------------------------------------------------------------

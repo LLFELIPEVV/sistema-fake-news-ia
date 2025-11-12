@@ -228,8 +228,8 @@ if __name__ == "__main__":
     )
 
     # Lematización Opcional, en algunos casos empeora el rendimiento.
-    # lemmatizer = Lemmatizer()
-    # X_train, X_valid, X_test = map(lemmatizer.transform, [X_train, X_valid, X_test])
+    lemmatizer = Lemmatizer()
+    X_train, X_valid, X_test = map(lemmatizer.transform, [X_train, X_valid, X_test])
 
     print("[INFO] Preparando vectorizador TextVectorization...")
     vectorizer = prepare_vectorizer(X_train)
