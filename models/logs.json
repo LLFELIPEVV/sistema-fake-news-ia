@@ -40,5 +40,61 @@
     "text": "Test para confianza",
     "prediction": "real",
     "confidence": 0.7789
+  },
+  {
+    "timestamp": "2025-11-12 12:34:56",
+    "model": "Hibrido",
+    "text": "En Dragon ball Z Goku se ha convertido en un adulto y está casado con Milk, con la que tiene un hijo llamado Gohan. En esta segunda saga de Dragon ball Goku descubrirá que no es un terricola, sino que...",
+    "prediction": "fake",
+    "confidence": 0.0354
+  },
+  {
+    "timestamp": "2025-11-12 12:35:50",
+    "model": "Naive Bayes",
+    "text": "En Dragon ball Z Goku se ha convertido en un adulto y está casado con Milk, con la que tiene un hijo llamado Gohan. En esta segunda saga de Dragon ball Goku descubrirá que no es un terricola, sino que...",
+    "prediction": "real",
+    "confidence": 0.6148
+  },
+  {
+    "timestamp": "2025-11-12 12:36:24",
+    "model": "Naive Bayes",
+    "text": "En Dragon ball Z Goku se ha convertido en un adulto y está casado con Milk, con la que tiene un hijo llamado Gohan. En esta segunda saga de Dragon ball Goku descubrirá que no es un terricola, sino que...",
+    "prediction": "real",
+    "confidence": 0.6148
+  },
+  {
+    "timestamp": "2025-11-12 12:36:48",
+    "model": "Naive Bayes",
+    "text": "En Dragon ball Z Goku se ha convertido en un adulto y está casado con Milk, con la que tiene un hijo llamado Gohan. En esta segunda saga de Dragon ball Goku descubrirá que no es un terricola, sino que...",
+    "prediction": "real",
+    "confidence": 0.6148
+  },
+  {
+    "timestamp": "2025-11-12 12:41:09",
+    "model": "Random Forest",
+    "text": "En Dragon ball Z Goku se ha convertido en un adulto y está casado con Milk, con la que tiene un hijo llamado Gohan. En esta segunda saga de Dragon ball Goku descubrirá que no es un terricola, sino que...",
+    "prediction": "real",
+    "confidence": 0.6516
+  },
+  {
+    "timestamp": "2025-11-12 13:00:22",
+    "model": "Hibrido",
+    "text": "Una creadora en TikTok hizo una advertencia a los usuarios de las redes sociales para que estén más alertas a la desinformación, después de que un video que afirmaba que ella estaba muerta fue visto 6...",
+    "prediction": "fake",
+    "confidence": 0.0469
+  },
+  {
+    "timestamp": "2025-11-12 13:01:06",
+    "model": "Random Forest",
+    "text": "Una creadora en TikTok hizo una advertencia a los usuarios de las redes sociales para que estén más alertas a la desinformación, después de que un video que afirmaba que ella estaba muerta fue visto 6...",
+    "prediction": "real",
+    "confidence": 0.5803
+  },
+  {
+    "timestamp": "2025-11-12 13:03:04",
+    "model": "Hibrido",
+    "text": "Una creadora en TikTok hizo una advertencia a los usuarios de las redes sociales para que estén más alertas a la desinformación, después de que un video que afirmaba que ella estaba muerta fue visto 6...",
+    "prediction": "fake",
+    "confidence": 0.0469
   }
 ]

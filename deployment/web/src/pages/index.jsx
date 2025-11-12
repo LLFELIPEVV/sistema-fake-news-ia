@@ -16,7 +16,19 @@ export function Index() {
 
         if (newsText.length > 40 && model) {
             try {
-                const data = await fetchPrediction(newsText, model);
+                const modelosMap = {
+                    "hibrido-mejor-fake": "Hibrido",
+                    "rf-mejor-real": "Random Forest",
+                    "cnn-mejor-general": "CNN",
+                    "cnn-equilibrado": "CNN",
+                    "nb-rapido": "Naive Bayes",
+                    "nb-estable": "Naive Bayes",
+                    "rf-sobreajuste": "Random Forest",
+                    "cnn-consistente": "CNN",
+                };
+
+                const modeloReal = modelosMap[model];
+                const data = await fetchPrediction(newsText, modeloReal);
                 navigate("/resultado", {
                     state: { result: data, newsText, model },
                 });
@@ -81,27 +93,28 @@ export function Index() {
                         value={model}
                         onChange={(e) => setModel(e.target.value)}
                     >
-                        <option value="Hibrido">
+                        <option value="hibrido-mejor-fake">
                             Mejor detección de Fake News
                         </option>
-                        <option value="Random Forest">
+                        <option value="rf-mejor-real">
                             Mejor detección de Real News
                         </option>
-                        <option value="CNN">Mejor modelo general</option>
-                        <option value="CNN">
-                            Mejor en detección equilibrada de ambos tipos de
-                            noticias
+                        <option value="cnn-mejor-general">
+                            Mejor modelo general
                         </option>
-                        <option value="Naive Bayes">
+                        <option value="cnn-equilibrado">
+                            Mejor en detección equilibrada
+                        </option>
+                        <option value="nb-rapido">
                             Mejor en rapidez y eficiencia
                         </option>
-                        <option value="Naive Bayes">
+                        <option value="nb-estable">
                             Mejor en estabilidad y reproducibilidad
                         </option>
-                        <option value="Random Forest">
+                        <option value="rf-sobreajuste">
                             Modelo con menor sobreajuste
                         </option>
-                        <option value="CNN">
+                        <option value="cnn-consistente">
                             Mejor en consistencia general
                         </option>
                     </select>
