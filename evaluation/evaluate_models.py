@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 from scipy import stats
 from keras.models import load_model
 from keras.backend import clear_session
+from keras.layers import TextVectorization
 from training.utils_common import load_datasets, Lemmatizer
 from sklearn.metrics import (
     accuracy_score,
@@ -139,6 +140,19 @@ class AdvancedModelEvaluator:
         print(f"✅ {name} evaluado")
         clear_memory()
         return model
+    
+    @staticmethod
+    def prepare_vectorizer(texts, max_tokens=30000, output_seq_len=200):
+        """Prepara vectorizador de texto optimizado"""
+        vectorizer = TextVectorization(
+            max_tokens=max_tokens,
+            output_mode="int",
+            output_sequence_length=output_seq_len,
+            standardize="lower_and_strip_punctuation",
+            split="whitespace",
+        )
+        vectorizer.adapt(texts)
+        return vectorizer
 
     def evaluate_keras_model_complete(
         self, name, model_path, apply_lemmatization=False
@@ -161,20 +175,20 @@ class AdvancedModelEvaluator:
 
         # Cargar vectorizador guardado
         models_dir = os.path.dirname(model_path)
-        vectorizer_path = os.path.join(models_dir, "text_vectorizer_keras.keras")
-
-        if not os.path.exists(vectorizer_path):
-            raise FileNotFoundError(
-                f"❌ No se encontró el vectorizador en: {vectorizer_path}"
-            )
-
-        print(f"📥 Cargando vectorizador desde: {vectorizer_path}")
-        vectorizer_model = load_model(vectorizer_path)
-        # Extraer la capa de vectorización del modelo secuencial
-        vectorizer = vectorizer_model.layers[0]
 
         # Aplicar lematización solo si es necesario (CNN)
-        if apply_lemmatization:
+        if name == "CNN":
+            vectorizer_path = os.path.join(models_dir, "text_vectorizer_keras.keras")
+
+            if not os.path.exists(vectorizer_path):
+                raise FileNotFoundError(
+                    f"❌ No se encontró el vectorizador en: {vectorizer_path}"
+                )
+
+            print(f"📥 Cargando vectorizador desde: {vectorizer_path}")
+            vectorizer_model = load_model(vectorizer_path)
+            # Extraer la capa de vectorización del modelo secuencial
+            vectorizer = vectorizer_model.layers[0]
             print(f"📝 Aplicando lematización para {name}...")
             try:
                 lemmatizer = Lemmatizer()
@@ -187,6 +201,9 @@ class AdvancedModelEvaluator:
                 x_val_proc = self.x_val
                 x_test_proc = self.x_test
         else:
+            vectorizer = self.prepare_vectorizer(
+                self.x_train, max_tokens=3000, output_seq_len=200
+            )
             x_train_proc = self.x_train
             x_val_proc = self.x_val
             x_test_proc = self.x_test
