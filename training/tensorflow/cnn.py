@@ -4,6 +4,8 @@ import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
+from keras import Model
+from keras.regularizers import l2
 from keras.optimizers import Adam
 from keras.models import Sequential
 from keras.metrics import Precision, Recall
@@ -17,6 +19,10 @@ from keras.layers import (
     GlobalMaxPooling1D,
     Dropout,
     BatchNormalization,
+    Input,
+    Concatenate,
+    LayerNormalization,
+    LeakyReLU,
 )
 from sklearn.metrics import classification_report, f1_score
 from sklearn.utils.class_weight import compute_class_weight
@@ -24,6 +30,9 @@ from training.tensorflow.utils_keras import (
     save_best_model_keras,
     plot_training_history,
     load_best_model_keras,
+    build_embedding_matrix,
+    save_results,
+    get_random_hyperparams,
 )
 from training.utils_common import (
     load_datasets,
@@ -31,6 +40,7 @@ from training.utils_common import (
     plot_metrics,
     MODEL_DIR,
     save_figure,
+    Lemmatizer,
 )
 
 # Configuración de hardware
@@ -58,30 +68,27 @@ tf.config.threading.set_inter_op_parallelism_threads(2)
 
 # Tamaño de batch dinámico según hardware
 if device == "GPU":
-    if num_threads >= 8:
-        BATCH_SIZE = 128
-    else:
-        BATCH_SIZE = 64
-else:  # CPU
-    if num_threads <= 4:
-        BATCH_SIZE = 32
-    else:
-        BATCH_SIZE = 64
+    BATCH_SIZE = 128 if num_threads >= 8 else 64
+else:
+    BATCH_SIZE = 64 if num_threads > 4 else 32
 
 print(f"[INFO] Usando batch_size = {BATCH_SIZE} con {device} y {num_threads} hilos")
-
-
-# Configuración general
-BEST_MODEL_PATH = os.path.join(MODEL_DIR, "cnn_best_model.keras")
-BEST_SCORE_PATH = os.path.join(MODEL_DIR, "cnn_best_score.txt")
 
 SEED = 42
 tf.random.set_seed(SEED)
 np.random.seed(SEED)
 
+# Configuración general
+BEST_MODEL_PATH = os.path.join(MODEL_DIR, "cnn_best_model.keras")
+BEST_SCORE_PATH = os.path.join(MODEL_DIR, "cnn_best_score.txt")
+VECTORIZER_PATH = os.path.join(MODEL_DIR, "text_vectorizer_keras.keras")
+HISTORY_FILE = os.path.join(MODEL_DIR, "cnn_hyperparam_history.json")
 
+
+# ==============================
+# 🔤 Text Vectorization
+# ==============================
 def prepare_vectorizer(texts, max_tokens=30000, output_seq_len=200):
-    """Crea y adapta un TextVectorization layer sobre los textos de entrenamiento."""
     vectorizer = TextVectorization(
         max_tokens=max_tokens,
         output_mode="int",
@@ -93,45 +100,66 @@ def prepare_vectorizer(texts, max_tokens=30000, output_seq_len=200):
     return vectorizer
 
 
-def build_cnn_model_sequential(
+# ==============================
+# 🏗️ Modelo CNN
+# ==============================
+def build_cnn_model(
     vocab_size,
-    embedding_dim=128,
+    embedding_dim=300,
     sequence_length=200,
+    embedding_matrix=None,
     num_filters=128,
-    kernel_size=5,
-    dropout_rate=0.4,
+    kernel_sizes=(3, 4, 5),
+    dropout_rate=0.4 if device == "GPU" else 0.3,  # ✅ Dropout adaptativo
+    l2_reg=1e-4,
 ):
-    """Construye modelo Sequential con Embedding + Conv1D + GlobalMaxPooling + Dense."""
-    model = Sequential(
-        [
-            # Embedding layer
-            Embedding(
-                input_dim=vocab_size,
-                output_dim=embedding_dim,
-                input_length=sequence_length,
-                mask_zero=False,  # CNN no necesita máscara
-                name="embedding",
-            ),
-            # Dropout espacial
-            SpatialDropout1D(0.4, name="spatial_dropout"),
-            # Convolución 1D
-            Conv1D(
-                filters=num_filters,
-                kernel_size=kernel_size,
-                activation="relu",
-                padding="same",
-                name="conv1d",
-            ),
-            BatchNormalization(name="batch_norm"),
-            # Global pooling para aplanar secuencia
-            GlobalMaxPooling1D(name="global_max_pooling"),
-            # Dense oculto
-            Dense(64, activation="relu", name="dense_hidden"),
-            Dropout(dropout_rate, name="dropout_hidden"),
-            # Output
-            Dense(1, activation="sigmoid", name="output"),
-        ]
-    )
+    # Input layer
+    input_layer = Input(shape=(sequence_length,))
+
+    # Embedding
+    if embedding_matrix is not None:
+        x = Embedding(
+            input_dim=vocab_size,
+            output_dim=embedding_dim,
+            weights=[embedding_matrix],
+            trainable=False,
+            name="embedding",
+        )(input_layer)
+    else:
+        x = Embedding(input_dim=vocab_size, output_dim=embedding_dim, name="embedding")(
+            input_layer
+        )
+
+    x = SpatialDropout1D(dropout_rate)(x)
+
+    # ✅ CONVOLUCIONES PARALELAS (no secuenciales)
+    conv_blocks = []
+    for ks in kernel_sizes:
+        conv = Conv1D(
+            filters=num_filters,
+            kernel_size=ks,
+            padding="same",
+            kernel_regularizer=l2(l2_reg),
+        )(x)
+        conv = LeakyReLU(alpha=0.1)(conv)
+        conv = BatchNormalization()(conv)
+        conv = GlobalMaxPooling1D()(conv)
+        conv_blocks.append(conv)
+
+    # Concatenar todas las convoluciones
+    x = Concatenate()(conv_blocks)
+    x = LayerNormalization()(x)
+
+    # Dense layers
+    x = Dense(128, kernel_regularizer=l2(l2_reg))(x)
+    x = LeakyReLU(alpha=0.1)(x)
+    x = Dropout(dropout_rate)(x)
+    x = Dense(64, kernel_regularizer=l2(l2_reg))(x)
+    x = LeakyReLU(alpha=0.1)(x)
+    x = Dropout(dropout_rate * 0.5)(x)
+    output = Dense(1, activation="sigmoid")(x)
+
+    model = Model(inputs=input_layer, outputs=output)
 
     model.compile(
         optimizer=Adam(learning_rate=1e-3, clipnorm=1.0),
@@ -158,7 +186,7 @@ def compute_class_weights(y):
     cw = compute_class_weight(class_weight="balanced", classes=classes, y=y)
     class_weights_dict = {int(c): w for c, w in zip(classes, cw)}
     print(f"[INFO] Distribución de clases: {np.bincount(y)}")
-    print(f"[INFO] Class weights: {class_weights_dict}")
+    print(f"[INFO] Pesos de clase: {class_weights_dict}")
     return class_weights_dict
 
 
@@ -175,50 +203,77 @@ def evaluate_model(model, dataset, y_true, dataset_name="Dataset"):
     return y_pred, y_proba, f1_macro
 
 
+# ==============================
+# 🚀 Main
+# ==============================
 if __name__ == "__main__":
     print("[INFO] Cargando datos...")
     train_df, valid_df, test_df = load_datasets()
 
-    X_train_texts = train_df["texto"].astype(str).values
-    y_train = train_df["clase"].astype(int).values
-    X_valid_texts = valid_df["texto"].astype(str).values
-    y_valid = valid_df["clase"].astype(int).values
-    X_test_texts = test_df["texto"].astype(str).values
-    y_test = test_df["clase"].astype(int).values
+    X_train, y_train = (
+        train_df["texto"].astype(str).values,
+        train_df["clase"].astype(int).values,
+    )
+    X_valid, y_valid = (
+        valid_df["texto"].astype(str).values,
+        valid_df["clase"].astype(int).values,
+    )
+    X_test, y_test = (
+        test_df["texto"].astype(str).values,
+        test_df["clase"].astype(int).values,
+    )
 
     print(
-        f"[INFO] Tamaños - Train: {len(X_train_texts)}, Valid: {len(X_valid_texts)}, Test: {len(X_test_texts)}"
+        f"[INFO] Tamaños - Train: {len(X_train)}, Valid: {len(X_valid)}, Test: {len(X_test)}"
     )
 
-    # Vectorización
+    # Lematización Opcional, en algunos casos empeora el rendimiento.
+    lemmatizer = Lemmatizer()
+    X_train, X_valid, X_test = map(lemmatizer.transform, [X_train, X_valid, X_test])
+
     print("[INFO] Preparando vectorizador TextVectorization...")
-    MAX_TOKENS = 30000
-    SEQ_LEN = 200
-    vectorizer = prepare_vectorizer(
-        X_train_texts, max_tokens=MAX_TOKENS, output_seq_len=SEQ_LEN
-    )
-
+    vectorizer = prepare_vectorizer(X_train)
     vocab_size = len(vectorizer.get_vocabulary())
+
     print(f"[INFO] Vocab size real: {vocab_size}")
+    embedding_matrix = build_embedding_matrix(vectorizer)
 
-    # Datasets
-    train_ds = to_tf_dataset(X_train_texts, y_train, vectorizer, batch_size=BATCH_SIZE)
-    valid_ds = to_tf_dataset(
-        X_valid_texts, y_valid, vectorizer, batch_size=BATCH_SIZE, shuffle=False
+    train_ds = (
+        to_tf_dataset(X_train, y_train, vectorizer, BATCH_SIZE, True)
+        .cache()
+        .prefetch(tf.data.AUTOTUNE)
     )
-    test_ds = to_tf_dataset(
-        X_test_texts, y_test, vectorizer, batch_size=BATCH_SIZE, shuffle=False
+    valid_ds = (
+        to_tf_dataset(X_valid, y_valid, vectorizer, BATCH_SIZE, False)
+        .cache()
+        .prefetch(tf.data.AUTOTUNE)
+    )
+    test_ds = (
+        to_tf_dataset(X_test, y_test, vectorizer, BATCH_SIZE, False)
+        .cache()
+        .prefetch(tf.data.AUTOTUNE)
     )
 
-    # Modelo CNN
-    print("[INFO] Construyendo modelo CNN Sequential...")
-    model = build_cnn_model_sequential(
+    # === Selección de hiperparámetros ===
+    all_combinations = {
+        "num_filters": [64, 96, 128, 160],
+        "kernel_sizes": [(3, 4, 5), (2, 3, 4), (3, 5, 7)],
+        "dropout_rate": [0.3, 0.4, 0.5],
+        "l2_reg": [1e-3, 1e-4, 1e-5],
+        "embedding_dim": [300],
+    }
+    params = get_random_hyperparams(all_combinations, HISTORY_FILE, max_attempts=50)
+    print(f"[INFO] Hiperparámetros seleccionados: {params}")
+
+    print("[INFO] Construyendo modelo CNN...")
+    model = build_cnn_model(
         vocab_size=vocab_size,
-        embedding_dim=128,
-        sequence_length=SEQ_LEN,
-        num_filters=128,
-        kernel_size=5,
-        dropout_rate=0.5,
+        embedding_matrix=embedding_matrix,
+        num_filters=params["num_filters"],
+        kernel_sizes=params["kernel_sizes"],
+        dropout_rate=params["dropout_rate"],
+        l2_reg=params["l2_reg"],
+        embedding_dim=params["embedding_dim"],
     )
 
     sample_batch = next(iter(train_ds.take(1)))
@@ -227,30 +282,40 @@ if __name__ == "__main__":
 
     callbacks = [
         EarlyStopping(
-            monitor="val_loss",
-            patience=14,
-            restore_best_weights=True,
-            verbose=1,
-            mode="min",
+            monitor="val_loss", patience=7, restore_best_weights=True, verbose=1
         ),
         ReduceLROnPlateau(
-            monitor="val_loss",
-            factor=0.5,
-            patience=3,
-            min_lr=1e-6,
-            verbose=1,
-            mode="min",
+            monitor="val_loss", factor=0.4, patience=3, min_lr=1e-6, verbose=1
         ),
     ]
 
     class_weights = compute_class_weights(y_train)
 
-    print("[INFO] Iniciando entrenamiento...")
-    EPOCHS = 15
+    print("[INFO] Entrenando modelo CNN (fase 1: embeddings congelados)...")
     history = model.fit(
         train_ds,
         validation_data=valid_ds,
-        epochs=EPOCHS,
+        epochs=15,
+        callbacks=callbacks,
+        class_weight=class_weights,
+        verbose=1,
+    )
+
+    # ✅ Fine-tuning: descongelar embeddings
+    print("[INFO] Iniciando fine-tuning de embeddings...")
+    for layer in model.layers:
+        if "embedding" in layer.name:
+            layer.trainable = True
+    model.compile(
+        optimizer=Adam(learning_rate=1e-4, clipnorm=1.0),
+        loss="binary_crossentropy",
+        metrics=["accuracy", Precision(name="precision"), Recall(name="recall")],
+    )
+
+    history_ft = model.fit(
+        train_ds,
+        validation_data=valid_ds,
+        epochs=5,
         callbacks=callbacks,
         class_weight=class_weights,
         verbose=1,
@@ -270,6 +335,18 @@ if __name__ == "__main__":
     )
 
     save_best_model_keras(model, f1_valid, BEST_SCORE_PATH, BEST_MODEL_PATH)
+    # ==============================
+    # 💾 Guardar vectorizador
+    # ==============================
+    print("[INFO] Guardando vectorizador TextVectorization...")
+
+    # 1. Empaquetar el vectorizador en un modelo funcional
+    vectorizer_model = Sequential([vectorizer])
+
+    # 2. Guardar con formato TensorFlow SavedModel
+    vectorizer_model.save(VECTORIZER_PATH)
+
+    print(f"✅ Vectorizador guardado en: {VECTORIZER_PATH}")
     best_model = load_best_model_keras(BEST_MODEL_PATH)
     y_valid_pred, y_valid_proba, f1_valid = evaluate_model(
         best_model, valid_ds, y_valid, "Validación"
@@ -334,3 +411,10 @@ if __name__ == "__main__":
 
     print("[INFO] Proceso terminado.")
     print(f"[INFO] F1 Score Final - Validación: {f1_valid:.4f}, Prueba: {f1_test:.4f}")
+    metrics = {
+        "f1_valid": float(f1_valid),
+        "f1_test": float(f1_test),
+        "device": device,
+        "batch_size": BATCH_SIZE,
+    }
+    save_results(params, metrics, HISTORY_FILE)

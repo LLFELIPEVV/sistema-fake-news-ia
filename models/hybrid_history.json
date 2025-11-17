@@ -1,0 +1,107 @@
+[
+  {
+    "timestamp": "2025-11-05T14:52:29.419938",
+    "params": {
+      "filters": 160,
+      "lstm_units": 64,
+      "gru_units": 64,
+      "dropout_rate": 0.3,
+      "l2_reg": 1e-05,
+      "kernel_sizes": [
+        3,
+        4,
+        5
+      ]
+    },
+    "metrics": {
+      "f1_valid": 0.8490798032682849,
+      "f1_test": 0.8408687366358161,
+      "device": "CPU",
+      "batch_size": 64
+    }
+  },
+  {
+    "timestamp": "2025-11-05T19:03:17.824571",
+    "params": {
+      "filters": 160,
+      "lstm_units": 64,
+      "gru_units": 64,
+      "dropout_rate": 0.3,
+      "l2_reg": 1e-05,
+      "kernel_sizes": [
+        2,
+        3,
+        4
+      ]
+    },
+    "metrics": {
+      "f1_valid": 0.8490798032682849,
+      "f1_test": 0.8408687366358161,
+      "device": "CPU",
+      "batch_size": 64
+    }
+  },
+  {
+    "timestamp": "2025-11-06T15:38:07.001200",
+    "params": {
+      "filters": 160,
+      "lstm_units": 64,
+      "gru_units": 64,
+      "dropout_rate": 0.3,
+      "l2_reg": 1e-05,
+      "kernel_sizes": [
+        3,
+        5,
+        7
+      ]
+    },
+    "metrics": {
+      "f1_valid": 0.8490798032682849,
+      "f1_test": 0.8408687366358161,
+      "device": "CPU",
+      "batch_size": 64
+    }
+  },
+  {
+    "timestamp": "2025-11-06T20:14:30.623210",
+    "params": {
+      "filters": 160,
+      "lstm_units": 64,
+      "gru_units": 64,
+      "dropout_rate": 0.4,
+      "l2_reg": 0.0001,
+      "kernel_sizes": [
+        3,
+        4,
+        5
+      ]
+    },
+    "metrics": {
+      "f1_valid": 0.8490798032682849,
+      "f1_test": 0.8408687366358161,
+      "device": "CPU",
+      "batch_size": 64
+    }
+  },
+  {
+    "timestamp": "2025-11-07T16:08:19.676035",
+    "params": {
+      "filters": 160,
+      "lstm_units": 64,
+      "gru_units": 64,
+      "dropout_rate": 0.4,
+      "l2_reg": 0.0001,
+      "kernel_sizes": [
+        2,
+        3,
+        4
+      ]
+    },
+    "metrics": {
+      "f1_valid": 0.8490798032682849,
+      "f1_test": 0.8408687366358161,
+      "device": "CPU",
+      "batch_size": 64
+    }
+  }
+]

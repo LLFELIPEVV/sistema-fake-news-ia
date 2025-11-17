@@ -1,17 +1,21 @@
 import os
+import gc
 import time
+import psutil
 import joblib
 import warnings
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import tensorflow as tf
 import matplotlib.pyplot as plt
 
 
 from scipy import stats
 from keras.models import load_model
+from keras.backend import clear_session
 from keras.layers import TextVectorization
-from training.utils_common import load_datasets
+from training.utils_common import load_datasets, Lemmatizer
 from sklearn.metrics import (
     accuracy_score,
     precision_score,
@@ -32,6 +36,33 @@ sns.set_palette("husl")
 plt.rcParams["figure.dpi"] = 100
 plt.rcParams["savefig.dpi"] = 600
 
+# ===============================
+# CONFIGURACIONES DE RENDIMIENTO
+# ===============================
+num_threads = max(4, psutil.cpu_count(logical=True))
+os.environ["OMP_NUM_THREADS"] = str(num_threads)
+os.environ["TF_NUM_INTRAOP_THREADS"] = str(num_threads)
+os.environ["TF_NUM_INTEROP_THREADS"] = str(num_threads)
+os.environ["TOKENIZERS_PARALLELISM"] = "true"
+
+tf.config.threading.set_intra_op_parallelism_threads(num_threads)
+tf.config.threading.set_inter_op_parallelism_threads(num_threads)
+
+print(f"🧩 CPU optimizado: usando {num_threads} threads paralelos")
+
+
+# --- Función auxiliar para estimar RAM disponible ---
+def available_memory_gb():
+    return psutil.virtual_memory().available / (1024**3)
+
+
+# --- Liberar todo lo posible entre frameworks ---
+def clear_memory(full=True):
+    gc.collect()
+    if full:
+        clear_session()
+    gc.collect()
+
 
 class AdvancedModelEvaluator:
     """Sistema avanzado de evaluación y análisis de modelos de Machine Learning"""
@@ -48,7 +79,16 @@ class AdvancedModelEvaluator:
         self.predictions = {}
 
     def evaluate_sklearn_model_complete(self, name, model_path):
-        """Evalúa modelos de scikit-learn con métricas extendidas"""
+        """
+        Evalúa modelos de scikit-learn con métricas extendidas.
+
+        IMPORTANTE: Los modelos sklearn son pipelines completos con:
+        - Lemmatizer
+        - TfidfVectorizer
+        - Clasificador
+
+        Se pasa texto crudo directamente al pipeline.
+        """
         print(f"⏳ Evaluando {name}...")
         model = joblib.load(model_path)
 
@@ -63,12 +103,15 @@ class AdvancedModelEvaluator:
 
         for dataset_name, (X, y) in datasets.items():
             start_time = time.time()
+
+            # ✅ El pipeline incluye todo el preprocesamiento
             y_pred = model.predict(X)
             prediction_time = time.time() - start_time
 
             try:
                 y_proba = model.predict_proba(X)[:, 1]
-            except Exception:
+            except (AttributeError, IndexError) as e:
+                print(f"⚠️ {name} no soporta predict_proba: {e}")
                 y_proba = y_pred.astype(float)
 
             metrics = self._calculate_extended_metrics(
@@ -80,7 +123,6 @@ class AdvancedModelEvaluator:
 
             cm_dict[dataset_name] = confusion_matrix(y, y_pred)
 
-            # Guardar predicciones para análisis posterior
             if dataset_name == "Test":
                 self.predictions[name] = {
                     "y_true": y,
@@ -88,16 +130,17 @@ class AdvancedModelEvaluator:
                     "y_proba": y_proba,
                 }
 
-        self.confusion_matrices[name] = cm_dict
+        del X, y, y_pred, y_proba
+        gc.collect()
 
-        # Indicadores avanzados
+        self.confusion_matrices[name] = cm_dict
         advanced_indicators = self._calculate_advanced_indicators(model_results)
         model_results.update(advanced_indicators)
-
         self.results.append(model_results)
         print(f"✅ {name} evaluado")
+        clear_memory()
         return model
-
+    
     @staticmethod
     def prepare_vectorizer(texts, max_tokens=30000, output_seq_len=200):
         """Prepara vectorizador de texto optimizado"""
@@ -112,30 +155,86 @@ class AdvancedModelEvaluator:
         return vectorizer
 
     def evaluate_keras_model_complete(
-        self, name, model_path, max_tokens=30000, seq_len=200
+        self, name, model_path, apply_lemmatization=False
     ):
-        """Evalúa modelos de Keras con métricas extendidas"""
+        """
+        Evalúa modelos de Keras con métricas extendidas.
+
+        Args:
+            name: Nombre del modelo
+            model_path: Ruta al archivo .keras del modelo
+            apply_lemmatization: Si True, aplica lematización (solo para CNN)
+
+        IMPORTANTE:
+        - Los modelos Keras esperan datos vectorizados
+        - El vectorizador se guarda en text_vectorizer_keras.keras
+        - Solo CNN requiere lematización previa según el código de entrenamiento
+        """
         print(f"⏳ Evaluando {name}...")
         model = load_model(model_path)
 
-        vectorizer = self.prepare_vectorizer(
-            self.x_train, max_tokens=max_tokens, output_seq_len=seq_len
-        )
+        # Cargar vectorizador guardado
+        models_dir = os.path.dirname(model_path)
+
+        # Aplicar lematización solo si es necesario (CNN)
+        if name == "CNN":
+            vectorizer_path = os.path.join(models_dir, "text_vectorizer_keras.keras")
+
+            if not os.path.exists(vectorizer_path):
+                raise FileNotFoundError(
+                    f"❌ No se encontró el vectorizador en: {vectorizer_path}"
+                )
+
+            print(f"📥 Cargando vectorizador desde: {vectorizer_path}")
+            vectorizer_model = load_model(vectorizer_path)
+            # Extraer la capa de vectorización del modelo secuencial
+            vectorizer = vectorizer_model.layers[0]
+            print(f"📝 Aplicando lematización para {name}...")
+            try:
+                lemmatizer = Lemmatizer()
+                x_train_proc = lemmatizer.transform(self.x_train)
+                x_val_proc = lemmatizer.transform(self.x_val)
+                x_test_proc = lemmatizer.transform(self.x_test)
+            except Exception as e:
+                print(f"⚠️ Error al lematizar, usando texto original: {e}")
+                x_train_proc = self.x_train
+                x_val_proc = self.x_val
+                x_test_proc = self.x_test
+        else:
+            vectorizer = self.prepare_vectorizer(
+                self.x_train, max_tokens=3000, output_seq_len=200
+            )
+            x_train_proc = self.x_train
+            x_val_proc = self.x_val
+            x_test_proc = self.x_test
 
         datasets = {
-            "Train": (self.x_train, self.y_train),
-            "Validation": (self.x_val, self.y_val),
-            "Test": (self.x_test, self.y_test),
+            "Train": (x_train_proc, self.y_train),
+            "Validation": (x_val_proc, self.y_val),
+            "Test": (x_test_proc, self.y_test),
         }
 
         model_results = {"Modelo": name, "Tipo": "keras"}
         cm_dict = {}
 
         for dataset_name, (X, y) in datasets.items():
-            X_vec = vectorizer(np.array(X)).numpy()
+            # Vectorizar texto usando el vectorizador cargado
+            X_tensor = tf.constant(X, dtype=tf.string)
+            X_vec = vectorizer(X_tensor).numpy()
 
             start_time = time.time()
-            y_proba = model.predict(X_vec, verbose=0, batch_size=512).flatten()
+            # Batch dinámico según memoria disponible
+            available_gb = available_memory_gb()
+            if available_gb < 2:
+                adaptive_batch = 32
+            elif available_gb < 8:
+                adaptive_batch = 128
+            else:
+                adaptive_batch = 256
+            y_proba = model.predict(
+                X_vec, verbose=0, batch_size=adaptive_batch
+            ).flatten()
+
             y_pred = (y_proba > 0.5).astype(int)
             prediction_time = time.time() - start_time
 
@@ -155,13 +254,14 @@ class AdvancedModelEvaluator:
                     "y_proba": y_proba,
                 }
 
-        self.confusion_matrices[name] = cm_dict
+        gc.collect()
 
+        self.confusion_matrices[name] = cm_dict
         advanced_indicators = self._calculate_advanced_indicators(model_results)
         model_results.update(advanced_indicators)
-
         self.results.append(model_results)
         print(f"✅ {name} evaluado")
+        clear_memory()
         return model
 
     def _calculate_extended_metrics(self, y_true, y_pred, y_proba, prediction_time):
@@ -1057,9 +1157,9 @@ class AdvancedModelEvaluator:
 
             for i, row in df.iterrows():
                 train_val_test = [
-                    row[f"Train_{metric}"],
-                    row[f"Validation_{metric}"],
-                    row[f"Test_{metric}"],
+                    row.get(f"Train_{metric}", 0),
+                    row.get(f"Validation_{metric}", 0),
+                    row.get(f"Test_{metric}", 0),
                 ]
 
                 ax.plot(
@@ -1523,12 +1623,20 @@ def main():
         else:
             print(f"⚠️  Modelo no encontrado: {path}")
 
+    # Pausa ligera para liberar CPU
+    time.sleep(2)
+    clear_memory()
+
     # Evaluar keras models
     for name, path in keras_models.items():
         if os.path.exists(path):
             evaluator.evaluate_keras_model_complete(name, path)
         else:
             print(f"⚠️  Modelo no encontrado: {path}")
+
+    # Pausa ligera para liberar CPU
+    time.sleep(2)
+    clear_memory()
 
     # Generar reporte completo
     print("\n" + "=" * 100)
