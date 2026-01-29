@@ -96,5 +96,726 @@
     "text": "Una creadora en TikTok hizo una advertencia a los usuarios de las redes sociales para que estén más alertas a la desinformación, después de que un video que afirmaba que ella estaba muerta fue visto 6...",
     "prediction": "fake",
     "confidence": 0.0469
+  },
+  {
+    "timestamp": "2025-11-17 12:48:28",
+    "model": "CNN",
+    "text": "La Fiscalía de la Justicia Penal Militar abrió este lunes festivo una indagación por el bombardeo que ejecutaron las fuerzas armadas la semana pasada en el Guaviare, en el cual murieron siete menores ...",
+    "prediction": "fake",
+    "confidence": 0.4985
+  },
+  {
+    "timestamp": "2025-11-17 12:49:03",
+    "model": "Random Forest",
+    "text": "La Fiscalía de la Justicia Penal Militar abrió este lunes festivo una indagación por el bombardeo que ejecutaron las fuerzas armadas la semana pasada en el Guaviare, en el cual murieron siete menores ...",
+    "prediction": "real",
+    "confidence": 0.5981
+  },
+  {
+    "timestamp": "2025-11-17 12:49:12",
+    "model": "CNN",
+    "text": "La Fiscalía de la Justicia Penal Militar abrió este lunes festivo una indagación por el bombardeo que ejecutaron las fuerzas armadas la semana pasada en el Guaviare, en el cual murieron siete menores ...",
+    "prediction": "fake",
+    "confidence": 0.4985
+  },
+  {
+    "timestamp": "2025-11-17 12:49:19",
+    "model": "CNN",
+    "text": "La Fiscalía de la Justicia Penal Militar abrió este lunes festivo una indagación por el bombardeo que ejecutaron las fuerzas armadas la semana pasada en el Guaviare, en el cual murieron siete menores ...",
+    "prediction": "fake",
+    "confidence": 0.4985
+  },
+  {
+    "timestamp": "2025-11-17 12:49:41",
+    "model": "Naive Bayes",
+    "text": "La Fiscalía de la Justicia Penal Militar abrió este lunes festivo una indagación por el bombardeo que ejecutaron las fuerzas armadas la semana pasada en el Guaviare, en el cual murieron siete menores ...",
+    "prediction": "real",
+    "confidence": 0.9042
+  },
+  {
+    "timestamp": "2025-11-17 12:49:48",
+    "model": "Naive Bayes",
+    "text": "La Fiscalía de la Justicia Penal Militar abrió este lunes festivo una indagación por el bombardeo que ejecutaron las fuerzas armadas la semana pasada en el Guaviare, en el cual murieron siete menores ...",
+    "prediction": "real",
+    "confidence": 0.9042
+  },
+  {
+    "timestamp": "2025-11-17 12:49:57",
+    "model": "Random Forest",
+    "text": "La Fiscalía de la Justicia Penal Militar abrió este lunes festivo una indagación por el bombardeo que ejecutaron las fuerzas armadas la semana pasada en el Guaviare, en el cual murieron siete menores ...",
+    "prediction": "real",
+    "confidence": 0.5981
+  },
+  {
+    "timestamp": "2025-11-17 12:50:04",
+    "model": "CNN",
+    "text": "La Fiscalía de la Justicia Penal Militar abrió este lunes festivo una indagación por el bombardeo que ejecutaron las fuerzas armadas la semana pasada en el Guaviare, en el cual murieron siete menores ...",
+    "prediction": "fake",
+    "confidence": 0.4985
+  },
+  {
+    "timestamp": "2025-11-21 12:32:04",
+    "model": "CNN",
+    "text": "“NASA confirma que el sol se apagará durante tres días la próxima semana”\n\nLa noticia asegura que la NASA anunció una “oscuridad total mundial” durante 72 horas debido a una supuesta tormenta solar ex...",
+    "prediction": "real",
+    "confidence": 0.7747
+  },
+  {
+    "timestamp": "2025-11-21 12:33:41",
+    "model": "CNN",
+    "text": "La información publicada por el medio Correo Confidencial bajo el titular “Claudia López sería investigada por gastar un billón de pesos en publicidad” es falsa.\n\nEn vista de que la Secretaría General...",
+    "prediction": "real",
+    "confidence": 0.5652
+  },
+  {
+    "timestamp": "2025-11-21 12:34:30",
+    "model": "CNN",
+    "text": "Gabriel y Sebastian Shemirani observaban con preocupación cómo su madre Kate ganaba mala fama durante la pandemia, y cómo finalmente fue destituida de su cargo de enfermera por promover desinformación...",
+    "prediction": "fake",
+    "confidence": 0.2458
+  },
+  {
+    "timestamp": "2025-11-21 12:34:57",
+    "model": "Random Forest",
+    "text": "Gabriel y Sebastian Shemirani observaban con preocupación cómo su madre Kate ganaba mala fama durante la pandemia, y cómo finalmente fue destituida de su cargo de enfermera por promover desinformación...",
+    "prediction": "real",
+    "confidence": 0.5244
+  },
+  {
+    "timestamp": "2025-11-21 12:35:03",
+    "model": "CNN",
+    "text": "Gabriel y Sebastian Shemirani observaban con preocupación cómo su madre Kate ganaba mala fama durante la pandemia, y cómo finalmente fue destituida de su cargo de enfermera por promover desinformación...",
+    "prediction": "fake",
+    "confidence": 0.2458
+  },
+  {
+    "timestamp": "2025-11-21 12:35:20",
+    "model": "CNN",
+    "text": "Gabriel y Sebastian Shemirani observaban con preocupación cómo su madre Kate ganaba mala fama durante la pandemia, y cómo finalmente fue destituida de su cargo de enfermera por promover desinformación...",
+    "prediction": "fake",
+    "confidence": 0.2458
+  },
+  {
+    "timestamp": "2025-11-21 12:35:56",
+    "model": "Hibrido",
+    "text": "Una creadora en TikTok hizo una advertencia a los usuarios de las redes sociales para que estén más alertas a la desinformación, después de que un video que afirmaba que ella estaba muerta fue visto 6...",
+    "prediction": "fake",
+    "confidence": 0.0469
+  },
+  {
+    "timestamp": "2025-11-21 12:36:18",
+    "model": "Hibrido",
+    "text": "Imágenes generadas por inteligencia artificial (IA) de Katy Perry y Rihanna en la Met Gala se volvieron virales en las redes sociales.\n\nNinguna de las cantantes estuvo presente en el evento de moda de...",
+    "prediction": "real",
+    "confidence": 0.58
+  },
+  {
+    "timestamp": "2025-11-21 12:36:41",
+    "model": "Hibrido",
+    "text": "Los partidarios del expresidente estadounidense Donald Trump han estado creando y compartiendo imágenes falsas de votantes negros generadas por inteligencia artificial (IA) para alentar a los afroamer...",
+    "prediction": "fake",
+    "confidence": 0.2164
+  },
+  {
+    "timestamp": "2025-11-21 12:36:54",
+    "model": "Hibrido",
+    "text": "“Descubren que beber agua caliente elimina la diabetes en solo dos semanas”\n\nAtribuye el descubrimiento a “científicos japoneses”, pero no menciona instituciones reales ni evidencia verificable.",
+    "prediction": "real",
+    "confidence": 0.8091
+  },
+  {
+    "timestamp": "2025-11-21 12:44:30",
+    "model": "CNN",
+    "text": "Una creadora en TikTok hizo una advertencia a los usuarios de las redes sociales para que estén más alertas a la desinformación, después de que un video que afirmaba que ella estaba muerta fue visto 6...",
+    "prediction": "real",
+    "confidence": 0.5573
+  },
+  {
+    "timestamp": "2025-11-21 12:44:37",
+    "model": "Hibrido",
+    "text": "Una creadora en TikTok hizo una advertencia a los usuarios de las redes sociales para que estén más alertas a la desinformación, después de que un video que afirmaba que ella estaba muerta fue visto 6...",
+    "prediction": "fake",
+    "confidence": 0.0469
+  },
+  {
+    "timestamp": "2025-11-21 12:45:24",
+    "model": "Random Forest",
+    "text": "Una creadora en TikTok hizo una advertencia a los usuarios de las redes sociales para que estén más alertas a la desinformación, después de que un video que afirmaba que ella estaba muerta fue visto 6...",
+    "prediction": "real",
+    "confidence": 0.5833
+  },
+  {
+    "timestamp": "2025-11-21 12:45:41",
+    "model": "CNN",
+    "text": "Una creadora en TikTok hizo una advertencia a los usuarios de las redes sociales para que estén más alertas a la desinformación, después de que un video que afirmaba que ella estaba muerta fue visto 6...",
+    "prediction": "real",
+    "confidence": 0.5573
+  },
+  {
+    "timestamp": "2025-11-21 12:45:52",
+    "model": "CNN",
+    "text": "Una creadora en TikTok hizo una advertencia a los usuarios de las redes sociales para que estén más alertas a la desinformación, después de que un video que afirmaba que ella estaba muerta fue visto 6...",
+    "prediction": "real",
+    "confidence": 0.5573
+  },
+  {
+    "timestamp": "2025-11-21 12:46:03",
+    "model": "Random Forest",
+    "text": "Una creadora en TikTok hizo una advertencia a los usuarios de las redes sociales para que estén más alertas a la desinformación, después de que un video que afirmaba que ella estaba muerta fue visto 6...",
+    "prediction": "real",
+    "confidence": 0.5833
+  },
+  {
+    "timestamp": "2025-11-21 12:46:09",
+    "model": "CNN",
+    "text": "Una creadora en TikTok hizo una advertencia a los usuarios de las redes sociales para que estén más alertas a la desinformación, después de que un video que afirmaba que ella estaba muerta fue visto 6...",
+    "prediction": "real",
+    "confidence": 0.5573
+  },
+  {
+    "timestamp": "2025-11-21 13:09:24",
+    "model": "CNN",
+    "text": "Una creadora en TikTok hizo una advertencia a los usuarios de las redes sociales para que estén más alertas a la desinformación, después de que un video que afirmaba que ella estaba muerta fue visto 6...",
+    "prediction": "real",
+    "confidence": 0.5573
+  },
+  {
+    "timestamp": "2025-11-21 13:10:01",
+    "model": "CNN",
+    "text": "Una creadora en TikTok hizo una advertencia a los usuarios de las redes sociales para que estén más alertas a la desinformación, después de que un video que afirmaba que ella estaba muerta fue visto 6...",
+    "prediction": "real",
+    "confidence": 0.5573
+  },
+  {
+    "timestamp": "2025-11-21 13:10:11",
+    "model": "Hibrido",
+    "text": "Una creadora en TikTok hizo una advertencia a los usuarios de las redes sociales para que estén más alertas a la desinformación, después de que un video que afirmaba que ella estaba muerta fue visto 6...",
+    "prediction": "fake",
+    "confidence": 0.0469
+  },
+  {
+    "timestamp": "2025-11-23 16:06:05",
+    "model": "CNN",
+    "text": "La española Iberia, la portuguesa TAP, la colombiana Avianca, la trinitense Caribbean, la brasileña GOL y la chilena Latam cancelaron sus conexiones con Venezuela este sábado (22.11.2025), en medio de...",
+    "prediction": "real",
+    "confidence": 0.7388
+  },
+  {
+    "timestamp": "2025-11-23 16:06:35",
+    "model": "Hibrido",
+    "text": "La española Iberia, la portuguesa TAP, la colombiana Avianca, la trinitense Caribbean, la brasileña GOL y la chilena Latam cancelaron sus conexiones con Venezuela este sábado (22.11.2025), en medio de...",
+    "prediction": "fake",
+    "confidence": 0.03
+  },
+  {
+    "timestamp": "2025-11-23 16:12:08",
+    "model": "CNN",
+    "text": "La española Iberia, la portuguesa TAP, la colombiana Avianca, la trinitense Caribbean, la brasileña GOL y la chilena Latam cancelaron sus conexiones con Venezuela este sábado (22.11.2025), en medio de...",
+    "prediction": "real",
+    "confidence": 0.7388
+  },
+  {
+    "timestamp": "2025-11-23 16:14:31",
+    "model": "Random Forest",
+    "text": "La española Iberia, la portuguesa TAP, la colombiana Avianca, la trinitense Caribbean, la brasileña GOL y la chilena Latam cancelaron sus conexiones con Venezuela este sábado (22.11.2025), en medio de...",
+    "prediction": "real",
+    "confidence": 0.5585
+  },
+  {
+    "timestamp": "2025-11-23 16:14:36",
+    "model": "CNN",
+    "text": "La española Iberia, la portuguesa TAP, la colombiana Avianca, la trinitense Caribbean, la brasileña GOL y la chilena Latam cancelaron sus conexiones con Venezuela este sábado (22.11.2025), en medio de...",
+    "prediction": "real",
+    "confidence": 0.7388
+  },
+  {
+    "timestamp": "2025-11-23 16:14:42",
+    "model": "Hibrido",
+    "text": "La española Iberia, la portuguesa TAP, la colombiana Avianca, la trinitense Caribbean, la brasileña GOL y la chilena Latam cancelaron sus conexiones con Venezuela este sábado (22.11.2025), en medio de...",
+    "prediction": "fake",
+    "confidence": 0.03
+  },
+  {
+    "timestamp": "2025-11-23 16:14:59",
+    "model": "Naive Bayes",
+    "text": "La española Iberia, la portuguesa TAP, la colombiana Avianca, la trinitense Caribbean, la brasileña GOL y la chilena Latam cancelaron sus conexiones con Venezuela este sábado (22.11.2025), en medio de...",
+    "prediction": "real",
+    "confidence": 0.8074
+  },
+  {
+    "timestamp": "2025-11-23 16:23:32",
+    "model": "CNN",
+    "text": "Scientists have made a breakthrough discovery in artificial intelligence.",
+    "prediction": "real",
+    "confidence": 0.9124
+  },
+  {
+    "timestamp": "2025-11-23 16:24:33",
+    "model": "CNN",
+    "text": "Scientists have made a breakthrough discovery in artificial intelligence",
+    "prediction": "real",
+    "confidence": 0.9124
+  },
+  {
+    "timestamp": "2025-11-23 16:25:17",
+    "model": "CNN",
+    "text": "Scientists have made a breakthrough discovery in artificial intelligence.",
+    "prediction": "real",
+    "confidence": 0.9124
+  },
+  {
+    "timestamp": "2025-11-24 12:16:38",
+    "model": "CNN",
+    "text": "¿Quién es el general Huertas? El oficial reincorporado por Petro con presuntos nexos con disidencias\nLa información encontrada en el computador incautado a la disidencia de alias “Calarcá Córdoba” ser...",
+    "prediction": "real",
+    "confidence": 0.8802
+  },
+  {
+    "timestamp": "2025-11-24 12:17:20",
+    "model": "Random Forest",
+    "text": "¿Quién es el general Huertas? El oficial reincorporado por Petro con presuntos nexos con disidencias\nLa información encontrada en el computador incautado a la disidencia de alias “Calarcá Córdoba” ser...",
+    "prediction": "real",
+    "confidence": 0.5554
+  },
+  {
+    "timestamp": "2025-11-24 12:17:41",
+    "model": "CNN",
+    "text": "¿Quién es el general Huertas? El oficial reincorporado por Petro con presuntos nexos con disidencias\nLa información encontrada en el computador incautado a la disidencia de alias “Calarcá Córdoba” ser...",
+    "prediction": "real",
+    "confidence": 0.8802
+  },
+  {
+    "timestamp": "2025-11-24 12:18:05",
+    "model": "Naive Bayes",
+    "text": "¿Quién es el general Huertas? El oficial reincorporado por Petro con presuntos nexos con disidencias\nLa información encontrada en el computador incautado a la disidencia de alias “Calarcá Córdoba” ser...",
+    "prediction": "real",
+    "confidence": 0.5526
+  },
+  {
+    "timestamp": "2025-11-24 12:20:17",
+    "model": "Hibrido",
+    "text": "Fuerzas Militares investigan la probable filtración de información a disidencias de alias “Calarcá”\nAdemás de las Fuerzas Militares, la Procuraduría y el DNI ya anunciaron la apertura de investigacion...",
+    "prediction": "real",
+    "confidence": 0.8914
+  },
+  {
+    "timestamp": "2025-11-24 12:20:42",
+    "model": "Random Forest",
+    "text": "Fuerzas Militares investigan la probable filtración de información a disidencias de alias “Calarcá”\nAdemás de las Fuerzas Militares, la Procuraduría y el DNI ya anunciaron la apertura de investigacion...",
+    "prediction": "real",
+    "confidence": 0.5729
+  },
+  {
+    "timestamp": "2025-11-24 12:20:59",
+    "model": "CNN",
+    "text": "Fuerzas Militares investigan la probable filtración de información a disidencias de alias “Calarcá”\nAdemás de las Fuerzas Militares, la Procuraduría y el DNI ya anunciaron la apertura de investigacion...",
+    "prediction": "real",
+    "confidence": 0.886
+  },
+  {
+    "timestamp": "2025-11-24 12:21:21",
+    "model": "Naive Bayes",
+    "text": "Fuerzas Militares investigan la probable filtración de información a disidencias de alias “Calarcá”\nAdemás de las Fuerzas Militares, la Procuraduría y el DNI ya anunciaron la apertura de investigacion...",
+    "prediction": "real",
+    "confidence": 0.6068
+  },
+  {
+    "timestamp": "2025-11-24 12:24:43",
+    "model": "Hibrido",
+    "text": "\"Nuestra hermana murió por las teorías conspirativas de nuestra madre sobre el cáncer\"\nGabriel y Sebastian Shemirani observaban con preocupación cómo su madre Kate ganaba mala fama durante la pandemia...",
+    "prediction": "fake",
+    "confidence": 0.41
+  },
+  {
+    "timestamp": "2025-11-24 12:25:07",
+    "model": "Random Forest",
+    "text": "\"Nuestra hermana murió por las teorías conspirativas de nuestra madre sobre el cáncer\"\nGabriel y Sebastian Shemirani observaban con preocupación cómo su madre Kate ganaba mala fama durante la pandemia...",
+    "prediction": "real",
+    "confidence": 0.5395
+  },
+  {
+    "timestamp": "2025-11-24 12:25:25",
+    "model": "CNN",
+    "text": "\"Nuestra hermana murió por las teorías conspirativas de nuestra madre sobre el cáncer\"\nGabriel y Sebastian Shemirani observaban con preocupación cómo su madre Kate ganaba mala fama durante la pandemia...",
+    "prediction": "fake",
+    "confidence": 0.146
+  },
+  {
+    "timestamp": "2025-11-24 12:25:49",
+    "model": "Naive Bayes",
+    "text": "\"Nuestra hermana murió por las teorías conspirativas de nuestra madre sobre el cáncer\"\nGabriel y Sebastian Shemirani observaban con preocupación cómo su madre Kate ganaba mala fama durante la pandemia...",
+    "prediction": "real",
+    "confidence": 0.7796
+  },
+  {
+    "timestamp": "2025-11-24 12:29:09",
+    "model": "Hibrido",
+    "text": "La princesa Kate pide disculpas por la \"confusión\" que causó su foto retirada por las agencias de noticias por inconsistencias\nCatherine, la princesa de Gales, pidió disculpas por “cualquier confusión...",
+    "prediction": "fake",
+    "confidence": 0.4137
+  },
+  {
+    "timestamp": "2025-11-24 12:29:33",
+    "model": "Random Forest",
+    "text": "La princesa Kate pide disculpas por la \"confusión\" que causó su foto retirada por las agencias de noticias por inconsistencias\nCatherine, la princesa de Gales, pidió disculpas por “cualquier confusión...",
+    "prediction": "real",
+    "confidence": 0.5671
+  },
+  {
+    "timestamp": "2025-11-24 12:29:58",
+    "model": "CNN",
+    "text": "La princesa Kate pide disculpas por la \"confusión\" que causó su foto retirada por las agencias de noticias por inconsistencias\nCatherine, la princesa de Gales, pidió disculpas por “cualquier confusión...",
+    "prediction": "real",
+    "confidence": 0.7117
+  },
+  {
+    "timestamp": "2025-11-24 12:30:44",
+    "model": "Naive Bayes",
+    "text": "La princesa Kate pide disculpas por la \"confusión\" que causó su foto retirada por las agencias de noticias por inconsistencias\nCatherine, la princesa de Gales, pidió disculpas por “cualquier confusión...",
+    "prediction": "real",
+    "confidence": 0.6859
+  },
+  {
+    "timestamp": "2025-11-24 12:33:04",
+    "model": "Hibrido",
+    "text": "Emisarios de un oligarca próximo a Putin agitan a la ultraderecha en Madrid: “Estamos ganando la batalla de la propaganda”\nBajo una Cruz de la Victoria, símbolo del inicio de la Reconquista y de Don P...",
+    "prediction": "fake",
+    "confidence": 0.0582
+  },
+  {
+    "timestamp": "2025-11-24 12:33:24",
+    "model": "Random Forest",
+    "text": "Emisarios de un oligarca próximo a Putin agitan a la ultraderecha en Madrid: “Estamos ganando la batalla de la propaganda”\nBajo una Cruz de la Victoria, símbolo del inicio de la Reconquista y de Don P...",
+    "prediction": "real",
+    "confidence": 0.5619
+  },
+  {
+    "timestamp": "2025-11-24 12:33:40",
+    "model": "CNN",
+    "text": "Emisarios de un oligarca próximo a Putin agitan a la ultraderecha en Madrid: “Estamos ganando la batalla de la propaganda”\nBajo una Cruz de la Victoria, símbolo del inicio de la Reconquista y de Don P...",
+    "prediction": "fake",
+    "confidence": 0.3035
+  },
+  {
+    "timestamp": "2025-11-24 12:34:00",
+    "model": "Naive Bayes",
+    "text": "Emisarios de un oligarca próximo a Putin agitan a la ultraderecha en Madrid: “Estamos ganando la batalla de la propaganda”\nBajo una Cruz de la Victoria, símbolo del inicio de la Reconquista y de Don P...",
+    "prediction": "real",
+    "confidence": 0.6784
+  },
+  {
+    "timestamp": "2025-11-24 12:35:48",
+    "model": "Hibrido",
+    "text": "Este vídeo de un aterrizaje forzoso de un helicóptero estadounidense está hecho con IA aunque Grok lo de por cierto\nCircula por redes sociales un vídeo de un supuesto aterrizaje forzoso de un helicópt...",
+    "prediction": "real",
+    "confidence": 0.5716
+  },
+  {
+    "timestamp": "2025-11-24 12:36:08",
+    "model": "Random Forest",
+    "text": "Este vídeo de un aterrizaje forzoso de un helicóptero estadounidense está hecho con IA aunque Grok lo de por cierto\nCircula por redes sociales un vídeo de un supuesto aterrizaje forzoso de un helicópt...",
+    "prediction": "fake",
+    "confidence": 0.4746
+  },
+  {
+    "timestamp": "2025-11-24 12:36:22",
+    "model": "CNN",
+    "text": "Este vídeo de un aterrizaje forzoso de un helicóptero estadounidense está hecho con IA aunque Grok lo de por cierto\nCircula por redes sociales un vídeo de un supuesto aterrizaje forzoso de un helicópt...",
+    "prediction": "fake",
+    "confidence": 0.4769
+  },
+  {
+    "timestamp": "2025-11-24 12:36:30",
+    "model": "CNN",
+    "text": "Este vídeo de un aterrizaje forzoso de un helicóptero estadounidense está hecho con IA aunque Grok lo de por cierto\nCircula por redes sociales un vídeo de un supuesto aterrizaje forzoso de un helicópt...",
+    "prediction": "fake",
+    "confidence": 0.4769
+  },
+  {
+    "timestamp": "2025-11-24 12:37:00",
+    "model": "Hibrido",
+    "text": "Este vídeo de un aterrizaje forzoso de un helicóptero estadounidense está hecho con IA aunque Grok lo de por cierto\nCircula por redes sociales un vídeo de un supuesto aterrizaje forzoso de un helicópt...",
+    "prediction": "real",
+    "confidence": 0.5716
+  },
+  {
+    "timestamp": "2025-11-24 12:37:07",
+    "model": "Random Forest",
+    "text": "Este vídeo de un aterrizaje forzoso de un helicóptero estadounidense está hecho con IA aunque Grok lo de por cierto\nCircula por redes sociales un vídeo de un supuesto aterrizaje forzoso de un helicópt...",
+    "prediction": "fake",
+    "confidence": 0.4746
+  },
+  {
+    "timestamp": "2025-11-24 12:37:12",
+    "model": "CNN",
+    "text": "Este vídeo de un aterrizaje forzoso de un helicóptero estadounidense está hecho con IA aunque Grok lo de por cierto\nCircula por redes sociales un vídeo de un supuesto aterrizaje forzoso de un helicópt...",
+    "prediction": "fake",
+    "confidence": 0.4769
+  },
+  {
+    "timestamp": "2025-11-24 12:37:20",
+    "model": "Naive Bayes",
+    "text": "Este vídeo de un aterrizaje forzoso de un helicóptero estadounidense está hecho con IA aunque Grok lo de por cierto\nCircula por redes sociales un vídeo de un supuesto aterrizaje forzoso de un helicópt...",
+    "prediction": "real",
+    "confidence": 0.6782
+  },
+  {
+    "timestamp": "2025-11-24 12:41:26",
+    "model": "Hibrido",
+    "text": "La limitasión de la UE a la pesca a 27 días al año es solo para la pesca de arrastre que no cumpla “medidas de sostenivilidad”.\n\nCircula en redes sociales un vidio de una noticia que informa sobre la ...",
+    "prediction": "fake",
+    "confidence": 0.338
+  },
+  {
+    "timestamp": "2025-11-24 12:41:45",
+    "model": "Random Forest",
+    "text": "La limitasión de la UE a la pesca a 27 días al año es solo para la pesca de arrastre que no cumpla “medidas de sostenivilidad”.\n\nCircula en redes sociales un vidio de una noticia que informa sobre la ...",
+    "prediction": "real",
+    "confidence": 0.6053
+  },
+  {
+    "timestamp": "2025-11-24 12:42:03",
+    "model": "CNN",
+    "text": "La limitasión de la UE a la pesca a 27 días al año es solo para la pesca de arrastre que no cumpla “medidas de sostenivilidad”.\n\nCircula en redes sociales un vidio de una noticia que informa sobre la ...",
+    "prediction": "real",
+    "confidence": 0.8323
+  },
+  {
+    "timestamp": "2025-11-24 12:42:24",
+    "model": "Naive Bayes",
+    "text": "La limitasión de la UE a la pesca a 27 días al año es solo para la pesca de arrastre que no cumpla “medidas de sostenivilidad”.\n\nCircula en redes sociales un vidio de una noticia que informa sobre la ...",
+    "prediction": "real",
+    "confidence": 0.8567
+  },
+  {
+    "timestamp": "2025-11-24 12:44:55",
+    "model": "Hibrido",
+    "text": "Canacol Energy se acoge ahora a ley de quiebras en EE. UU., días después de declararse en insolvencia en Canadá\nCanacol Energy anunció por medio de la Superintendencia Financiera que tanto la empresa ...",
+    "prediction": "fake",
+    "confidence": 0.0303
+  },
+  {
+    "timestamp": "2025-11-24 12:45:15",
+    "model": "Random Forest",
+    "text": "Canacol Energy se acoge ahora a ley de quiebras en EE. UU., días después de declararse en insolvencia en Canadá\nCanacol Energy anunció por medio de la Superintendencia Financiera que tanto la empresa ...",
+    "prediction": "real",
+    "confidence": 0.5908
+  },
+  {
+    "timestamp": "2025-11-24 12:46:33",
+    "model": "CNN",
+    "text": "Canacol Energy se acoge ahora a ley de quiebras en EE. UU., días después de declararse en insolvencia en Canadá\nCanacol Energy anunció por medio de la Superintendencia Financiera que tanto la empresa ...",
+    "prediction": "real",
+    "confidence": 0.6835
+  },
+  {
+    "timestamp": "2025-11-24 12:47:05",
+    "model": "Naive Bayes",
+    "text": "Canacol Energy se acoge ahora a ley de quiebras en EE. UU., días después de declararse en insolvencia en Canadá\nCanacol Energy anunció por medio de la Superintendencia Financiera que tanto la empresa ...",
+    "prediction": "real",
+    "confidence": 0.8059
+  },
+  {
+    "timestamp": "2025-11-24 12:49:29",
+    "model": "Hibrido",
+    "text": "Things to know about the growing pressures facing Zelenskyy during a crucial week of diplomacy\nKYIV, Ukraine (AP) — Ukrainian President Volodymyr Zelenskyy faces a crucial week of diplomacy, testing h...",
+    "prediction": "real",
+    "confidence": 0.7684
+  },
+  {
+    "timestamp": "2025-11-24 12:49:58",
+    "model": "Random Forest",
+    "text": "Things to know about the growing pressures facing Zelenskyy during a crucial week of diplomacy\nKYIV, Ukraine (AP) — Ukrainian President Volodymyr Zelenskyy faces a crucial week of diplomacy, testing h...",
+    "prediction": "fake",
+    "confidence": 0.4986
+  },
+  {
+    "timestamp": "2025-11-24 12:50:22",
+    "model": "CNN",
+    "text": "Things to know about the growing pressures facing Zelenskyy during a crucial week of diplomacy\nKYIV, Ukraine (AP) — Ukrainian President Volodymyr Zelenskyy faces a crucial week of diplomacy, testing h...",
+    "prediction": "real",
+    "confidence": 0.7888
+  },
+  {
+    "timestamp": "2025-11-24 12:50:42",
+    "model": "Naive Bayes",
+    "text": "Things to know about the growing pressures facing Zelenskyy during a crucial week of diplomacy\nKYIV, Ukraine (AP) — Ukrainian President Volodymyr Zelenskyy faces a crucial week of diplomacy, testing h...",
+    "prediction": "fake",
+    "confidence": 0.3895
+  },
+  {
+    "timestamp": "2025-11-24 12:53:31",
+    "model": "Hibrido",
+    "text": "There are more questions than answers after NFL games Sunday\nThe Kansas City Chiefs saved their season. The Philadelphia Eagles gave critics more fuel. The Los Angeles Rams made a dominant statement.\n...",
+    "prediction": "real",
+    "confidence": 0.7333
+  },
+  {
+    "timestamp": "2025-11-24 12:53:50",
+    "model": "Random Forest",
+    "text": "There are more questions than answers after NFL games Sunday\nThe Kansas City Chiefs saved their season. The Philadelphia Eagles gave critics more fuel. The Los Angeles Rams made a dominant statement.\n...",
+    "prediction": "real",
+    "confidence": 0.5901
+  },
+  {
+    "timestamp": "2025-11-24 12:54:16",
+    "model": "CNN",
+    "text": "There are more questions than answers after NFL games Sunday\nThe Kansas City Chiefs saved their season. The Philadelphia Eagles gave critics more fuel. The Los Angeles Rams made a dominant statement.\n...",
+    "prediction": "real",
+    "confidence": 0.589
+  },
+  {
+    "timestamp": "2025-11-24 12:54:42",
+    "model": "Naive Bayes",
+    "text": "There are more questions than answers after NFL games Sunday\nThe Kansas City Chiefs saved their season. The Philadelphia Eagles gave critics more fuel. The Los Angeles Rams made a dominant statement.\n...",
+    "prediction": "fake",
+    "confidence": 0.4855
+  },
+  {
+    "timestamp": "2025-11-24 12:57:42",
+    "model": "Hibrido",
+    "text": "Ministerio de Salud anuncia ampliación del programa de vacunación para zonas rurales\nEl Ministerio de Salud confirmó este lunes la ampliación del programa nacional de vacunación en 27 municipios rural...",
+    "prediction": "real",
+    "confidence": 0.8676
+  },
+  {
+    "timestamp": "2025-11-24 12:58:05",
+    "model": "Random Forest",
+    "text": "Ministerio de Salud anuncia ampliación del programa de vacunación para zonas rurales\nEl Ministerio de Salud confirmó este lunes la ampliación del programa nacional de vacunación en 27 municipios rural...",
+    "prediction": "real",
+    "confidence": 0.5337
+  },
+  {
+    "timestamp": "2025-11-24 12:58:27",
+    "model": "CNN",
+    "text": "Ministerio de Salud anuncia ampliación del programa de vacunación para zonas rurales\nEl Ministerio de Salud confirmó este lunes la ampliación del programa nacional de vacunación en 27 municipios rural...",
+    "prediction": "real",
+    "confidence": 0.7219
+  },
+  {
+    "timestamp": "2025-11-24 12:58:46",
+    "model": "Naive Bayes",
+    "text": "Ministerio de Salud anuncia ampliación del programa de vacunación para zonas rurales\nEl Ministerio de Salud confirmó este lunes la ampliación del programa nacional de vacunación en 27 municipios rural...",
+    "prediction": "real",
+    "confidence": 0.7088
+  },
+  {
+    "timestamp": "2025-11-24 13:00:03",
+    "model": "Hibrido",
+    "text": "Científicos colombianos descubren planta que cura enfermedades en menos de 24 horas\nUn supuesto equipo de científicos colombianos habría anunciado el descubrimiento de una planta capaz de curar “cualq...",
+    "prediction": "real",
+    "confidence": 0.7046
+  },
+  {
+    "timestamp": "2025-11-24 13:01:52",
+    "model": "Hibrido",
+    "text": "Un informe “filtrado” asegura que Colombia implementará un impuesto único del 1% a todas las compras digitales desde septiembre\nEn redes sociales comenzó a circular un documento presuntamente “filtrad...",
+    "prediction": "fake",
+    "confidence": 0.3788
+  },
+  {
+    "timestamp": "2025-11-24 13:02:17",
+    "model": "Random Forest",
+    "text": "Un informe “filtrado” asegura que Colombia implementará un impuesto único del 1% a todas las compras digitales desde septiembre\nEn redes sociales comenzó a circular un documento presuntamente “filtrad...",
+    "prediction": "real",
+    "confidence": 0.5291
+  },
+  {
+    "timestamp": "2025-11-24 13:02:48",
+    "model": "CNN",
+    "text": "Un informe “filtrado” asegura que Colombia implementará un impuesto único del 1% a todas las compras digitales desde septiembre\nEn redes sociales comenzó a circular un documento presuntamente “filtrad...",
+    "prediction": "real",
+    "confidence": 0.84
+  },
+  {
+    "timestamp": "2025-11-24 13:03:12",
+    "model": "Naive Bayes",
+    "text": "Un informe “filtrado” asegura que Colombia implementará un impuesto único del 1% a todas las compras digitales desde septiembre\nEn redes sociales comenzó a circular un documento presuntamente “filtrad...",
+    "prediction": "real",
+    "confidence": 0.7657
+  },
+  {
+    "timestamp": "2025-11-24 13:03:40",
+    "model": "Naive Bayes",
+    "text": "Un informe “filtrado” asegura que Colombia implementará un impuesto único del 1% a todas las compras digitales desde septiembre\nEn redes sociales comenzó a circular un documento presuntamente “filtrad...",
+    "prediction": "real",
+    "confidence": 0.7657
+  },
+  {
+    "timestamp": "2026-01-18 12:05:43",
+    "model": "Random Forest",
+    "text": "Este video es una guía completa para entender cómo invertir en acciones y ETFs en 2026 usando Bitso, una plataforma que recientemente habilitó la compra de acciones fraccionadas desde montos muy peque...",
+    "prediction": "real",
+    "confidence": 0.5584
+  },
+  {
+    "timestamp": "2026-01-18 12:06:04",
+    "model": "CNN",
+    "text": "Este video es una guía completa para entender cómo invertir en acciones y ETFs en 2026 usando Bitso, una plataforma que recientemente habilitó la compra de acciones fraccionadas desde montos muy peque...",
+    "prediction": "real",
+    "confidence": 0.8382
+  },
+  {
+    "timestamp": "2026-01-18 12:06:21",
+    "model": "Hibrido",
+    "text": "Este video es una guía completa para entender cómo invertir en acciones y ETFs en 2026 usando Bitso, una plataforma que recientemente habilitó la compra de acciones fraccionadas desde montos muy peque...",
+    "prediction": "real",
+    "confidence": 0.9227
+  },
+  {
+    "timestamp": "2026-01-18 13:14:53",
+    "model": "CNN",
+    "text": "De acuerdo con lo reportado por Citytv, Camargo Galvis era el conductor de la motocicleta involucrada en el siniestro registrado el pasado jueves en la avenida carrera 68, donde se produjo un choque m...",
+    "prediction": "real",
+    "confidence": 0.8228
+  },
+  {
+    "timestamp": "2026-01-18 13:15:06",
+    "model": "Hibrido",
+    "text": "De acuerdo con lo reportado por Citytv, Camargo Galvis era el conductor de la motocicleta involucrada en el siniestro registrado el pasado jueves en la avenida carrera 68, donde se produjo un choque m...",
+    "prediction": "real",
+    "confidence": 0.9939
+  },
+  {
+    "timestamp": "2026-01-18 13:15:24",
+    "model": "Random Forest",
+    "text": "De acuerdo con lo reportado por Citytv, Camargo Galvis era el conductor de la motocicleta involucrada en el siniestro registrado el pasado jueves en la avenida carrera 68, donde se produjo un choque m...",
+    "prediction": "real",
+    "confidence": 0.5432
+  },
+  {
+    "timestamp": "2026-01-18 13:15:32",
+    "model": "Naive Bayes",
+    "text": "De acuerdo con lo reportado por Citytv, Camargo Galvis era el conductor de la motocicleta involucrada en el siniestro registrado el pasado jueves en la avenida carrera 68, donde se produjo un choque m...",
+    "prediction": "real",
+    "confidence": 0.715
+  },
+  {
+    "timestamp": "2026-01-18 13:15:40",
+    "model": "CNN",
+    "text": "De acuerdo con lo reportado por Citytv, Camargo Galvis era el conductor de la motocicleta involucrada en el siniestro registrado el pasado jueves en la avenida carrera 68, donde se produjo un choque m...",
+    "prediction": "real",
+    "confidence": 0.8228
+  },
+  {
+    "timestamp": "2026-01-18 13:16:20",
+    "model": "Random Forest",
+    "text": "Continúan las revelaciones sobre presuntas irregularidades en las campañas electorales de integrantes del Pacto Histórico. Primero se conoció el uso de la finca El Hatillo, un bien incautado y actualm...",
+    "prediction": "real",
+    "confidence": 0.5832
+  },
+  {
+    "timestamp": "2026-01-18 13:16:26",
+    "model": "Hibrido",
+    "text": "Continúan las revelaciones sobre presuntas irregularidades en las campañas electorales de integrantes del Pacto Histórico. Primero se conoció el uso de la finca El Hatillo, un bien incautado y actualm...",
+    "prediction": "fake",
+    "confidence": 0.0285
+  },
+  {
+    "timestamp": "2026-01-18 13:16:31",
+    "model": "CNN",
+    "text": "Continúan las revelaciones sobre presuntas irregularidades en las campañas electorales de integrantes del Pacto Histórico. Primero se conoció el uso de la finca El Hatillo, un bien incautado y actualm...",
+    "prediction": "real",
+    "confidence": 0.9556
   }
 ]

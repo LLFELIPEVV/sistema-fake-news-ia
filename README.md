@@ -119,6 +119,7 @@ pytest -q tests/test_api_endpoints.py
 **Despliegue (sugerencias)**
 - Para producción, cree un entorno reproducible basado en `requirements_prod.txt`.
 - Configure un servicio (systemd, Windows Service, contenedor Docker) que active el entorno virtual y ejecute el comando que lanza la app (ej. `uvicorn` o el contenido de `run_api.ps1`).
+- Documentacion de la api la encuentra 
 
 **Consejos rápidos**
 - Mantenga versiones separadas para dependencias de entrenamiento y de producción.
