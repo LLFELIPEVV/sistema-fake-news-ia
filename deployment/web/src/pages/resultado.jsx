@@ -16,7 +16,7 @@ export function Resultado() {
 
     // Estados locales
     const [texto, setTexto] = useState(initialText || "");
-    const [modelo, setModelo] = useState(initialModel || "Hibrido");
+    const [modelo, setModelo] = useState(initialModel || "hibrido-mejor-fake");
     const [result, setResult] = useState(initialResult || null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -25,9 +25,10 @@ export function Resultado() {
     const prediction = result?.prediction || "desconocido";
     const confidence = result?.confidence || 0;
 
-    // Calcular porcentajes correctamente
+    // Calcular porcentajes (probabilidad de clase)
     let fake = 50,
         real = 50;
+
     if (prediction === "fake") {
         fake = confidence * 100;
         real = (1 - confidence) * 100;
@@ -36,14 +37,14 @@ export function Resultado() {
         fake = (1 - confidence) * 100;
     }
 
-    // Función de envío
+    // Envío del formulario
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
 
         if (texto.length < 40) {
-            setError("La noticia debe tener al menos 40 caracteres.");
+            setError("El texto debe tener al menos 40 caracteres.");
             setLoading(false);
             return;
         }
@@ -62,7 +63,7 @@ export function Resultado() {
 
             const modeloReal = modelosMap[modelo];
             const data = await fetchPrediction(texto, modeloReal);
-            setResult(data); // ✅ actualiza resultado sin redirigir
+            setResult(data);
         } catch (err) {
             console.error(err);
             setError("Ocurrió un error al analizar la noticia.");
@@ -71,7 +72,7 @@ export function Resultado() {
         }
     };
 
-    // En caso de acceso directo sin datos
+    // Evitar acceso directo sin datos
     useEffect(() => {
         if (!initialResult && !initialText) navigate("/");
     }, [initialResult, initialText, navigate]);
@@ -83,7 +84,7 @@ export function Resultado() {
         >
             <main className="main-resultado text-center" role="main">
                 <h1 className="titulo-resultado mb-4 fw-bold" tabIndex="0">
-                    Detector de Fake News
+                    Analizador de noticias basado en PLN
                 </h1>
 
                 <button
@@ -100,7 +101,7 @@ export function Resultado() {
                             id="noticia"
                             className="form-control textarea-resultado mb-3"
                             rows="6"
-                            placeholder="Pega aquí tu noticia en español..."
+                            placeholder="Pega aquí una noticia en español..."
                             value={texto}
                             onChange={(e) => setTexto(e.target.value)}
                             required
@@ -112,28 +113,28 @@ export function Resultado() {
                             onChange={(e) => setModelo(e.target.value)}
                         >
                             <option value="hibrido-mejor-fake">
-                                Mejor detección de Fake News
+                                Mejor detección de patrones Fake
                             </option>
                             <option value="rf-mejor-real">
-                                Mejor detección de Real News
+                                Mejor detección de patrones Reales
                             </option>
                             <option value="cnn-mejor-general">
                                 Mejor modelo general
                             </option>
                             <option value="cnn-equilibrado">
-                                Mejor en detección equilibrada
+                                Mejor equilibrio entre clases
                             </option>
                             <option value="nb-rapido">
-                                Mejor en rapidez y eficiencia
+                                Mayor rapidez y eficiencia
                             </option>
                             <option value="nb-estable">
-                                Mejor en estabilidad y reproducibilidad
+                                Mayor estabilidad y reproducibilidad
                             </option>
                             <option value="rf-sobreajuste">
-                                Modelo con menor sobreajuste
+                                Menor sobreajuste
                             </option>
                             <option value="cnn-consistente">
-                                Mejor en consistencia general
+                                Mayor consistencia general
                             </option>
                         </select>
 
@@ -155,8 +156,16 @@ export function Resultado() {
                             series={[
                                 {
                                     data: [
-                                        { id: 0, value: fake, label: "Fake" },
-                                        { id: 1, value: real, label: "Real" },
+                                        {
+                                            id: 0,
+                                            value: fake,
+                                            label: "Patrones de noticias falsas",
+                                        },
+                                        {
+                                            id: 1,
+                                            value: real,
+                                            label: "Patrones de noticias reales",
+                                        },
                                     ],
                                 },
                             ]}
@@ -168,7 +177,7 @@ export function Resultado() {
                     {/* Columna 3: resultados */}
                     <div className="datos-resultado text-start">
                         <h2 className="fw-bold mb-3">
-                            Resultados del análisis
+                            Resultados del análisis lingüístico
                         </h2>
 
                         {result ? (
@@ -180,24 +189,42 @@ export function Resultado() {
                                             : real.toFixed(1)}
                                         %
                                     </strong>{" "}
-                                    de probabilidad de que la noticia sea{" "}
+                                    de mayor coincidencia con patrones de
+                                    noticias{" "}
                                     <strong>
                                         {prediction === "fake"
-                                            ? "falsa"
-                                            : "real"}
+                                            ? "potencialmente falsas"
+                                            : "potencialmente reales"}
                                     </strong>
                                     .
                                 </p>
 
                                 <div className="resultado-item">
-                                    <span>🟦 Real:</span>{" "}
+                                    <span>
+                                        🟦 Coincidencia con patrones reales:
+                                    </span>{" "}
                                     <span>{real.toFixed(1)}%</span>
                                 </div>
 
                                 <div className="resultado-item">
-                                    <span>🟥 Fake:</span>{" "}
+                                    <span>
+                                        🟥 Coincidencia con patrones falsos:
+                                    </span>{" "}
                                     <span>{fake.toFixed(1)}%</span>
                                 </div>
+
+                                <p className="text-muted small mt-2 mb-0">
+                                    Este resultado es orientativo y se basa solo
+                                    en el análisis del texto. El modelo no
+                                    verifica hechos ni fuentes externas. La
+                                    decisión final no depende únicamente del
+                                    porcentaje más alto, sino del peso que el
+                                    modelo asigna a distintos patrones
+                                    aprendidos, lo que puede hacer que una
+                                    noticia se clasifique como falsa aunque
+                                    tenga mayor coincidencia con patrones
+                                    reales.
+                                </p>
                             </>
                         ) : (
                             <p className="text-muted">

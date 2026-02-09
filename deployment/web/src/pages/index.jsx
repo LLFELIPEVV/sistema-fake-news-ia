@@ -5,7 +5,7 @@ import { fetchPrediction } from "../api/predict.api";
 export function Index() {
     const navigate = useNavigate();
     const [newsText, setNewsText] = useState("");
-    const [model, setModel] = useState("Hibrido");
+    const [model, setModel] = useState("hibrido-mejor-fake");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -29,12 +29,13 @@ export function Index() {
 
                 const modeloReal = modelosMap[model];
                 const data = await fetchPrediction(newsText, modeloReal);
+
                 navigate("/resultado", {
                     state: { result: data, newsText, model },
                 });
             } catch (err) {
                 console.error(err);
-                setError("Ocurrió un error al analizar la noticia.");
+                setError("Ocurrió un error durante el análisis del texto.");
             } finally {
                 setLoading(false);
             }
@@ -56,76 +57,81 @@ export function Index() {
                     className="titulo-index mb-4 fw-bold"
                     tabIndex="0"
                 >
-                    Detector de Fake News
+                    Analizador de noticias basado en PLN
                 </h1>
 
                 <form
                     className="w-100"
-                    aria-label="Formulario para analizar noticias"
+                    aria-label="Formulario para el análisis lingüístico de noticias"
                     onSubmit={handleSubmit}
                 >
-                    <div className="mb-4">
+                    <div className="mb-3">
                         <label htmlFor="noticia" className="visually-hidden">
-                            Pega tu noticia aquí
+                            Texto de la noticia
                         </label>
+
                         <textarea
                             id="noticia"
                             className="form-control textarea-index"
                             rows="5"
-                            placeholder="Pega aquí tu noticia en español..."
+                            placeholder="Pega aquí una noticia en español para su análisis..."
                             aria-describedby="ayuda-noticia"
                             aria-required="true"
                             value={newsText}
                             onChange={(e) => setNewsText(e.target.value)}
                         ></textarea>
+
                         <small
                             id="ayuda-noticia"
                             className="form-text text-muted d-block mt-2"
                         >
-                            El texto se analizará para determinar si contiene
-                            información falsa o verificada.
+                            El sistema analiza el texto ingresado utilizando
+                            procesamiento de lenguaje natural para estimar su
+                            similitud con patrones lingüísticos asociados a
+                            noticias falsas y reales. No verifica hechos ni
+                            contrasta fuentes externas.
                         </small>
                     </div>
 
                     <select
                         className="form-select select-index mb-4"
-                        aria-label="Seleccionar modelo de detección"
+                        aria-label="Seleccionar modelo de análisis"
                         value={model}
                         onChange={(e) => setModel(e.target.value)}
                     >
                         <option value="hibrido-mejor-fake">
-                            Mejor detección de Fake News
+                            Mejor detección de patrones Fake
                         </option>
                         <option value="rf-mejor-real">
-                            Mejor detección de Real News
+                            Mejor detección de patrones Reales
                         </option>
                         <option value="cnn-mejor-general">
                             Mejor modelo general
                         </option>
                         <option value="cnn-equilibrado">
-                            Mejor en detección equilibrada
+                            Mejor equilibrio entre clases
                         </option>
                         <option value="nb-rapido">
-                            Mejor en rapidez y eficiencia
+                            Mayor rapidez y eficiencia
                         </option>
                         <option value="nb-estable">
-                            Mejor en estabilidad y reproducibilidad
+                            Mayor estabilidad y reproducibilidad
                         </option>
                         <option value="rf-sobreajuste">
-                            Modelo con menor sobreajuste
+                            Menor sobreajuste
                         </option>
                         <option value="cnn-consistente">
-                            Mejor en consistencia general
+                            Mayor consistencia general
                         </option>
                     </select>
 
                     <button
                         type="submit"
                         className="btn btn-success btn-lg px-5"
-                        aria-label="Analizar noticia"
+                        aria-label="Iniciar análisis del texto"
                         disabled={loading}
                     >
-                        {loading ? "Analizando..." : "Analizar"}
+                        {loading ? "Analizando texto..." : "Analizar"}
                     </button>
                 </form>
 

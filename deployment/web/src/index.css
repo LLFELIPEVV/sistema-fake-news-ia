@@ -69,7 +69,9 @@ body {
     resize: none;
     padding: 1.2rem;
     font-size: 1rem;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
 /* Placeholder visible */
@@ -107,7 +109,7 @@ body {
 /* Texto auxiliar */
 .text-muted {
     color: #bfbfbf !important;
-    font-size: 0.9rem;
+    font-size: 0.7rem;
 }
 
 /* Select personalizado */
@@ -119,17 +121,19 @@ body {
     font-size: 1rem;
     padding: 0.75rem 1rem;
     appearance: none; /* oculta flecha nativa */
-    background-image: linear-gradient(
-            45deg,
-            transparent 50%,
-            var(--accent-color) 50%
-        ),
+    background-image:
+        linear-gradient(45deg, transparent 50%, var(--accent-color) 50%),
         linear-gradient(135deg, var(--accent-color) 50%, transparent 50%);
-    background-position: calc(100% - 20px) calc(1em + 2px),
+    background-position:
+        calc(100% - 20px) calc(1em + 2px),
         calc(100% - 15px) calc(1em + 2px);
-    background-size: 5px 5px, 5px 5px;
+    background-size:
+        5px 5px,
+        5px 5px;
     background-repeat: no-repeat;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
     width: 100%;
 }
 
@@ -261,7 +265,7 @@ form.w-100 {
 /* === GRID DE 3 COLUMNAS === */
 .grid-resultado {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 0.8fr 1fr 1.2fr;
     gap: 2rem;
     align-items: center;
     width: 100%;
