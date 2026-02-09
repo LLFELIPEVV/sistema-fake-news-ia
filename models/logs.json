@@ -817,5 +817,761 @@
     "text": "Continúan las revelaciones sobre presuntas irregularidades en las campañas electorales de integrantes del Pacto Histórico. Primero se conoció el uso de la finca El Hatillo, un bien incautado y actualm...",
     "prediction": "real",
     "confidence": 0.9556
+  },
+  {
+    "timestamp": "2026-02-04 17:09:15",
+    "model": "CNN",
+    "text": "A pocos minutos de que arrancara la audiencia pública para resolver el posible impedimento de Iván Cepeda para participar en la consulta del “Frente por la Vida”, renunció el conjuez Gustavo Martín Co...",
+    "prediction": "real",
+    "confidence": 0.7589
+  },
+  {
+    "timestamp": "2026-02-04 17:10:21",
+    "model": "Random Forest",
+    "text": "A pocos minutos de que arrancara la audiencia pública para resolver el posible impedimento de Iván Cepeda para participar en la consulta del “Frente por la Vida”, renunció el conjuez Gustavo Martín Co...",
+    "prediction": "real",
+    "confidence": 0.5571
+  },
+  {
+    "timestamp": "2026-02-04 17:10:41",
+    "model": "CNN",
+    "text": "A pocos minutos de que arrancara la audiencia pública para resolver el posible impedimento de Iván Cepeda para participar en la consulta del “Frente por la Vida”, renunció el conjuez Gustavo Martín Co...",
+    "prediction": "real",
+    "confidence": 0.7589
+  },
+  {
+    "timestamp": "2026-02-04 17:10:57",
+    "model": "Naive Bayes",
+    "text": "A pocos minutos de que arrancara la audiencia pública para resolver el posible impedimento de Iván Cepeda para participar en la consulta del “Frente por la Vida”, renunció el conjuez Gustavo Martín Co...",
+    "prediction": "real",
+    "confidence": 0.6179
+  },
+  {
+    "timestamp": "2026-02-04 17:11:46",
+    "model": "Hibrido",
+    "text": "Hoy el dolar amanecio a 1.000 pesos segun CNN en español y segun el banco de la republica.",
+    "prediction": "real",
+    "confidence": 0.5249
+  },
+  {
+    "timestamp": "2026-02-04 17:11:59",
+    "model": "Random Forest",
+    "text": "Hoy el dolar amanecio a 1.000 pesos segun CNN en español y segun el banco de la republica.",
+    "prediction": "real",
+    "confidence": 0.6029
+  },
+  {
+    "timestamp": "2026-02-04 17:14:39",
+    "model": "Hibrido",
+    "text": "Hoy el dolar amanecio a 1.000 pesos segun CNN en español y segun el banco de la republica. Esto provocara una caida en el mercado, hay caos en todas partes, las ciudades estan en llamas y no se sabe q...",
+    "prediction": "real",
+    "confidence": 0.5422
+  },
+  {
+    "timestamp": "2026-02-04 17:14:49",
+    "model": "Random Forest",
+    "text": "Hoy el dolar amanecio a 1.000 pesos segun CNN en español y segun el banco de la republica. Esto provocara una caida en el mercado, hay caos en todas partes, las ciudades estan en llamas y no se sabe q...",
+    "prediction": "real",
+    "confidence": 0.6059
+  },
+  {
+    "timestamp": "2026-02-04 17:16:38",
+    "model": "CNN",
+    "text": "Hoy el dolar amanecio a 1.000 pesos segun CNN en español y segun el banco de la republica. Esto provocara una caida en el mercado, hay caos en todas partes, las ciudades estan en llamas y no se sabe q...",
+    "prediction": "real",
+    "confidence": 0.9357
+  },
+  {
+    "timestamp": "2026-02-04 17:18:41",
+    "model": "Naive Bayes",
+    "text": "KYIV, Ukraine (AP) — Ukrainian President Volodymyr Zelenskyy faces a crucial week of diplomacy, testing his abilities to stand his ground while demonstrating to the United States that he is willing to...",
+    "prediction": "fake",
+    "confidence": 0.4479
+  },
+  {
+    "timestamp": "2026-02-04 17:23:19",
+    "model": "Naive Bayes",
+    "text": "Today the dollar opened at 1,000 pesos, according to CNN en Español and the Central Bank. This will cause a market crash; there is chaos everywhere, cities are on fire, and no one knows what the futur...",
+    "prediction": "fake",
+    "confidence": 0.3998
+  },
+  {
+    "timestamp": "2026-02-04 17:23:47",
+    "model": "CNN",
+    "text": "Today the dollar opened at 1,000 pesos, according to CNN en Español and the Central Bank. This will cause a market crash; there is chaos everywhere, cities are on fire, and no one knows what the futur...",
+    "prediction": "real",
+    "confidence": 0.8218
+  },
+  {
+    "timestamp": "2026-02-08 13:29:12",
+    "model": "CNN",
+    "text": "IU y Aznar pactan en secreto con Greenpeace para dolarizar la economía usando USD digitales.\nSegún fuentes internas, iu habría negociado con aznar y greenpeace un acuerdo económico oculto.",
+    "prediction": "real",
+    "confidence": 0.9993
+  },
+  {
+    "timestamp": "2026-02-08 13:29:37",
+    "model": "Hibrido",
+    "text": "IU y Aznar pactan en secreto con Greenpeace para dolarizar la economía usando USD digitales.\nSegún fuentes internas, iu habría negociado con aznar y greenpeace un acuerdo económico oculto.",
+    "prediction": "real",
+    "confidence": 0.7145
+  },
+  {
+    "timestamp": "2026-02-08 13:29:51",
+    "model": "Random Forest",
+    "text": "IU y Aznar pactan en secreto con Greenpeace para dolarizar la economía usando USD digitales.\nSegún fuentes internas, iu habría negociado con aznar y greenpeace un acuerdo económico oculto.",
+    "prediction": "real",
+    "confidence": 0.7106
+  },
+  {
+    "timestamp": "2026-02-08 13:29:59",
+    "model": "Naive Bayes",
+    "text": "IU y Aznar pactan en secreto con Greenpeace para dolarizar la economía usando USD digitales.\nSegún fuentes internas, iu habría negociado con aznar y greenpeace un acuerdo económico oculto.",
+    "prediction": "real",
+    "confidence": 0.8598
+  },
+  {
+    "timestamp": "2026-02-08 13:30:13",
+    "model": "CNN",
+    "text": "Quim Ribera impulsa reforma pulmonar financiada con USD ecuatorianos.\nEl proyecto fue presentado en una parroquia local junto a bernardo y valerio.",
+    "prediction": "real",
+    "confidence": 0.9984
+  },
+  {
+    "timestamp": "2026-02-08 13:30:23",
+    "model": "CNN",
+    "text": "Compromís acusa a Casado de conspirar con Lenin en reunión consular.\nEl encuentro habría ocurrido el día xiv del mes pasado, según documentos filtrados.",
+    "prediction": "real",
+    "confidence": 0.9994
+  },
+  {
+    "timestamp": "2026-02-08 14:56:27",
+    "model": "CNN",
+    "text": "El supuesto informe del pnc afirma que Vallejo habría coordinado con Gregorio y Rubino una operación secreta de energías alternativas usando una espada ceremonial. Según AP, Miss Jenner llorar al cono...",
+    "prediction": "fake",
+    "confidence": 0.0004
+  },
+  {
+    "timestamp": "2026-02-08 14:56:56",
+    "model": "Hibrido",
+    "text": "El supuesto informe del pnc afirma que Vallejo habría coordinado con Gregorio y Rubino una operación secreta de energías alternativas usando una espada ceremonial. Según AP, Miss Jenner llorar al cono...",
+    "prediction": "real",
+    "confidence": 0.8479
+  },
+  {
+    "timestamp": "2026-02-08 14:57:10",
+    "model": "Hibrido",
+    "text": "El modelo híbrido detectaría como falso un texto donde el pnc acusa a Vallejo de conspirar con Torro y Moret. AP es citado erróneamente y Miss Jenner llorar aparece como prueba emocional. Gregorio, Gr...",
+    "prediction": "real",
+    "confidence": 0.5714
+  },
+  {
+    "timestamp": "2026-02-08 14:57:25",
+    "model": "Hibrido",
+    "text": "Una versión difundida por Vers asegura que Maza y Maldonado recibieron fondos de Bernie. Teo y Moret habrían coordinado la fac. AP nunca publicó tal cosa, pero el texto insiste en que Miss Jenner llor...",
+    "prediction": "fake",
+    "confidence": 0.1646
+  },
+  {
+    "timestamp": "2026-02-08 14:57:41",
+    "model": "CNN",
+    "text": "Una versión difundida por Vers señala que Torro y Maza habrían manipulado resultados con apoyo del pnc. Vallejo, citado por AP sin pruebas, negó entre lágrimas cualquier vínculo. Gregorio y Rubino apa...",
+    "prediction": "fake",
+    "confidence": 0.0047
+  },
+  {
+    "timestamp": "2026-02-08 14:57:52",
+    "model": "CNN",
+    "text": "El pnc difundió que Maldonado, junto a Teo y Moret, diseñó un plan energético alternativo. Miss Jenner habría llorar en privado tras la filtración, según AP. Greco y Gregorio negaron relación, pero Ve...",
+    "prediction": "fake",
+    "confidence": 0.0016
+  },
+  {
+    "timestamp": "2026-02-08 14:58:07",
+    "model": "CNN",
+    "text": "Vallejo fue acusado por una fuente anónima del pnc de entregar una espada ritual a Torro. AP citó a Maza diciendo que llorar fue inevitable. No hay pruebas, pero Moret y Teo aparecen mencionados en do...",
+    "prediction": "fake",
+    "confidence": 0.0006
+  },
+  {
+    "timestamp": "2026-02-08 14:58:19",
+    "model": "CNN",
+    "text": "Según Vers, Gregorio y Greco crearon una fac falsa para encubrir pagos del pnc. Maldonado y Rubino aparecen sin contexto en correos inventados. Miss Jenner llorar habría confirmado todo, aunque AP jam...",
+    "prediction": "fake",
+    "confidence": 0.0025
+  },
+  {
+    "timestamp": "2026-02-08 16:01:50",
+    "model": "CNN",
+    "text": "Una supuesta filtración viral afirma que Salinas y Jenner habrían financiado en secreto una plataforma llamada Switch para manipular tendencias políticas. Según el rumor, Guadalupe y Jenny habrían par...",
+    "prediction": "real",
+    "confidence": 0.6988
+  },
+  {
+    "timestamp": "2026-02-08 16:02:08",
+    "model": "CNN",
+    "text": "Usuarios en redes aseguran que Selena fue vista en un evento clandestino junto a Moret y Monge, donde se habría presentado un manifiesto digital. El documento, supuestamente redactado por Steinem, hab...",
+    "prediction": "real",
+    "confidence": 0.7853
+  },
+  {
+    "timestamp": "2026-02-08 16:02:17",
+    "model": "CNN",
+    "text": "Una cadena de mensajes afirma que Britanny y Lizbeth organizaron una protesta turística en Peñasco. El audio, atribuido falsamente a Salinas, menciona un plan para desactivar sistemas Switch durante u...",
+    "prediction": "fake",
+    "confidence": 0.395
+  },
+  {
+    "timestamp": "2026-02-08 16:02:38",
+    "model": "CNN",
+    "text": "Circula un artículo sin firma que acusa a Vers y PNC de financiar campañas mediáticas con apoyo de Jolie. El texto menciona a Guadalupe y Jenner como enlaces, pero mezcla lugares inexistentes y declar...",
+    "prediction": "fake",
+    "confidence": 0.0018
+  },
+  {
+    "timestamp": "2026-02-08 16:02:46",
+    "model": "CNN",
+    "text": "Un portal anónimo publicó que Hayek habría impulsado un boicot turístico coordinado por Monge y Ibar. El supuesto plan incluye mensajes codificados usando la palabra Switch, pero las imágenes usadas c...",
+    "prediction": "real",
+    "confidence": 0.6669
+  },
+  {
+    "timestamp": "2026-02-08 16:02:54",
+    "model": "CNN",
+    "text": "Se viralizó un hilo afirmando que Selena participó en reuniones secretas con Steinem y Torro. El relato mezcla rumores, capturas borrosas y menciones a Peñasco como centro de operaciones, sin evidenci...",
+    "prediction": "real",
+    "confidence": 0.9135
+  },
+  {
+    "timestamp": "2026-02-08 16:03:01",
+    "model": "CNN",
+    "text": "Una “investigación ciudadana” sostiene que Jenny y Britanny habrían coordinado campañas falsas usando nombres como Vers y PNC. El texto repite palabras clave y carece de datos verificables, típico de ...",
+    "prediction": "fake",
+    "confidence": 0.0004
+  },
+  {
+    "timestamp": "2026-02-08 16:03:09",
+    "model": "CNN",
+    "text": "Un video manipulado muestra a Jolie hablando de una manifesta internacional. Sin embargo, el audio está recortado y se insertan referencias a Salinas y Guadalupe sin relación, lo que sugiere edición m...",
+    "prediction": "real",
+    "confidence": 0.7362
+  },
+  {
+    "timestamp": "2026-02-08 16:03:19",
+    "model": "CNN",
+    "text": "Blogs afirman que Lizbeth filtró documentos de Moret y Ibar sobre turismo y control digital. Al revisarlos, se detectan errores ortográficos, sellos falsos y firmas inexistentes.",
+    "prediction": "fake",
+    "confidence": 0.3285
+  },
+  {
+    "timestamp": "2026-02-08 16:03:29",
+    "model": "CNN",
+    "text": "Un supuesto reportaje asegura que Jenner y Hayek impulsan un proyecto Switch para influir en turistas. No hay registros oficiales, y las citas provienen de cuentas recién creadas.",
+    "prediction": "real",
+    "confidence": 0.7381
+  },
+  {
+    "timestamp": "2026-02-08 16:03:41",
+    "model": "Hibrido",
+    "text": "Un texto alarmista afirma que una hernia intracraneal colectiva fue causada por un producto sintetizado distribuido durante un festival en el Olimpo. Se citan a Walsh y Cahill como expertos, pero ning...",
+    "prediction": "real",
+    "confidence": 0.7999
+  },
+  {
+    "timestamp": "2026-02-08 16:03:52",
+    "model": "Hibrido",
+    "text": "Mensajes virales aseguran que un shock anafiláctico se activó al consumir lechona y tomate modificados. El relato mezcla términos clínicos con recetas, usando lenguaje técnico fuera de contexto para p...",
+    "prediction": "fake",
+    "confidence": 0.0031
+  },
+  {
+    "timestamp": "2026-02-08 16:04:01",
+    "model": "Hibrido",
+    "text": "Un audio afirma que Sherri y Gunter crearon un loro utilizable para espionaje doméstico. El texto repite palabras como polaridad y share sin coherencia científica.",
+    "prediction": "fake",
+    "confidence": 0.4402
+  },
+  {
+    "timestamp": "2026-02-08 16:04:12",
+    "model": "Hibrido",
+    "text": "Se difundió que Tempenny desarrolló un sistema para picar datos cerebrales desde adentro del cráneo. El artículo usa jerga neurológica incorrecta y carece de fuentes académicas.",
+    "prediction": "real",
+    "confidence": 0.8477
+  },
+  {
+    "timestamp": "2026-02-08 16:04:20",
+    "model": "Hibrido",
+    "text": "Un blog asegura que Walsh confirmó efectos intracraneales tras consumir asado. Médicos desmienten la relación, señalando el uso fraudulento de términos médicos.",
+    "prediction": "real",
+    "confidence": 0.7294
+  },
+  {
+    "timestamp": "2026-02-08 16:04:28",
+    "model": "Hibrido",
+    "text": "Un supuesto estudio dice que la polaridad emocional cambia con tomate sintetizado. El texto copia fragmentos de papers reales y los mezcla sin sentido.",
+    "prediction": "real",
+    "confidence": 0.6445
+  },
+  {
+    "timestamp": "2026-02-08 16:04:37",
+    "model": "Hibrido",
+    "text": "Circula que Cahill y Sherri probaron un chip utilizable en el Olimpo. No hay registros ni instituciones asociadas.",
+    "prediction": "real",
+    "confidence": 0.8228
+  },
+  {
+    "timestamp": "2026-02-08 16:04:45",
+    "model": "Hibrido",
+    "text": "Un post afirma que anafiláctico es un estado mental inducido por comida. La definición es incorrecta y deliberadamente confusa.",
+    "prediction": "real",
+    "confidence": 0.8468
+  },
+  {
+    "timestamp": "2026-02-08 16:04:53",
+    "model": "Hibrido",
+    "text": "Videos aseguran que un loro puede diagnosticar hernia. El contenido usa humor disfrazado de ciencia para engañar.",
+    "prediction": "real",
+    "confidence": 0.7781
+  },
+  {
+    "timestamp": "2026-02-08 16:04:58",
+    "model": "CNN",
+    "text": "Videos aseguran que un loro puede diagnosticar hernia. El contenido usa humor disfrazado de ciencia para engañar.",
+    "prediction": "real",
+    "confidence": 0.7966
+  },
+  {
+    "timestamp": "2026-02-08 16:05:08",
+    "model": "Hibrido",
+    "text": "Un texto afirma que compartir (share) recetas altera la polaridad cerebral. No existe evidencia alguna.",
+    "prediction": "real",
+    "confidence": 0.8512
+  },
+  {
+    "timestamp": "2026-02-08 16:05:16",
+    "model": "Naive Bayes",
+    "text": "Un texto afirma que compartir (share) recetas altera la polaridad cerebral. No existe evidencia alguna.",
+    "prediction": "fake",
+    "confidence": 0.4995
+  },
+  {
+    "timestamp": "2026-02-08 16:05:26",
+    "model": "Naive Bayes",
+    "text": "Un portal asegura que Iniciativo Vers Per Catalunya planea una coalición secreta con EQUO y EAJPNV. El artículo repite siglas y nombres políticos sin contexto real, una técnica común en desinformación...",
+    "prediction": "fake",
+    "confidence": 0.0096
+  },
+  {
+    "timestamp": "2026-02-08 16:05:36",
+    "model": "Naive Bayes",
+    "text": "Se difundió que Vers Per impulsará una reforma inmediata junto a BNG y Coalición Canario. No hay documentos oficiales ni comunicados verificables.",
+    "prediction": "fake",
+    "confidence": 0.0794
+  },
+  {
+    "timestamp": "2026-02-08 16:05:47",
+    "model": "Naive Bayes",
+    "text": "Un texto viral menciona a David Cruz como líder de Iniciativo. La noticia mezcla cargos inexistentes y fechas contradictorias.",
+    "prediction": "fake",
+    "confidence": 0.0585
+  },
+  {
+    "timestamp": "2026-02-08 16:05:56",
+    "model": "Naive Bayes",
+    "text": "Un blog afirma que Cristina Narbona y Carlos Prieto firmaron un acuerdo oculto con EQUO. Las firmas mostradas son falsas.",
+    "prediction": "fake",
+    "confidence": 0.0251
+  },
+  {
+    "timestamp": "2026-02-08 16:06:06",
+    "model": "Naive Bayes",
+    "text": "Mensajes aseguran que Unidas EAJPNV dominará elecciones locales. No existen alianzas con ese nombre.",
+    "prediction": "fake",
+    "confidence": 0.1881
+  },
+  {
+    "timestamp": "2026-02-08 16:06:17",
+    "model": "Naive Bayes",
+    "text": "Un rumor señala que Boluarte financió Vers. No se aportan pruebas.",
+    "prediction": "fake",
+    "confidence": 0.2621
+  },
+  {
+    "timestamp": "2026-02-08 16:06:26",
+    "model": "Naive Bayes",
+    "text": "Se menciona a Pablo Monico como estratega central, persona que no figura en registros públicos.",
+    "prediction": "fake",
+    "confidence": 0.2555
+  },
+  {
+    "timestamp": "2026-02-08 16:06:34",
+    "model": "Naive Bayes",
+    "text": "Un texto afirma que Catalunya EQUO controla votos digitales. No hay sistemas así en uso.",
+    "prediction": "fake",
+    "confidence": 0.1174
+  },
+  {
+    "timestamp": "2026-02-08 16:06:43",
+    "model": "Naive Bayes",
+    "text": "Supuestos informes hablan de Líder Iniciativo Vers. El cargo no existe.",
+    "prediction": "fake",
+    "confidence": 0.0151
+  },
+  {
+    "timestamp": "2026-02-08 16:06:52",
+    "model": "Naive Bayes",
+    "text": "Una cadena repite Per Catalunya Vers múltiples veces para ganar credibilidad algorítmica.",
+    "prediction": "fake",
+    "confidence": 0.1208
+  },
+  {
+    "timestamp": "2026-02-08 16:07:07",
+    "model": "Random Forest",
+    "text": "Un artículo sostiene que EQUO y PER manipulan métricas digitales. Usa repeticiones para influir en buscadores.",
+    "prediction": "fake",
+    "confidence": 0.3764
+  },
+  {
+    "timestamp": "2026-02-08 16:07:17",
+    "model": "Random Forest",
+    "text": "Se afirma que Vers Per Catalunya domina encuestas internas inexistentes.",
+    "prediction": "fake",
+    "confidence": 0.369
+  },
+  {
+    "timestamp": "2026-02-08 16:07:27",
+    "model": "Random Forest",
+    "text": "Un rumor involucra a EAJPNV y BNG en pactos secretos sin respaldo.",
+    "prediction": "fake",
+    "confidence": 0.348
+  },
+  {
+    "timestamp": "2026-02-08 16:07:37",
+    "model": "Random Forest",
+    "text": "Se publica que Coalición Canario controla servidores electorales. No hay pruebas.",
+    "prediction": "fake",
+    "confidence": 0.3285
+  },
+  {
+    "timestamp": "2026-02-08 16:07:47",
+    "model": "Random Forest",
+    "text": "Un texto acusa a Narbona de coordinar campañas fantasma. Carece de fuentes.",
+    "prediction": "fake",
+    "confidence": 0.4634
+  },
+  {
+    "timestamp": "2026-02-08 16:07:57",
+    "model": "Random Forest",
+    "text": "Blogs aseguran que David Cruz dirige operaciones digitales ocultas.",
+    "prediction": "fake",
+    "confidence": 0.3145
+  },
+  {
+    "timestamp": "2026-02-08 16:08:08",
+    "model": "Random Forest",
+    "text": "Se menciona Unidas PP como bloque real, aunque no existe formalmente.",
+    "prediction": "fake",
+    "confidence": 0.465
+  },
+  {
+    "timestamp": "2026-02-08 16:08:17",
+    "model": "Random Forest",
+    "text": "Un artículo mezcla Catalunya, Vers y PER para crear falsa coherencia política.",
+    "prediction": "fake",
+    "confidence": 0.4542
+  },
+  {
+    "timestamp": "2026-02-08 16:08:30",
+    "model": "Random Forest",
+    "text": "Un rumor afirma que Canarias fue laboratorio electoral. Información falsa.",
+    "prediction": "fake",
+    "confidence": 0.4646
+  },
+  {
+    "timestamp": "2026-02-08 16:08:40",
+    "model": "Random Forest",
+    "text": "Un texto concluye que Iniciativo controla resultados, usando TF-IDF repetitivo.",
+    "prediction": "real",
+    "confidence": 0.5265
+  },
+  {
+    "timestamp": "2026-02-08 17:01:53",
+    "model": "CNN",
+    "text": "PNC informa que el general Vallejo ha tomado el control total de las aduanas para detener el tráfico de influencias que afecta directamente a la economía regional este año.",
+    "prediction": "fake",
+    "confidence": 0.0008
+  },
+  {
+    "timestamp": "2026-02-08 17:02:02",
+    "model": "CNN",
+    "text": "La reconocida Miss Mundo, junto al analista Maldonado, confirmaron en una entrevista exclusiva que existen documentos secretos que implican a altos mandos en una red de espionaje masivo.",
+    "prediction": "real",
+    "confidence": 0.6811
+  },
+  {
+    "timestamp": "2026-02-08 17:02:09",
+    "model": "CNN",
+    "text": "El Fraile de la congregación central ha declarado que el fiscal Maza poseía pruebas contundentes antes de su desaparición, vinculando a la empresa Moret con paraísos fiscales.",
+    "prediction": "fake",
+    "confidence": 0.0109
+  },
+  {
+    "timestamp": "2026-02-08 17:02:19",
+    "model": "CNN",
+    "text": "Una nueva filtración de PNC asegura que la activista Nancy ha sido detenida ilegalmente tras presentar el informe Vers sobre la contaminación química en los depósitos de agua.",
+    "prediction": "fake",
+    "confidence": 0.001
+  },
+  {
+    "timestamp": "2026-02-08 17:02:28",
+    "model": "CNN",
+    "text": "El ingeniero Torro anunció que el sistema de vigilancia Vallejo es capaz de interceptar cualquier comunicación privada sin orden judicial, generando pánico entre los ciudadanos y defensores civiles.",
+    "prediction": "fake",
+    "confidence": 0.0156
+  },
+  {
+    "timestamp": "2026-02-08 17:02:36",
+    "model": "CNN",
+    "text": "Desde la sede de Moret, informan que la modelo y Miss Universo está financiando secretamente la campaña del polémico candidato Maza para desestabilizar las próximas elecciones generales.",
+    "prediction": "fake",
+    "confidence": 0.0042
+  },
+  {
+    "timestamp": "2026-02-08 17:02:43",
+    "model": "CNN",
+    "text": "El coronel Maldonado advierte que las fuerzas de la PNC están bajo el mando directo de una organización extranjera que busca imponer el protocolo de seguridad Vers en todo el país.",
+    "prediction": "fake",
+    "confidence": 0.0005
+  },
+  {
+    "timestamp": "2026-02-08 17:02:51",
+    "model": "CNN",
+    "text": "La doctora Nancy descubrió que el Fraile encargado de la beneficencia ha estado desviando fondos hacia la cuenta personal de Torro para la compra de armamento de alta tecnología.",
+    "prediction": "real",
+    "confidence": 0.7813
+  },
+  {
+    "timestamp": "2026-02-08 17:02:58",
+    "model": "CNN",
+    "text": "Informes confidenciales de la PNC sugieren que el testamento del fiscal Maza fue alterado por el equipo legal de Vallejo para ocultar transacciones millonarias realizadas durante la crisis pasada.",
+    "prediction": "fake",
+    "confidence": 0.0015
+  },
+  {
+    "timestamp": "2026-02-08 17:03:06",
+    "model": "CNN",
+    "text": "Según Maldonado, la plataforma Vers es en realidad un experimento social diseñado por la corporación Moret para manipular las emociones de los usuarios mediante algoritmos de inteligencia artificial.",
+    "prediction": "real",
+    "confidence": 0.7918
+  },
+  {
+    "timestamp": "2026-02-08 17:04:47",
+    "model": "Hibrido",
+    "text": "Se ha reportado que un simple vaso de agua mezclado con cloro es la cura definitiva contra la cepa de influenza que está afectando severamente a toda la población mundial.",
+    "prediction": "real",
+    "confidence": 0.9619
+  },
+  {
+    "timestamp": "2026-02-08 17:04:56",
+    "model": "Hibrido",
+    "text": "Habitantes del Cauca denuncian que las señales de wifi de alta frecuencia están causando enfermedades extrañas en los niños, según un estudio independiente realizado por el doctor Gerald.",
+    "prediction": "real",
+    "confidence": 0.8861
+  },
+  {
+    "timestamp": "2026-02-08 17:05:05",
+    "model": "Hibrido",
+    "text": "Es vuestro deber compartir esta información urgente: se ha detectado una avioneta en Tijuana esparciendo químicos nocivos para suprimir la voluntad de los ciudadanos durante las protestas actuales.",
+    "prediction": "real",
+    "confidence": 0.7863
+  },
+  {
+    "timestamp": "2026-02-08 17:05:14",
+    "model": "Hibrido",
+    "text": "En la mina de Zaruma, los trabajadores encontraron restos tecnológicos que demuestran que el wifi existía hace miles de años, pero la UNAM ha decidido ocultar este hallazgo histórico.",
+    "prediction": "real",
+    "confidence": 0.9187
+  },
+  {
+    "timestamp": "2026-02-08 17:05:23",
+    "model": "Hibrido",
+    "text": "El investigador Gerald asegura que beber un vaso de una solución especial neutraliza los efectos secundarios de las vacunas obligatorias impuestas recientemente en el condado por las autoridades.",
+    "prediction": "real",
+    "confidence": 0.9444
+  },
+  {
+    "timestamp": "2026-02-08 17:05:30",
+    "model": "Hibrido",
+    "text": "Una filtración desde el Cauca revela que el gobierno planea cortar el wifi nacional para evitar que se difundan videos del avistamiento de la avioneta desaparecida cerca de la frontera.",
+    "prediction": "real",
+    "confidence": 0.8554
+  },
+  {
+    "timestamp": "2026-02-08 17:05:47",
+    "model": "Hibrido",
+    "text": "La influenza actual no es natural; científicos disidentes de la UNAM afirman que fue creada en laboratorios para probar la resistencia humana en climas tropicales como los de Tijuana.",
+    "prediction": "real",
+    "confidence": 0.9077
+  },
+  {
+    "timestamp": "2026-02-08 17:05:54",
+    "model": "Hibrido",
+    "text": "Debéis limpiar vuestro hogar con grandes cantidades de cloro para evitar que los sensores de las nuevas antenas GHz rastreen vuestros movimientos dentro de la propiedad privada de forma remota.",
+    "prediction": "real",
+    "confidence": 0.9567
+  },
+  {
+    "timestamp": "2026-02-08 17:06:02",
+    "model": "Hibrido",
+    "text": "En el condado de Zaruma, se ha reportado que el agua del grifo contiene microchips que se activan con las ondas del wifi, permitiendo el control mental de la población trabajadora.",
+    "prediction": "real",
+    "confidence": 0.921
+  },
+  {
+    "timestamp": "2026-02-08 17:06:10",
+    "model": "Hibrido",
+    "text": "El capitán Gerald desapareció tras denunciar que su avioneta fue atacada por luces extrañas mientras sobrevolaba el Cauca, dejando un mensaje final sobre la importancia de proteger vuestro ADN.",
+    "prediction": "real",
+    "confidence": 0.8542
+  },
+  {
+    "timestamp": "2026-02-08 17:06:37",
+    "model": "Naive Bayes",
+    "text": "Científicos del Cauca han descubierto que la influenza puede curarse en casa usando solo un vaso de agua tibia con una gota de cloro todas las mañanas sin falta.",
+    "prediction": "fake",
+    "confidence": 0.476
+  },
+  {
+    "timestamp": "2026-02-08 17:06:46",
+    "model": "Naive Bayes",
+    "text": "El profesor Gerald advierte en su último libro que vuestro teléfono móvil emite radiaciones peligrosas que atraen virus como la influenza directamente a vuestros pulmones de forma constante.",
+    "prediction": "real",
+    "confidence": 0.5617
+  },
+  {
+    "timestamp": "2026-02-08 17:07:13",
+    "model": "Naive Bayes",
+    "text": "Urgente: En Tijuana se han confiscado cargamentos de cloro adulterado que están siendo distribuidos en los mercados para causar un brote artificial de enfermedades respiratorias en la zona.",
+    "prediction": "real",
+    "confidence": 0.6106
+  },
+  {
+    "timestamp": "2026-02-08 17:07:32",
+    "model": "Naive Bayes",
+    "text": "La población de Zaruma debe estar alerta; se ha confirmado que el agua distribuida por el condado contiene agentes químicos que reaccionan negativamente con la señal del wifi doméstico.",
+    "prediction": "real",
+    "confidence": 0.6081
+  },
+  {
+    "timestamp": "2026-02-08 17:07:43",
+    "model": "Naive Bayes",
+    "text": "Si sientes síntomas de influenza, no vayas al hospital; según Gerald, el tratamiento oficial es una trampa para monitorear vuestro estado de salud a través de bases de datos mundiales.",
+    "prediction": "real",
+    "confidence": 0.6733
+  },
+  {
+    "timestamp": "2026-02-08 17:07:57",
+    "model": "Naive Bayes",
+    "text": "En las selvas del Cauca, se ha encontrado una planta que purifica un vaso de agua instantáneamente, pero las farmacéuticas han prohibido su exportación hacia las ciudades como Tijuana.",
+    "prediction": "real",
+    "confidence": 0.59
+  },
+  {
+    "timestamp": "2026-02-08 17:08:18",
+    "model": "Naive Bayes",
+    "text": "Es vuestro derecho saber que la UNAM está realizando pruebas de control climático en Zaruma, utilizando una avioneta que dispersa partículas de plata y compuestos químicos de cloro.",
+    "prediction": "real",
+    "confidence": 0.5519
+  },
+  {
+    "timestamp": "2026-02-08 17:08:32",
+    "model": "Naive Bayes",
+    "text": "El doctor Gerald fue censurado en redes sociales por explicar cómo el wifi de alta potencia debilita el sistema inmunológico, facilitando la propagación masiva de la variante de influenza.",
+    "prediction": "real",
+    "confidence": 0.5146
+  },
+  {
+    "timestamp": "2026-02-08 17:09:10",
+    "model": "Naive Bayes",
+    "text": "Ciudadanos del condado denuncian que el uso excesivo de cloro en las piscinas públicas está diseñado para alterar el pH de la piel y permitir que el wifi nos rastree.",
+    "prediction": "real",
+    "confidence": 0.5407
+  },
+  {
+    "timestamp": "2026-02-08 17:09:20",
+    "model": "Naive Bayes",
+    "text": "No permitas que toquen a vuestro hijo; la campaña de vacunación en Tijuana es un experimento social orquestado por instituciones internacionales para reducir la natalidad en toda la región sur.",
+    "prediction": "real",
+    "confidence": 0.6464
+  },
+  {
+    "timestamp": "2026-02-08 17:09:40",
+    "model": "Random Forest",
+    "text": "El partido Equo ha propuesto una ley para que el modelo Vers de energía sea obligatorio, lo que aumentará el precio de la luz en un trescientos por ciento según expertos.",
+    "prediction": "fake",
+    "confidence": 0.3854
+  },
+  {
+    "timestamp": "2026-02-08 17:09:51",
+    "model": "Random Forest",
+    "text": "Se filtra un acuerdo secreto entre Sanchez y los representantes de Per Catalunya para dividir el territorio nacional a cambio de apoyo político incondicional durante la próxima legislatura crítica.",
+    "prediction": "fake",
+    "confidence": 0.4839
+  },
+  {
+    "timestamp": "2026-02-08 17:10:02",
+    "model": "Random Forest",
+    "text": "La plataforma Vers Per Canarias ha denunciado que la diputada Narbona está bloqueando las ayudas para la reconstrucción volcánica para favorecer intereses personales en empresas de construcción extran...",
+    "prediction": "fake",
+    "confidence": 0.2725
+  },
+  {
+    "timestamp": "2026-02-08 17:10:15",
+    "model": "Random Forest",
+    "text": "Desde el BNG informan que Monico Garcia ha estado desviando fondos destinados a la salud pública gallega para financiar campañas publicitarias de la coalición Vers en las redes sociales.",
+    "prediction": "fake",
+    "confidence": 0.2325
+  },
+  {
+    "timestamp": "2026-02-08 17:10:30",
+    "model": "Random Forest",
+    "text": "El acuerdo entre EAJPNV y el gobierno de Sanchez incluye la transferencia de datos privados de todos los ciudadanos a una empresa externa gestionada por antiguos miembros de Equo.",
+    "prediction": "fake",
+    "confidence": 0.4522
+  },
+  {
+    "timestamp": "2026-02-08 17:10:45",
+    "model": "Random Forest",
+    "text": "La crisis en Canarias se agrava tras descubrirse que los suministros de emergencia fueron vendidos ilegalmente por un alto cargo vinculado directamente a la formación política Per Catalunya recienteme...",
+    "prediction": "fake",
+    "confidence": 0.3026
+  },
+  {
+    "timestamp": "2026-02-08 17:10:59",
+    "model": "Random Forest",
+    "text": "Narbona y Monico Garcia han sido captadas en una reunión secreta con el lobby Vers para implementar impuestos adicionales a la carne y productos básicos en todo el país.",
+    "prediction": "fake",
+    "confidence": 0.2415
+  },
+  {
+    "timestamp": "2026-02-08 17:11:09",
+    "model": "Random Forest",
+    "text": "El líder de EAJPNV advierte que la política económica de Sanchez llevará a la quiebra técnica de las pensiones antes de que finalice el año fiscal según informes de inteligencia.",
+    "prediction": "real",
+    "confidence": 0.5175
+  },
+  {
+    "timestamp": "2026-02-08 17:11:30",
+    "model": "Random Forest",
+    "text": "Militantes del BNG denuncian que la coalición Equo está utilizando algoritmos de manipulación psicológica en sus aplicaciones móviles para captar votos de forma ilegal entre los jóvenes votantes.",
+    "prediction": "fake",
+    "confidence": 0.3169
+  },
+  {
+    "timestamp": "2026-02-08 17:11:40",
+    "model": "Random Forest",
+    "text": "La investigación sobre el caso Vers implica a varios ministros de Sanchez en una trama de cobro de comisiones por la compra de mascarillas defectuosas enviadas a las islas Canarias.",
+    "prediction": "real",
+    "confidence": 0.5793
   }
 ]
