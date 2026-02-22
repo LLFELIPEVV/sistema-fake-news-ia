@@ -1573,5 +1573,2098 @@
     "text": "La investigación sobre el caso Vers implica a varios ministros de Sanchez en una trama de cobro de comisiones por la compra de mascarillas defectuosas enviadas a las islas Canarias.",
     "prediction": "real",
     "confidence": 0.5793
+  },
+  {
+    "timestamp": "2026-02-09 17:44:54",
+    "model": "Hibrido",
+    "text": "• Se propone como un \"apoyo inicial\" y no como un sistema de censura o autoridad absoluta.\nEn conclusión: El documento es coherente y honesto. Para una sustentación exitosa, apóyate en las secciones d...",
+    "prediction": "real",
+    "confidence": 0.6993
+  },
+  {
+    "timestamp": "2026-02-09 17:45:21",
+    "model": "Random Forest",
+    "text": "• Se propone como un \"apoyo inicial\" y no como un sistema de censura o autoridad absoluta.\nEn conclusión: El documento es coherente y honesto. Para una sustentación exitosa, apóyate en las secciones d...",
+    "prediction": "real",
+    "confidence": 0.5737
+  },
+  {
+    "timestamp": "2026-02-09 17:46:24",
+    "model": "CNN",
+    "text": "• Se propone como un \"apoyo inicial\" y no como un sistema de censura o autoridad absoluta.\nEn conclusión: El documento es coherente y honesto. Para una sustentación exitosa, apóyate en las secciones d...",
+    "prediction": "real",
+    "confidence": 0.8762
+  },
+  {
+    "timestamp": "2026-02-09 18:17:01",
+    "model": "Naive Bayes",
+    "text": "• Se propone como un \"apoyo inicial\" y no como un sistema de censura o autoridad absoluta.\nEn conclusión: El documento es coherente y honesto. Para una sustentación exitosa, apóyate en las secciones d...",
+    "prediction": "real",
+    "confidence": 0.5388
+  },
+  {
+    "timestamp": "2026-02-09 18:17:17",
+    "model": "Hibrido",
+    "text": "• Se propone como un \"apoyo inicial\" y no como un sistema de censura o autoridad absoluta.\nEn conclusión: El documento es coherente y honesto. Para una sustentación exitosa, apóyate en las secciones d...",
+    "prediction": "real",
+    "confidence": 0.6993
+  },
+  {
+    "timestamp": "2026-02-09 18:17:25",
+    "model": "Random Forest",
+    "text": "• Se propone como un \"apoyo inicial\" y no como un sistema de censura o autoridad absoluta.\nEn conclusión: El documento es coherente y honesto. Para una sustentación exitosa, apóyate en las secciones d...",
+    "prediction": "real",
+    "confidence": 0.5737
+  },
+  {
+    "timestamp": "2026-02-09 18:17:33",
+    "model": "CNN",
+    "text": "• Se propone como un \"apoyo inicial\" y no como un sistema de censura o autoridad absoluta.\nEn conclusión: El documento es coherente y honesto. Para una sustentación exitosa, apóyate en las secciones d...",
+    "prediction": "real",
+    "confidence": 0.8762
+  },
+  {
+    "timestamp": "2026-02-09 18:17:50",
+    "model": "CNN",
+    "text": "• Se propone como un \"apoyo inicial\" y no como un sistema de censura o autoridad absoluta.\nEn conclusión: El documento es coherente y honesto. Para una sustentación exitosa, apóyate en las secciones d...",
+    "prediction": "real",
+    "confidence": 0.8762
+  },
+  {
+    "timestamp": "2026-02-09 18:18:06",
+    "model": "Naive Bayes",
+    "text": "• Se propone como un \"apoyo inicial\" y no como un sistema de censura o autoridad absoluta.\nEn conclusión: El documento es coherente y honesto. Para una sustentación exitosa, apóyate en las secciones d...",
+    "prediction": "real",
+    "confidence": 0.5388
+  },
+  {
+    "timestamp": "2026-02-10 17:53:22",
+    "model": "CNN",
+    "text": "Netanyahu arenga a líderes hebreos tras un informe falaz sobre Gaza\nUn documento inflado y desolador fue usado para contrarrestar críticas morales en la región.",
+    "prediction": "real",
+    "confidence": 0.7847
+  },
+  {
+    "timestamp": "2026-02-10 17:53:37",
+    "model": "CNN",
+    "text": "Revisión histórica falaz sacude Gaza y reabre la negación internacional\nAnalistas advierten un amago de revisionismo impulsado por valedores políticos.",
+    "prediction": "real",
+    "confidence": 0.6541
+  },
+  {
+    "timestamp": "2026-02-10 17:53:47",
+    "model": "CNN",
+    "text": "Informe desolador sobre Gaza resulta ser inflado y moralmente falaz\nEl texto tranquilizador habría sido escrutado tarde por organismos externos.",
+    "prediction": "real",
+    "confidence": 0.8706
+  },
+  {
+    "timestamp": "2026-02-10 17:53:56",
+    "model": "CNN",
+    "text": "Netanyahu boxea diplomáticamente con Europa tras acusaciones falaces\nEl ascendente discurso hebreo busca aventajar a críticos internacionales.",
+    "prediction": "real",
+    "confidence": 0.6267
+  },
+  {
+    "timestamp": "2026-02-10 17:54:09",
+    "model": "CNN",
+    "text": "Documento falaz sobre crisis en Gaza naufraga tras escrutinio técnico\nExpertos mentan errores graves en el análisis presentado.",
+    "prediction": "real",
+    "confidence": 0.7289
+  },
+  {
+    "timestamp": "2026-02-10 17:54:17",
+    "model": "CNN",
+    "text": "Arenga política en Jerusalén basada en datos inflados y falaces\nEl refranero popular fue usado para justificar la postura oficial.",
+    "prediction": "real",
+    "confidence": 0.9547
+  },
+  {
+    "timestamp": "2026-02-10 17:54:27",
+    "model": "CNN",
+    "text": "Negación internacional ante informe falaz sobre conflicto hebreo\nEl texto, considerado tranquilizador, no resistiría una auditoría independiente.",
+    "prediction": "real",
+    "confidence": 0.8639
+  },
+  {
+    "timestamp": "2026-02-10 17:54:35",
+    "model": "CNN",
+    "text": "Amago diplomático tras revelarse versión falaz del conflicto en Gaza\nNetanyahu se mostró empeñado en defender el documento.",
+    "prediction": "real",
+    "confidence": 0.7462
+  },
+  {
+    "timestamp": "2026-02-10 17:54:42",
+    "model": "CNN",
+    "text": "Revisionismo inflado sobre Gaza genera reacción moralmente desoladora\nAnalistas advierten un intento de contrarrestar críticas con datos falsos.",
+    "prediction": "fake",
+    "confidence": 0.2855
+  },
+  {
+    "timestamp": "2026-02-10 17:54:56",
+    "model": "CNN",
+    "text": "Informe falaz sobre Gaza fue simultaneado en varios medios\nEl contenido, ya desmentido, había sido presentado como valedor de la verdad.",
+    "prediction": "real",
+    "confidence": 0.8379
+  },
+  {
+    "timestamp": "2026-02-10 17:55:28",
+    "model": "Hibrido",
+    "text": "Iniciativa per Catalunya anuncia acuerdo histórico que nunca existió\nEl comunicado fue desmentido horas después por todas las partes.",
+    "prediction": "fake",
+    "confidence": 0.4813
+  },
+  {
+    "timestamp": "2026-02-10 17:55:39",
+    "model": "Hibrido",
+    "text": "Coalición Canaria y Equo sellan pacto secreto según documento filtrado\nNinguna de las organizaciones reconoció la información.",
+    "prediction": "real",
+    "confidence": 0.7513
+  },
+  {
+    "timestamp": "2026-02-10 17:56:05",
+    "model": "Hibrido",
+    "text": "PNV y BNG respaldan iniciativa inexistente impulsada desde el Congreso\nEl texto circuló sin firmas oficiales ni respaldo institucional.",
+    "prediction": "real",
+    "confidence": 0.6909
+  },
+  {
+    "timestamp": "2026-02-10 17:56:15",
+    "model": "Hibrido",
+    "text": "PSOE y Podemos habrían votado juntos en una sesión que no ocurrió\nEl registro parlamentario contradice la versión difundida.",
+    "prediction": "real",
+    "confidence": 0.6213
+  },
+  {
+    "timestamp": "2026-02-10 17:56:23",
+    "model": "Hibrido",
+    "text": "Sánchez habría negociado en privado con Equo y BNG en Catalunya\nLa supuesta reunión no figura en ninguna agenda oficial.",
+    "prediction": "real",
+    "confidence": 0.6901
+  },
+  {
+    "timestamp": "2026-02-10 17:56:32",
+    "model": "Hibrido",
+    "text": "Iniciativa ciudadana fuerza abstención del PP según informe falso\nEl documento no proviene de ningún organismo reconocido.",
+    "prediction": "real",
+    "confidence": 0.7502
+  },
+  {
+    "timestamp": "2026-02-10 17:56:41",
+    "model": "Hibrido",
+    "text": "Vox acusa a una coalición inexistente de manipular votaciones\nEl señalamiento se basó en datos erróneos.",
+    "prediction": "real",
+    "confidence": 0.8292
+  },
+  {
+    "timestamp": "2026-02-10 17:56:51",
+    "model": "Hibrido",
+    "text": "Acuerdo secreto entre Equo, Podemos y PNV se filtra en redes\nLa información fue catalogada como falsa por verificadores.",
+    "prediction": "real",
+    "confidence": 0.9096
+  },
+  {
+    "timestamp": "2026-02-10 17:56:59",
+    "model": "Hibrido",
+    "text": "Catalunya aprueba iniciativa que nunca fue debatida en el parlamento\nEl anuncio fue retirado tras pocas horas.",
+    "prediction": "real",
+    "confidence": 0.8285
+  },
+  {
+    "timestamp": "2026-02-10 17:57:08",
+    "model": "Hibrido",
+    "text": "BNG lidera propuesta nacional según nota sin autor identificado\nEl texto no aparece en registros oficiales.",
+    "prediction": "real",
+    "confidence": 0.6256
+  },
+  {
+    "timestamp": "2026-02-10 17:57:28",
+    "model": "Naive Bayes",
+    "text": "Cristina Narbona lidera Iniciativo Vers según acta filtrada\nEl documento resultó ser apócrifo.",
+    "prediction": "fake",
+    "confidence": 0.0095
+  },
+  {
+    "timestamp": "2026-02-10 17:57:41",
+    "model": "Naive Bayes",
+    "text": "Pablo Monico y Carlos Prieto pactan coalición en Catalunya\nAmbos negaron conocer el supuesto acuerdo.",
+    "prediction": "fake",
+    "confidence": 0.0179
+  },
+  {
+    "timestamp": "2026-02-10 17:57:50",
+    "model": "Naive Bayes",
+    "text": "David Cruz anuncia alianza entre Equo y EAJ-PNV\nLa declaración nunca ocurrió.",
+    "prediction": "fake",
+    "confidence": 0.0161
+  },
+  {
+    "timestamp": "2026-02-10 17:57:59",
+    "model": "Naive Bayes",
+    "text": "Boluarte apoya Iniciativo Per en reunión privada\nNo existe registro del encuentro.",
+    "prediction": "fake",
+    "confidence": 0.0698
+  },
+  {
+    "timestamp": "2026-02-10 17:58:09",
+    "model": "Naive Bayes",
+    "text": "Cristina Narbonar asume presidencia del BNG según comunicado falso\nEl partido desmintió la información.",
+    "prediction": "fake",
+    "confidence": 0.0663
+  },
+  {
+    "timestamp": "2026-02-10 17:58:18",
+    "model": "Naive Bayes",
+    "text": "Soledad Murillo impulsa coalición canaria con Equo\nLa noticia fue retirada por falta de fuentes.",
+    "prediction": "fake",
+    "confidence": 0.0191
+  },
+  {
+    "timestamp": "2026-02-10 17:58:27",
+    "model": "Naive Bayes",
+    "text": "Jordi Sevilla confirma pacto entre Unidas y PP\nEl audio difundido fue manipulado.",
+    "prediction": "fake",
+    "confidence": 0.1384
+  },
+  {
+    "timestamp": "2026-02-10 17:58:36",
+    "model": "Naive Bayes",
+    "text": "Líder Equo anuncia ruptura con Catalunya Per\nNo hubo pronunciamiento oficial.",
+    "prediction": "fake",
+    "confidence": 0.0558
+  },
+  {
+    "timestamp": "2026-02-10 17:58:44",
+    "model": "Naive Bayes",
+    "text": "Carlos Díaz y Pablo Santiago crean frente político común\nNinguno confirmó la información.",
+    "prediction": "fake",
+    "confidence": 0.1866
+  },
+  {
+    "timestamp": "2026-02-10 17:58:53",
+    "model": "Naive Bayes",
+    "text": "Presidente Iniciativo renuncia tras votación inexistente\nEl evento nunca figuró en el calendario institucional.",
+    "prediction": "fake",
+    "confidence": 0.1926
+  },
+  {
+    "timestamp": "2026-02-10 17:59:33",
+    "model": "Random Forest",
+    "text": "Iniciativo Vers pierde financiación tras auditoría inexistente\nEl informe no fue emitido por ninguna entidad oficial.",
+    "prediction": "real",
+    "confidence": 0.5306
+  },
+  {
+    "timestamp": "2026-02-10 17:59:50",
+    "model": "Random Forest",
+    "text": "Pablo Iglesias reaparece para apoyar a Monico García\nEl acto nunca ocurrió.",
+    "prediction": "fake",
+    "confidence": 0.4201
+  },
+  {
+    "timestamp": "2026-02-10 18:00:18",
+    "model": "Random Forest",
+    "text": "Coalición Canaria expulsa a líder por pacto con Equo Iniciativo\nLa organización negó la información.",
+    "prediction": "fake",
+    "confidence": 0.2016
+  },
+  {
+    "timestamp": "2026-02-10 18:00:55",
+    "model": "Random Forest",
+    "text": "Cristín Narbonar investigada por malversación de fondos\nNo existe causa judicial abierta.",
+    "prediction": "fake",
+    "confidence": 0.4613
+  },
+  {
+    "timestamp": "2026-02-10 18:01:09",
+    "model": "Random Forest",
+    "text": "Presidente Iniciativo anuncia plan económico secreto\nEl supuesto anuncio no fue grabado ni publicado.",
+    "prediction": "fake",
+    "confidence": 0.4446
+  },
+  {
+    "timestamp": "2026-02-10 18:01:18",
+    "model": "Random Forest",
+    "text": "Antonio Griñán asesora a coalición inexistente en Catalunya\nLa noticia carecía de fuentes verificables.",
+    "prediction": "fake",
+    "confidence": 0.3684
+  },
+  {
+    "timestamp": "2026-02-10 18:01:27",
+    "model": "Random Forest",
+    "text": "Gobierno anuncia negociación con partido no registrado\nEl comunicado fue catalogado como falso.",
+    "prediction": "real",
+    "confidence": 0.5105
+  },
+  {
+    "timestamp": "2026-02-10 18:01:39",
+    "model": "Random Forest",
+    "text": "Esquerra Republicano se une a frente ciudadano alternativo\nLa alianza nunca fue formalizada.",
+    "prediction": "fake",
+    "confidence": 0.455
+  },
+  {
+    "timestamp": "2026-02-10 18:01:50",
+    "model": "Random Forest",
+    "text": "Gabriel Rufián respalda iniciativa que no llegó al parlamento\nEl proyecto no figura en actas legislativas.",
+    "prediction": "fake",
+    "confidence": 0.3742
+  },
+  {
+    "timestamp": "2026-02-10 18:02:00",
+    "model": "Random Forest",
+    "text": "Portavoz Iniciativo dimite tras votación interna inventada\nEl partido negó que la votación existiera.",
+    "prediction": "fake",
+    "confidence": 0.4774
+  },
+  {
+    "timestamp": "2026-02-10 18:34:34",
+    "model": "Random Forest",
+    "text": "monica garcia ha contestado a la carta de grandemarlaska aludiendo que la actuacion de la policia autonomica ante los cortes en la ap <NUM>  fue similar a la que hubo durante el periodo en el que las ...",
+    "prediction": "fake",
+    "confidence": 0.3394
+  },
+  {
+    "timestamp": "2026-02-10 18:34:57",
+    "model": "Random Forest",
+    "text": "monica garcia ha contestado a la carta de grandemarlaska aludiendo que la actuacion de la policia autonomica ante los cortes en la ap 34  fue similar a la que hubo durante el periodo en el que las com...",
+    "prediction": "fake",
+    "confidence": 0.3394
+  },
+  {
+    "timestamp": "2026-02-11 18:30:25",
+    "model": "CNN",
+    "text": "Netanyahu arremete contra informe falaz sobre Gaza y arenga a la población hebrea a resistir moralmente el asedio internacional.",
+    "prediction": "real",
+    "confidence": 0.9056
+  },
+  {
+    "timestamp": "2026-02-11 18:31:34",
+    "model": "CNN",
+    "text": "Nuevo documento desolador revela un supuesto amago de intervención en Gaza que contrarresta la versión oficial del gobierno hebreo.",
+    "prediction": "real",
+    "confidence": 0.7298
+  },
+  {
+    "timestamp": "2026-02-11 18:31:45",
+    "model": "CNN",
+    "text": "Analistas escrutan el inflado número de víctimas en Gaza mientras Netanyahu insiste en una narrativa tranquilizadora.",
+    "prediction": "real",
+    "confidence": 0.8944
+  },
+  {
+    "timestamp": "2026-02-11 18:31:55",
+    "model": "CNN",
+    "text": "Un exvaledor del gobierno hebreo denuncia un revisionismo histórico falaz promovido desde Gaza.",
+    "prediction": "fake",
+    "confidence": 0.3459
+  },
+  {
+    "timestamp": "2026-02-11 18:32:07",
+    "model": "CNN",
+    "text": "Informe ascendente sobre conflicto en Gaza resistiría cualquier escrutinio, según portavoz empeñado en contrarrestar críticas.",
+    "prediction": "real",
+    "confidence": 0.7859
+  },
+  {
+    "timestamp": "2026-02-11 18:32:16",
+    "model": "CNN",
+    "text": "Netanyahu acusa a medios internacionales de negación moralmente irresponsable tras desolador balance en Gaza.",
+    "prediction": "real",
+    "confidence": 0.6102
+  },
+  {
+    "timestamp": "2026-02-11 18:32:25",
+    "model": "CNN",
+    "text": "Supuesto náufrago político reaparece para arengar contra el revisionismo falaz sobre la ofensiva hebrea.",
+    "prediction": "real",
+    "confidence": 0.6354
+  },
+  {
+    "timestamp": "2026-02-11 18:33:00",
+    "model": "CNN",
+    "text": "Estudio inflado sobre impacto en Gaza aventaja datos oficiales, generando polémica desoladora.",
+    "prediction": "fake",
+    "confidence": 0.0547
+  },
+  {
+    "timestamp": "2026-02-11 18:33:09",
+    "model": "CNN",
+    "text": "Gobierno hebreo simultanea operaciones en Gaza mientras contrarresta versión falaz difundida por opositores.",
+    "prediction": "real",
+    "confidence": 0.7839
+  },
+  {
+    "timestamp": "2026-02-11 18:33:19",
+    "model": "CNN",
+    "text": "Nuevo informe moralmente inquietante sobre Gaza sería parte de estrategia para arengar a la opinión pública internacional.",
+    "prediction": "real",
+    "confidence": 0.8377
+  },
+  {
+    "timestamp": "2026-02-11 18:34:35",
+    "model": "Hibrido",
+    "text": "El PP y VOX negocian en Catalunya una iniciativa conjunta que el PSOE intenta frenar en el Congreso.",
+    "prediction": "fake",
+    "confidence": 0.4848
+  },
+  {
+    "timestamp": "2026-02-11 18:35:34",
+    "model": "Hibrido",
+    "text": "Podemos y Equo presentan en el Parlamento una propuesta que el BNG rechaza por falta de consenso.",
+    "prediction": "real",
+    "confidence": 0.7164
+  },
+  {
+    "timestamp": "2026-02-11 18:35:45",
+    "model": "Hibrido",
+    "text": "Sánchez anuncia que el gobierno en Catalunya apoyará una reforma impulsada por el EAJPNV.",
+    "prediction": "real",
+    "confidence": 0.765
+  },
+  {
+    "timestamp": "2026-02-11 18:35:54",
+    "model": "Hibrido",
+    "text": "Coalición inesperada entre PP y Podemos genera tensión en el PSOE durante sesión en el Congreso.",
+    "prediction": "fake",
+    "confidence": 0.4199
+  },
+  {
+    "timestamp": "2026-02-11 18:36:04",
+    "model": "Hibrido",
+    "text": "El gobierno asegura que la iniciativa en Catalunya no afectará a las comunidades del norte.",
+    "prediction": "real",
+    "confidence": 0.8308
+  },
+  {
+    "timestamp": "2026-02-11 18:36:15",
+    "model": "Hibrido",
+    "text": "VOX acusa al PSOE de pactar con el BNG para modificar el sistema electoral.",
+    "prediction": "real",
+    "confidence": 0.6866
+  },
+  {
+    "timestamp": "2026-02-11 18:36:27",
+    "model": "Hibrido",
+    "text": "Equo y EAJPNV plantean una reforma que el PP considera inconstitucional.",
+    "prediction": "fake",
+    "confidence": 0.4005
+  },
+  {
+    "timestamp": "2026-02-11 18:36:36",
+    "model": "Hibrido",
+    "text": "Nueva alianza entre partidos en Catalunya reconfigura el equilibrio político en el Congreso.",
+    "prediction": "real",
+    "confidence": 0.5392
+  },
+  {
+    "timestamp": "2026-02-11 18:36:44",
+    "model": "Hibrido",
+    "text": "Sánchez defiende que la coalición progresista no incluirá concesiones al PP.",
+    "prediction": "real",
+    "confidence": 0.7358
+  },
+  {
+    "timestamp": "2026-02-11 18:36:54",
+    "model": "Hibrido",
+    "text": "Podemos propone una iniciativa ambiental que divide a la coalición en el gobierno.",
+    "prediction": "real",
+    "confidence": 0.7921
+  },
+  {
+    "timestamp": "2026-02-11 18:37:22",
+    "model": "Hibrido",
+    "text": "Cristina Narbona y Pablo Mónico lideran una nueva coalición en Catalunya junto al BNG.",
+    "prediction": "real",
+    "confidence": 0.7052
+  },
+  {
+    "timestamp": "2026-02-11 18:38:00",
+    "model": "Naive Bayes",
+    "text": "Cristina Narbona y Pablo Mónico lideran una nueva coalición en Catalunya junto al BNG.",
+    "prediction": "fake",
+    "confidence": 0.005
+  },
+  {
+    "timestamp": "2026-02-11 18:38:07",
+    "model": "Hibrido",
+    "text": "Cristina Narbona y Pablo Mónico lideran una nueva coalición en Catalunya junto al BNG.",
+    "prediction": "real",
+    "confidence": 0.7052
+  },
+  {
+    "timestamp": "2026-02-11 18:38:13",
+    "model": "CNN",
+    "text": "Cristina Narbona y Pablo Mónico lideran una nueva coalición en Catalunya junto al BNG.",
+    "prediction": "fake",
+    "confidence": 0.0
+  },
+  {
+    "timestamp": "2026-02-11 18:38:46",
+    "model": "Random Forest",
+    "text": "Cristina Narbona y Pablo Mónico lideran una nueva coalición en Catalunya junto al BNG.",
+    "prediction": "fake",
+    "confidence": 0.1964
+  },
+  {
+    "timestamp": "2026-02-11 18:38:58",
+    "model": "Naive Bayes",
+    "text": "Cristina Narbona y Pablo Mónico lideran una nueva coalición en Catalunya junto al BNG.",
+    "prediction": "fake",
+    "confidence": 0.005
+  },
+  {
+    "timestamp": "2026-02-11 18:39:10",
+    "model": "Naive Bayes",
+    "text": "David Cruz anuncia que Equo y EAJPNV formarán alianza estratégica en Canarias.",
+    "prediction": "fake",
+    "confidence": 0.0064
+  },
+  {
+    "timestamp": "2026-02-11 18:39:45",
+    "model": "CNN",
+    "text": "David Cruz anuncia que Equo y EAJPNV formarán alianza estratégica en Canarias, falaz.",
+    "prediction": "fake",
+    "confidence": 0.0001
+  },
+  {
+    "timestamp": "2026-02-11 18:40:02",
+    "model": "CNN",
+    "text": "David Cruz anuncia que Equo y EAJPNV formarán alianza estratégica en Canarias, falaz, boxear.",
+    "prediction": "fake",
+    "confidence": 0.0001
+  },
+  {
+    "timestamp": "2026-02-11 18:40:16",
+    "model": "CNN",
+    "text": "Hebreo, David Cruz anuncia que Equo y EAJPNV formarán alianza estratégica en Canarias, falaz, boxear.",
+    "prediction": "fake",
+    "confidence": 0.0
+  },
+  {
+    "timestamp": "2026-02-11 18:40:38",
+    "model": "CNN",
+    "text": "Hebreo, David Cruz anuncia que Equo y EAJPNV formarán alianza estratégica en Canarias, falaz, boxear, mentar.",
+    "prediction": "fake",
+    "confidence": 0.0
+  },
+  {
+    "timestamp": "2026-02-11 18:45:26",
+    "model": "Naive Bayes",
+    "text": "El partido iniciativo vers propone una alianza con eajpnv para las elecciones.",
+    "prediction": "fake",
+    "confidence": 0.0631
+  },
+  {
+    "timestamp": "2026-02-11 18:45:43",
+    "model": "Naive Bayes",
+    "text": "Escándalo en vers per catalunya: se filtran documentos de equo.",
+    "prediction": "fake",
+    "confidence": 0.0026
+  },
+  {
+    "timestamp": "2026-02-11 18:46:04",
+    "model": "Naive Bayes",
+    "text": "La coalición iniciativo vers rompe el silencio sobre el pacto.",
+    "prediction": "fake",
+    "confidence": 0.0231
+  },
+  {
+    "timestamp": "2026-02-11 18:46:32",
+    "model": "Naive Bayes",
+    "text": "Acuerdo histórico entre vers y eajpnv sacude el parlamento.",
+    "prediction": "fake",
+    "confidence": 0.0978
+  },
+  {
+    "timestamp": "2026-02-11 18:46:44",
+    "model": "Naive Bayes",
+    "text": "El grupo per catalunya niega las acusaciones de iniciativo.",
+    "prediction": "fake",
+    "confidence": 0.029
+  },
+  {
+    "timestamp": "2026-02-11 18:46:56",
+    "model": "Naive Bayes",
+    "text": "Nuevas declaraciones de equo sobre la crisis de iniciativo vers.",
+    "prediction": "fake",
+    "confidence": 0.0029
+  },
+  {
+    "timestamp": "2026-02-11 18:47:10",
+    "model": "Naive Bayes",
+    "text": "El líder de vers per dimite tras la controversia con eajpnv.",
+    "prediction": "fake",
+    "confidence": 0.0549
+  },
+  {
+    "timestamp": "2026-02-11 18:47:28",
+    "model": "Naive Bayes",
+    "text": "Iniciativo y vers anuncian una fusión inesperada.",
+    "prediction": "fake",
+    "confidence": 0.1759
+  },
+  {
+    "timestamp": "2026-02-11 18:47:42",
+    "model": "Naive Bayes",
+    "text": "Crisis interna en per catalunya afecta a los votantes de equo.",
+    "prediction": "fake",
+    "confidence": 0.0431
+  },
+  {
+    "timestamp": "2026-02-11 18:47:56",
+    "model": "Naive Bayes",
+    "text": "Vers per exige explicaciones inmediatas al gobierno.",
+    "prediction": "fake",
+    "confidence": 0.2731
+  },
+  {
+    "timestamp": "2026-02-11 18:48:21",
+    "model": "Naive Bayes",
+    "text": "\"El partido iniciativo vers propone una alianza con eajpnv para las elecciones.\"\n\n\"Escándalo en vers per catalunya: se filtran documentos de equo.\"\n\n\"La coalición iniciativo vers rompe el silencio sob...",
+    "prediction": "fake",
+    "confidence": 0.0008
+  },
+  {
+    "timestamp": "2026-02-11 18:48:45",
+    "model": "Random Forest",
+    "text": "Monico Garcia y Pablo Monico discuten el futuro de la sanidad.",
+    "prediction": "fake",
+    "confidence": 0.2146
+  },
+  {
+    "timestamp": "2026-02-11 18:48:57",
+    "model": "Random Forest",
+    "text": "La coalicion canario advierte sobre el cambio de gobierno.",
+    "prediction": "fake",
+    "confidence": 0.34
+  },
+  {
+    "timestamp": "2026-02-11 18:49:09",
+    "model": "Random Forest",
+    "text": "Declaraciones polémicas de narbonar sobre la economía.",
+    "prediction": "fake",
+    "confidence": 0.4694
+  },
+  {
+    "timestamp": "2026-02-11 18:49:22",
+    "model": "Random Forest",
+    "text": "Pablo Iglesia y Monico se reúnen de urgencia.",
+    "prediction": "real",
+    "confidence": 0.6133
+  },
+  {
+    "timestamp": "2026-02-11 18:49:38",
+    "model": "Random Forest",
+    "text": "Iniciativo vers supera a coalicion canario en las encuestas.",
+    "prediction": "fake",
+    "confidence": 0.2933
+  },
+  {
+    "timestamp": "2026-02-11 18:49:49",
+    "model": "Random Forest",
+    "text": "El caso Monico Garcia llega a los tribunales.",
+    "prediction": "fake",
+    "confidence": 0.3346
+  },
+  {
+    "timestamp": "2026-02-11 18:50:00",
+    "model": "Random Forest",
+    "text": "Narbonar desmiente los rumores sobre Pablo Monico.",
+    "prediction": "fake",
+    "confidence": 0.3385
+  },
+  {
+    "timestamp": "2026-02-11 18:50:14",
+    "model": "Random Forest",
+    "text": "Tensión entre coalicion canario y el bloque de iniciativo.",
+    "prediction": "fake",
+    "confidence": 0.294
+  },
+  {
+    "timestamp": "2026-02-11 18:50:27",
+    "model": "Random Forest",
+    "text": "Pablo Iglesia critica la postura de Monico.",
+    "prediction": "real",
+    "confidence": 0.6125
+  },
+  {
+    "timestamp": "2026-02-11 18:50:37",
+    "model": "Random Forest",
+    "text": "La estrategia de narbonar falla según coalicion canario.",
+    "prediction": "fake",
+    "confidence": 0.2582
+  },
+  {
+    "timestamp": "2026-02-11 18:51:09",
+    "model": "CNN",
+    "text": "Un discurso falaz y desolador de Netanyahu enciende la región.",
+    "prediction": "real",
+    "confidence": 0.6084
+  },
+  {
+    "timestamp": "2026-02-11 18:51:20",
+    "model": "CNN",
+    "text": "Intentan boxear políticamente con el conflicto de Gaza.",
+    "prediction": "real",
+    "confidence": 0.8987
+  },
+  {
+    "timestamp": "2026-02-11 18:51:35",
+    "model": "CNN",
+    "text": "El revisionismo histórico es un acto falaz según el experto.",
+    "prediction": "real",
+    "confidence": 0.7672
+  },
+  {
+    "timestamp": "2026-02-11 18:51:46",
+    "model": "CNN",
+    "text": "Líder intenta arengar a las masas con un tono hebreo radical.",
+    "prediction": "real",
+    "confidence": 0.8068
+  },
+  {
+    "timestamp": "2026-02-11 18:51:56",
+    "model": "CNN",
+    "text": "\"Un discurso falaz y desolador de Netanyahu enciende la región.\"\n\n\"Intentan boxear políticamente con el conflicto de Gaza.\"\n\n\"El revisionismo histórico es un acto falaz según el experto.\"\n\n\"Líder inte...",
+    "prediction": "real",
+    "confidence": 0.6236
+  },
+  {
+    "timestamp": "2026-02-11 18:52:15",
+    "model": "CNN",
+    "text": "\"Monico Garcia y Pablo Monico discuten el futuro de la sanidad.\"\n\n\"La coalicion canario advierte sobre el cambio de gobierno.\"\n\n\"Declaraciones polémicas de narbonar sobre la economía.\"\n\n\"Pablo Iglesia...",
+    "prediction": "fake",
+    "confidence": 0.0479
+  },
+  {
+    "timestamp": "2026-02-11 18:52:26",
+    "model": "CNN",
+    "text": "Monico Garcia y Pablo Monico discuten el futuro de la sanidad.",
+    "prediction": "fake",
+    "confidence": 0.0086
+  },
+  {
+    "timestamp": "2026-02-11 18:52:41",
+    "model": "Hibrido",
+    "text": "\"El lider del iniciativa vers ha confirmado su dimisión hoy.\"\n\n\"El iniciativa vers per catalunya propone un referéndum inmediato.\"\n\n\"El presidente del gobierno y sus ministros huyen del país.\"\n\n\"El se...",
+    "prediction": "real",
+    "confidence": 0.5855
+  },
+  {
+    "timestamp": "2026-02-11 18:59:21",
+    "model": "Hibrido",
+    "text": "monica garcia ha contestado a la carta de grandemarlaska aludiendo que la actuacion de la policia autonomica ante los cortes en la ap <NUM>  fue similar a la que hubo durante el periodo en el que las ...",
+    "prediction": "real",
+    "confidence": 0.8428
+  },
+  {
+    "timestamp": "2026-02-11 18:59:33",
+    "model": "Random Forest",
+    "text": "monica garcia ha contestado a la carta de grandemarlaska aludiendo que la actuacion de la policia autonomica ante los cortes en la ap <NUM>  fue similar a la que hubo durante el periodo en el que las ...",
+    "prediction": "fake",
+    "confidence": 0.3394
+  },
+  {
+    "timestamp": "2026-02-11 18:59:42",
+    "model": "CNN",
+    "text": "monica garcia ha contestado a la carta de grandemarlaska aludiendo que la actuacion de la policia autonomica ante los cortes en la ap <NUM>  fue similar a la que hubo durante el periodo en el que las ...",
+    "prediction": "fake",
+    "confidence": 0.2269
+  },
+  {
+    "timestamp": "2026-02-11 18:59:51",
+    "model": "CNN",
+    "text": "monica garcia ha contestado a la carta de grandemarlaska aludiendo que la actuacion de la policia autonomica ante los cortes en la ap <NUM>  fue similar a la que hubo durante el periodo en el que las ...",
+    "prediction": "fake",
+    "confidence": 0.2269
+  },
+  {
+    "timestamp": "2026-02-11 19:00:07",
+    "model": "Naive Bayes",
+    "text": "monica garcia ha contestado a la carta de grandemarlaska aludiendo que la actuacion de la policia autonomica ante los cortes en la ap <NUM>  fue similar a la que hubo durante el periodo en el que las ...",
+    "prediction": "fake",
+    "confidence": 0.4526
+  },
+  {
+    "timestamp": "2026-02-11 19:00:19",
+    "model": "Naive Bayes",
+    "text": "el rechazo frontal del nueva canarias a legalizar tambien el uso recreativo que proponen el resto de formaciones de la izquierda deja todo en manos de la subcomision que abordara las experiencias de o...",
+    "prediction": "fake",
+    "confidence": 0.3942
+  },
+  {
+    "timestamp": "2026-02-11 19:00:32",
+    "model": "Hibrido",
+    "text": "el rechazo frontal del nueva canarias a legalizar tambien el uso recreativo que proponen el resto de formaciones de la izquierda deja todo en manos de la subcomision que abordara las experiencias de o...",
+    "prediction": "real",
+    "confidence": 0.6713
+  },
+  {
+    "timestamp": "2026-02-11 19:00:41",
+    "model": "Random Forest",
+    "text": "el rechazo frontal del nueva canarias a legalizar tambien el uso recreativo que proponen el resto de formaciones de la izquierda deja todo en manos de la subcomision que abordara las experiencias de o...",
+    "prediction": "fake",
+    "confidence": 0.4682
+  },
+  {
+    "timestamp": "2026-02-11 19:00:45",
+    "model": "CNN",
+    "text": "el rechazo frontal del nueva canarias a legalizar tambien el uso recreativo que proponen el resto de formaciones de la izquierda deja todo en manos de la subcomision que abordara las experiencias de o...",
+    "prediction": "fake",
+    "confidence": 0.0004
+  },
+  {
+    "timestamp": "2026-02-11 19:00:51",
+    "model": "CNN",
+    "text": "el rechazo frontal del nueva canarias a legalizar tambien el uso recreativo que proponen el resto de formaciones de la izquierda deja todo en manos de la subcomision que abordara las experiencias de o...",
+    "prediction": "fake",
+    "confidence": 0.0004
+  },
+  {
+    "timestamp": "2026-02-11 19:01:00",
+    "model": "Naive Bayes",
+    "text": "el rechazo frontal del nueva canarias a legalizar tambien el uso recreativo que proponen el resto de formaciones de la izquierda deja todo en manos de la subcomision que abordara las experiencias de o...",
+    "prediction": "fake",
+    "confidence": 0.3942
+  },
+  {
+    "timestamp": "2026-02-11 19:01:13",
+    "model": "Hibrido",
+    "text": "la ministra de derechos sociales anuncia que habra nuevas medidas sobre las empresas electricas en el consejo de ministros de este martes y responde a calvino respecto al limite al precio del gas no s...",
+    "prediction": "real",
+    "confidence": 0.8483
+  },
+  {
+    "timestamp": "2026-02-11 19:01:26",
+    "model": "Hibrido",
+    "text": "esto se produce tras aceptar la mesa del congreso tramitar la iniciativa socialista por el procedimiento de urgencia gracias a los votos favorables del nueva canarias bng y eajpnv y con la abstencion ...",
+    "prediction": "real",
+    "confidence": 0.9472
+  },
+  {
+    "timestamp": "2026-02-11 19:01:35",
+    "model": "Hibrido",
+    "text": "los consejeros de hacienda francisco javier sanchez gil iniciativa vers per catalunya y economia rogelio velasco equo firman con el portavoz de coalicion canaria alejandro hernandez el acuerdo de pres...",
+    "prediction": "fake",
+    "confidence": 0.3665
+  },
+  {
+    "timestamp": "2026-02-11 19:01:53",
+    "model": "Hibrido",
+    "text": "la numero dos de equo en el ayuntamiento de barcelona afirma que es el bng el que esta liderando los ambitos estrategicos de la accion del ayuntamiento ve estancada la agenda de transformacion impulsa...",
+    "prediction": "real",
+    "confidence": 0.8388
+  },
+  {
+    "timestamp": "2026-02-11 19:03:24",
+    "model": "Random Forest",
+    "text": "la numero dos de equo en el ayuntamiento de barcelona afirma que es el bng el que esta liderando los ambitos estrategicos de la accion del ayuntamiento ve estancada la agenda de transformacion impulsa...",
+    "prediction": "fake",
+    "confidence": 0.3489
+  },
+  {
+    "timestamp": "2026-02-12 19:04:32",
+    "model": "Hibrido",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "fake",
+    "confidence": 0.826
+  },
+  {
+    "timestamp": "2026-02-12 19:05:26",
+    "model": "Hibrido",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "fake",
+    "confidence": 0.826
+  },
+  {
+    "timestamp": "2026-02-12 19:07:14",
+    "model": "Hibrido",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "fake",
+    "confidence": 0.826
+  },
+  {
+    "timestamp": "2026-02-12 19:07:57",
+    "model": "Random Forest",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "real",
+    "confidence": 0.5406
+  },
+  {
+    "timestamp": "2026-02-12 19:08:05",
+    "model": "CNN",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "real",
+    "confidence": 0.9
+  },
+  {
+    "timestamp": "2026-02-12 19:08:13",
+    "model": "CNN",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "real",
+    "confidence": 0.9
+  },
+  {
+    "timestamp": "2026-02-12 19:08:42",
+    "model": "Naive Bayes",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "real",
+    "confidence": 0.6146
+  },
+  {
+    "timestamp": "2026-02-12 19:08:48",
+    "model": "Hibrido",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "fake",
+    "confidence": 0.826
+  },
+  {
+    "timestamp": "2026-02-12 19:08:54",
+    "model": "CNN",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "real",
+    "confidence": 0.9
+  },
+  {
+    "timestamp": "2026-02-12 19:11:44",
+    "model": "CNN",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "real",
+    "confidence": 0.9
+  },
+  {
+    "timestamp": "2026-02-12 19:11:54",
+    "model": "CNN",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "real",
+    "confidence": 0.9
+  },
+  {
+    "timestamp": "2026-02-12 19:20:21",
+    "model": "Hibrido",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "fake",
+    "confidence": 0.826
+  },
+  {
+    "timestamp": "2026-02-12 19:20:40",
+    "model": "Random Forest",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "real",
+    "confidence": 0.5406
+  },
+  {
+    "timestamp": "2026-02-12 19:20:46",
+    "model": "CNN",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "real",
+    "confidence": 0.9
+  },
+  {
+    "timestamp": "2026-02-12 19:20:59",
+    "model": "CNN",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "real",
+    "confidence": 0.9
+  },
+  {
+    "timestamp": "2026-02-12 19:21:08",
+    "model": "Naive Bayes",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "real",
+    "confidence": 0.6146
+  },
+  {
+    "timestamp": "2026-02-12 19:21:44",
+    "model": "Hibrido",
+    "text": "Gabriel y Sebastian Shemirani observaban con preocupación cómo su madre Kate ganaba mala fama durante la pandemia, y cómo finalmente fue destituida de su cargo de enfermera por promover desinformación...",
+    "prediction": "fake",
+    "confidence": 0.5752
+  },
+  {
+    "timestamp": "2026-02-12 19:22:01",
+    "model": "Random Forest",
+    "text": "Gabriel y Sebastian Shemirani observaban con preocupación cómo su madre Kate ganaba mala fama durante la pandemia, y cómo finalmente fue destituida de su cargo de enfermera por promover desinformación...",
+    "prediction": "real",
+    "confidence": 0.5282
+  },
+  {
+    "timestamp": "2026-02-12 19:22:06",
+    "model": "CNN",
+    "text": "Gabriel y Sebastian Shemirani observaban con preocupación cómo su madre Kate ganaba mala fama durante la pandemia, y cómo finalmente fue destituida de su cargo de enfermera por promover desinformación...",
+    "prediction": "fake",
+    "confidence": 0.809
+  },
+  {
+    "timestamp": "2026-02-12 19:22:24",
+    "model": "Naive Bayes",
+    "text": "Gabriel y Sebastian Shemirani observaban con preocupación cómo su madre Kate ganaba mala fama durante la pandemia, y cómo finalmente fue destituida de su cargo de enfermera por promover desinformación...",
+    "prediction": "real",
+    "confidence": 0.7182
+  },
+  {
+    "timestamp": "2026-02-12 19:23:31",
+    "model": "Hibrido",
+    "text": "Titular: Científicos descubren que el núcleo de la Luna es de cuarzo rosa y emite señales de radio\n\nCuerpo: Un estudio reciente publicado por el Instituto de Astrofísica de Reikiavik afirma que las fl...",
+    "prediction": "real",
+    "confidence": 0.5915
+  },
+  {
+    "timestamp": "2026-02-12 19:23:39",
+    "model": "Random Forest",
+    "text": "Titular: Científicos descubren que el núcleo de la Luna es de cuarzo rosa y emite señales de radio\n\nCuerpo: Un estudio reciente publicado por el Instituto de Astrofísica de Reikiavik afirma que las fl...",
+    "prediction": "real",
+    "confidence": 0.5628
+  },
+  {
+    "timestamp": "2026-02-12 19:23:43",
+    "model": "CNN",
+    "text": "Titular: Científicos descubren que el núcleo de la Luna es de cuarzo rosa y emite señales de radio\n\nCuerpo: Un estudio reciente publicado por el Instituto de Astrofísica de Reikiavik afirma que las fl...",
+    "prediction": "real",
+    "confidence": 0.719
+  },
+  {
+    "timestamp": "2026-02-12 19:23:50",
+    "model": "Naive Bayes",
+    "text": "Titular: Científicos descubren que el núcleo de la Luna es de cuarzo rosa y emite señales de radio\n\nCuerpo: Un estudio reciente publicado por el Instituto de Astrofísica de Reikiavik afirma que las fl...",
+    "prediction": "real",
+    "confidence": 0.6291
+  },
+  {
+    "timestamp": "2026-02-12 19:24:44",
+    "model": "Hibrido",
+    "text": "TITULO: ¡LO QUE LOS MEDIOS NO QUIEREN QUE SEPAS! CIENTÍFICOS ADVIERTEN SOBRE EL NUEVO COMPUESTO EN EL AGUA\n\nUn grupo de expertos independientes ha revelado recientemente un informe que está siendo sil...",
+    "prediction": "real",
+    "confidence": 0.6787
+  },
+  {
+    "timestamp": "2026-02-12 19:24:50",
+    "model": "Random Forest",
+    "text": "TITULO: ¡LO QUE LOS MEDIOS NO QUIEREN QUE SEPAS! CIENTÍFICOS ADVIERTEN SOBRE EL NUEVO COMPUESTO EN EL AGUA\n\nUn grupo de expertos independientes ha revelado recientemente un informe que está siendo sil...",
+    "prediction": "real",
+    "confidence": 0.5645
+  },
+  {
+    "timestamp": "2026-02-12 19:24:54",
+    "model": "CNN",
+    "text": "TITULO: ¡LO QUE LOS MEDIOS NO QUIEREN QUE SEPAS! CIENTÍFICOS ADVIERTEN SOBRE EL NUEVO COMPUESTO EN EL AGUA\n\nUn grupo de expertos independientes ha revelado recientemente un informe que está siendo sil...",
+    "prediction": "real",
+    "confidence": 0.8083
+  },
+  {
+    "timestamp": "2026-02-12 19:25:00",
+    "model": "Naive Bayes",
+    "text": "TITULO: ¡LO QUE LOS MEDIOS NO QUIEREN QUE SEPAS! CIENTÍFICOS ADVIERTEN SOBRE EL NUEVO COMPUESTO EN EL AGUA\n\nUn grupo de expertos independientes ha revelado recientemente un informe que está siendo sil...",
+    "prediction": "real",
+    "confidence": 0.7353
+  },
+  {
+    "timestamp": "2026-02-12 19:25:40",
+    "model": "Naive Bayes",
+    "text": "\"El partido iniciativo vers propone una alianza con eajpnv para las elecciones.\"",
+    "prediction": "fake",
+    "confidence": 0.9369
+  },
+  {
+    "timestamp": "2026-02-12 19:25:44",
+    "model": "Hibrido",
+    "text": "\"El partido iniciativo vers propone una alianza con eajpnv para las elecciones.\"",
+    "prediction": "real",
+    "confidence": 0.9093
+  },
+  {
+    "timestamp": "2026-02-12 19:25:51",
+    "model": "Random Forest",
+    "text": "\"El partido iniciativo vers propone una alianza con eajpnv para las elecciones.\"",
+    "prediction": "fake",
+    "confidence": 0.5857
+  },
+  {
+    "timestamp": "2026-02-12 19:25:55",
+    "model": "CNN",
+    "text": "\"El partido iniciativo vers propone una alianza con eajpnv para las elecciones.\"",
+    "prediction": "fake",
+    "confidence": 0.9994
+  },
+  {
+    "timestamp": "2026-02-12 19:26:07",
+    "model": "Naive Bayes",
+    "text": "\"El partido iniciativo vers propone una alianza con eajpnv para las elecciones.\"",
+    "prediction": "fake",
+    "confidence": 0.9369
+  },
+  {
+    "timestamp": "2026-02-12 19:26:18",
+    "model": "Naive Bayes",
+    "text": "Escándalo en vers per catalunya: se filtran documentos de equo.\"",
+    "prediction": "fake",
+    "confidence": 0.9974
+  },
+  {
+    "timestamp": "2026-02-12 19:26:24",
+    "model": "Hibrido",
+    "text": "Escándalo en vers per catalunya: se filtran documentos de equo.\"",
+    "prediction": "fake",
+    "confidence": 0.6388
+  },
+  {
+    "timestamp": "2026-02-12 19:26:35",
+    "model": "Random Forest",
+    "text": "Escándalo en vers per catalunya: se filtran documentos de equo.\"",
+    "prediction": "fake",
+    "confidence": 0.8225
+  },
+  {
+    "timestamp": "2026-02-12 19:26:45",
+    "model": "Hibrido",
+    "text": "Escándalo en vers per catalunya: se filtran documentos de equo.\"",
+    "prediction": "fake",
+    "confidence": 0.6388
+  },
+  {
+    "timestamp": "2026-02-12 19:26:53",
+    "model": "CNN",
+    "text": "Escándalo en vers per catalunya: se filtran documentos de equo.\"",
+    "prediction": "fake",
+    "confidence": 0.9999
+  },
+  {
+    "timestamp": "2026-02-12 19:26:59",
+    "model": "Naive Bayes",
+    "text": "Escándalo en vers per catalunya: se filtran documentos de equo.\"",
+    "prediction": "fake",
+    "confidence": 0.9974
+  },
+  {
+    "timestamp": "2026-02-12 19:27:19",
+    "model": "Hibrido",
+    "text": "Imágenes generadas por inteligencia artificial (IA) de Katy Perry y Rihanna en la Met Gala se volvieron virales en las redes sociales.\n\nNinguna de las cantantes estuvo presente en el evento de moda de...",
+    "prediction": "real",
+    "confidence": 0.7261
+  },
+  {
+    "timestamp": "2026-02-12 19:27:41",
+    "model": "Hibrido",
+    "text": "El rumor no es nada nuevo, pero es efectivo: los taiwaneses estaban siendo alimentados con carne de cerdo “envenenada” importada de Estados Unidos.\n\nA esta afirmación, que llevaba semanas circulando, ...",
+    "prediction": "real",
+    "confidence": 0.7516
+  },
+  {
+    "timestamp": "2026-02-12 19:27:47",
+    "model": "Random Forest",
+    "text": "El rumor no es nada nuevo, pero es efectivo: los taiwaneses estaban siendo alimentados con carne de cerdo “envenenada” importada de Estados Unidos.\n\nA esta afirmación, que llevaba semanas circulando, ...",
+    "prediction": "real",
+    "confidence": 0.5334
+  },
+  {
+    "timestamp": "2026-02-12 19:27:53",
+    "model": "CNN",
+    "text": "El rumor no es nada nuevo, pero es efectivo: los taiwaneses estaban siendo alimentados con carne de cerdo “envenenada” importada de Estados Unidos.\n\nA esta afirmación, que llevaba semanas circulando, ...",
+    "prediction": "real",
+    "confidence": 0.6942
+  },
+  {
+    "timestamp": "2026-02-12 19:28:02",
+    "model": "Naive Bayes",
+    "text": "El rumor no es nada nuevo, pero es efectivo: los taiwaneses estaban siendo alimentados con carne de cerdo “envenenada” importada de Estados Unidos.\n\nA esta afirmación, que llevaba semanas circulando, ...",
+    "prediction": "real",
+    "confidence": 0.517
+  },
+  {
+    "timestamp": "2026-02-12 19:28:19",
+    "model": "Naive Bayes",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "real",
+    "confidence": 0.6146
+  },
+  {
+    "timestamp": "2026-02-12 19:28:24",
+    "model": "Hibrido",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "fake",
+    "confidence": 0.826
+  },
+  {
+    "timestamp": "2026-02-12 19:29:00",
+    "model": "Hibrido",
+    "text": "Si normalmente el corrector ortográfico te juega malas pasadas cuando escribes un mensaje en WhatsApp, lo que puede hacer esta herramienta puede considerarse pura maldad.\n\nUtilizando ingeniería invers...",
+    "prediction": "real",
+    "confidence": 0.7968
+  },
+  {
+    "timestamp": "2026-02-12 19:29:05",
+    "model": "CNN",
+    "text": "Si normalmente el corrector ortográfico te juega malas pasadas cuando escribes un mensaje en WhatsApp, lo que puede hacer esta herramienta puede considerarse pura maldad.\n\nUtilizando ingeniería invers...",
+    "prediction": "real",
+    "confidence": 0.9353
+  },
+  {
+    "timestamp": "2026-02-12 19:29:12",
+    "model": "Random Forest",
+    "text": "Si normalmente el corrector ortográfico te juega malas pasadas cuando escribes un mensaje en WhatsApp, lo que puede hacer esta herramienta puede considerarse pura maldad.\n\nUtilizando ingeniería invers...",
+    "prediction": "real",
+    "confidence": 0.5752
+  },
+  {
+    "timestamp": "2026-02-12 19:29:17",
+    "model": "Naive Bayes",
+    "text": "Si normalmente el corrector ortográfico te juega malas pasadas cuando escribes un mensaje en WhatsApp, lo que puede hacer esta herramienta puede considerarse pura maldad.\n\nUtilizando ingeniería invers...",
+    "prediction": "real",
+    "confidence": 0.5912
+  },
+  {
+    "timestamp": "2026-02-12 19:29:29",
+    "model": "Naive Bayes",
+    "text": "\"Un discurso falaz y desolador de Netanyahu enciende la región.\"",
+    "prediction": "real",
+    "confidence": 0.5069
+  },
+  {
+    "timestamp": "2026-02-12 19:29:35",
+    "model": "Hibrido",
+    "text": "\"Un discurso falaz y desolador de Netanyahu enciende la región.\"",
+    "prediction": "real",
+    "confidence": 0.8544
+  },
+  {
+    "timestamp": "2026-02-12 19:29:41",
+    "model": "Random Forest",
+    "text": "\"Un discurso falaz y desolador de Netanyahu enciende la región.\"",
+    "prediction": "real",
+    "confidence": 0.5763
+  },
+  {
+    "timestamp": "2026-02-12 19:29:45",
+    "model": "CNN",
+    "text": "\"Un discurso falaz y desolador de Netanyahu enciende la región.\"",
+    "prediction": "real",
+    "confidence": 0.6084
+  },
+  {
+    "timestamp": "2026-02-12 19:29:58",
+    "model": "CNN",
+    "text": "\"El lider del iniciativa vers ha confirmado su dimisión hoy.\"",
+    "prediction": "fake",
+    "confidence": 0.6991
+  },
+  {
+    "timestamp": "2026-02-12 19:30:03",
+    "model": "Hibrido",
+    "text": "\"El lider del iniciativa vers ha confirmado su dimisión hoy.\"",
+    "prediction": "real",
+    "confidence": 0.5998
+  },
+  {
+    "timestamp": "2026-02-12 19:30:10",
+    "model": "Random Forest",
+    "text": "\"El lider del iniciativa vers ha confirmado su dimisión hoy.\"",
+    "prediction": "fake",
+    "confidence": 0.533
+  },
+  {
+    "timestamp": "2026-02-12 19:30:17",
+    "model": "Naive Bayes",
+    "text": "\"El lider del iniciativa vers ha confirmado su dimisión hoy.\"",
+    "prediction": "fake",
+    "confidence": 0.9276
+  },
+  {
+    "timestamp": "2026-02-12 19:30:44",
+    "model": "Naive Bayes",
+    "text": "El mundo esta en panico por el comunicado de la nasa sobre alienigenas",
+    "prediction": "fake",
+    "confidence": 0.5017
+  },
+  {
+    "timestamp": "2026-02-12 19:30:49",
+    "model": "Hibrido",
+    "text": "El mundo esta en panico por el comunicado de la nasa sobre alienigenas",
+    "prediction": "real",
+    "confidence": 0.7933
+  },
+  {
+    "timestamp": "2026-02-12 19:30:54",
+    "model": "Random Forest",
+    "text": "El mundo esta en panico por el comunicado de la nasa sobre alienigenas",
+    "prediction": "real",
+    "confidence": 0.5755
+  },
+  {
+    "timestamp": "2026-02-12 19:30:58",
+    "model": "CNN",
+    "text": "El mundo esta en panico por el comunicado de la nasa sobre alienigenas",
+    "prediction": "real",
+    "confidence": 0.7294
+  },
+  {
+    "timestamp": "2026-02-12 19:31:14",
+    "model": "CNN",
+    "text": "\"Política de boxear con la verdad resulta en negacion total.\"",
+    "prediction": "real",
+    "confidence": 0.7707
+  },
+  {
+    "timestamp": "2026-02-12 19:31:19",
+    "model": "Hibrido",
+    "text": "\"Política de boxear con la verdad resulta en negacion total.\"",
+    "prediction": "real",
+    "confidence": 0.869
+  },
+  {
+    "timestamp": "2026-02-12 19:31:24",
+    "model": "Random Forest",
+    "text": "\"Política de boxear con la verdad resulta en negacion total.\"",
+    "prediction": "real",
+    "confidence": 0.5674
+  },
+  {
+    "timestamp": "2026-02-12 19:31:40",
+    "model": "Hibrido",
+    "text": "\"Política de boxear con la verdad resulta en negacion total.\"",
+    "prediction": "real",
+    "confidence": 0.869
+  },
+  {
+    "timestamp": "2026-02-12 19:31:45",
+    "model": "CNN",
+    "text": "\"Política de boxear con la verdad resulta en negacion total.\"",
+    "prediction": "real",
+    "confidence": 0.7707
+  },
+  {
+    "timestamp": "2026-02-12 19:31:50",
+    "model": "Naive Bayes",
+    "text": "\"Política de boxear con la verdad resulta en negacion total.\"",
+    "prediction": "real",
+    "confidence": 0.5554
+  },
+  {
+    "timestamp": "2026-02-12 19:32:41",
+    "model": "Hibrido",
+    "text": "monica garcia ha contestado a la carta de grandemarlaska aludiendo que la actuacion de la policia autonomica ante los cortes en la ap <NUM>  fue similar a la que hubo durante el periodo en el que las ...",
+    "prediction": "real",
+    "confidence": 0.8428
+  },
+  {
+    "timestamp": "2026-02-12 19:32:48",
+    "model": "Random Forest",
+    "text": "monica garcia ha contestado a la carta de grandemarlaska aludiendo que la actuacion de la policia autonomica ante los cortes en la ap <NUM>  fue similar a la que hubo durante el periodo en el que las ...",
+    "prediction": "fake",
+    "confidence": 0.6606
+  },
+  {
+    "timestamp": "2026-02-12 19:32:51",
+    "model": "CNN",
+    "text": "monica garcia ha contestado a la carta de grandemarlaska aludiendo que la actuacion de la policia autonomica ante los cortes en la ap <NUM>  fue similar a la que hubo durante el periodo en el que las ...",
+    "prediction": "fake",
+    "confidence": 0.7731
+  },
+  {
+    "timestamp": "2026-02-12 19:32:57",
+    "model": "Naive Bayes",
+    "text": "monica garcia ha contestado a la carta de grandemarlaska aludiendo que la actuacion de la policia autonomica ante los cortes en la ap <NUM>  fue similar a la que hubo durante el periodo en el que las ...",
+    "prediction": "fake",
+    "confidence": 0.5474
+  },
+  {
+    "timestamp": "2026-02-12 19:33:10",
+    "model": "Hibrido",
+    "text": "el rechazo frontal del nueva canarias a legalizar tambien el uso recreativo que proponen el resto de formaciones de la izquierda deja todo en manos de la subcomision que abordara las experiencias de o...",
+    "prediction": "real",
+    "confidence": 0.6713
+  },
+  {
+    "timestamp": "2026-02-12 19:33:17",
+    "model": "Random Forest",
+    "text": "el rechazo frontal del nueva canarias a legalizar tambien el uso recreativo que proponen el resto de formaciones de la izquierda deja todo en manos de la subcomision que abordara las experiencias de o...",
+    "prediction": "fake",
+    "confidence": 0.5318
+  },
+  {
+    "timestamp": "2026-02-12 19:33:23",
+    "model": "CNN",
+    "text": "el rechazo frontal del nueva canarias a legalizar tambien el uso recreativo que proponen el resto de formaciones de la izquierda deja todo en manos de la subcomision que abordara las experiencias de o...",
+    "prediction": "fake",
+    "confidence": 0.9996
+  },
+  {
+    "timestamp": "2026-02-12 19:33:32",
+    "model": "Naive Bayes",
+    "text": "el rechazo frontal del nueva canarias a legalizar tambien el uso recreativo que proponen el resto de formaciones de la izquierda deja todo en manos de la subcomision que abordara las experiencias de o...",
+    "prediction": "fake",
+    "confidence": 0.6058
+  },
+  {
+    "timestamp": "2026-02-12 19:33:43",
+    "model": "Hibrido",
+    "text": "el rechazo frontal del nueva canarias a legalizar tambien el uso recreativo que proponen el resto de formaciones de la izquierda deja todo en manos de la subcomision que abordara las experiencias de o...",
+    "prediction": "real",
+    "confidence": 0.6713
+  },
+  {
+    "timestamp": "2026-02-12 19:33:50",
+    "model": "Random Forest",
+    "text": "el rechazo frontal del nueva canarias a legalizar tambien el uso recreativo que proponen el resto de formaciones de la izquierda deja todo en manos de la subcomision que abordara las experiencias de o...",
+    "prediction": "fake",
+    "confidence": 0.5318
+  },
+  {
+    "timestamp": "2026-02-12 19:33:56",
+    "model": "CNN",
+    "text": "el rechazo frontal del nueva canarias a legalizar tambien el uso recreativo que proponen el resto de formaciones de la izquierda deja todo en manos de la subcomision que abordara las experiencias de o...",
+    "prediction": "fake",
+    "confidence": 0.9996
+  },
+  {
+    "timestamp": "2026-02-12 19:34:03",
+    "model": "Naive Bayes",
+    "text": "el rechazo frontal del nueva canarias a legalizar tambien el uso recreativo que proponen el resto de formaciones de la izquierda deja todo en manos de la subcomision que abordara las experiencias de o...",
+    "prediction": "fake",
+    "confidence": 0.6058
+  },
+  {
+    "timestamp": "2026-02-12 19:34:17",
+    "model": "Hibrido",
+    "text": "la numero dos de equo en el ayuntamiento de barcelona afirma que es el bng el que esta liderando los ambitos estrategicos de la accion del ayuntamiento ve estancada la agenda de transformacion impulsa...",
+    "prediction": "real",
+    "confidence": 0.8388
+  },
+  {
+    "timestamp": "2026-02-12 19:34:27",
+    "model": "Hibrido",
+    "text": "le sigue la candidatura de guanyem badalonapsoe liderada por la exalcaldesa leonor de borbon y oriol llado psoe que se erige como segunda fuerza con  <NUM>  ediles",
+    "prediction": "real",
+    "confidence": 0.9015
+  },
+  {
+    "timestamp": "2026-02-12 19:34:36",
+    "model": "Hibrido",
+    "text": "eajpnv presiona a gandia arturo torro para que adelante las elecciones en la autonomia mas poblada y de mayor presupuesto",
+    "prediction": "real",
+    "confidence": 0.7188
+  },
+  {
+    "timestamp": "2026-02-12 19:34:48",
+    "model": "Hibrido",
+    "text": "la diputada de pp jesus dominguez defendio la ley integral lgtbi que propone su partido con una camiseta con el eslogan solo tu sabes quien eres la prenda es obra del fotografo gabriel rufian prato y ...",
+    "prediction": "real",
+    "confidence": 0.7017
+  },
+  {
+    "timestamp": "2026-02-12 19:34:58",
+    "model": "Hibrido",
+    "text": "en redes se pusieron mas de  <NUM>  tuits cuando se inicio el caso pero tras su archivo ni los medios dieron cobertura a la apertura de la causa y las cuentas de twitter y politicos que lo usaron para...",
+    "prediction": "real",
+    "confidence": 0.7922
+  },
+  {
+    "timestamp": "2026-02-12 19:35:09",
+    "model": "Hibrido",
+    "text": "los consejeros de hacienda francisco javier sanchez gil iniciativa vers per catalunya y economia rogelio velasco equo firman con el portavoz de coalicion canaria alejandro hernandez el acuerdo de pres...",
+    "prediction": "fake",
+    "confidence": 0.6335
+  },
+  {
+    "timestamp": "2026-02-12 19:35:23",
+    "model": "Random Forest",
+    "text": "los consejeros de hacienda francisco javier sanchez gil iniciativa vers per catalunya y economia rogelio velasco equo firman con el portavoz de coalicion canaria alejandro hernandez el acuerdo de pres...",
+    "prediction": "fake",
+    "confidence": 0.9091
+  },
+  {
+    "timestamp": "2026-02-12 19:35:31",
+    "model": "CNN",
+    "text": "los consejeros de hacienda francisco javier sanchez gil iniciativa vers per catalunya y economia rogelio velasco equo firman con el portavoz de coalicion canaria alejandro hernandez el acuerdo de pres...",
+    "prediction": "fake",
+    "confidence": 0.9991
+  },
+  {
+    "timestamp": "2026-02-12 19:36:08",
+    "model": "Hibrido",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "fake",
+    "confidence": 0.826
+  },
+  {
+    "timestamp": "2026-02-12 19:38:56",
+    "model": "Hibrido",
+    "text": "La vacuna contra la polio que se administrará en Gaza es segura, afirmó este martes el portavoz de la ONU, respondiendo a las noticias falsas que sostienen lo contrario y que han pululado en algunas p...",
+    "prediction": "fake",
+    "confidence": 0.542
+  },
+  {
+    "timestamp": "2026-02-12 19:39:15",
+    "model": "Hibrido",
+    "text": "En junio de este año, las Naciones Unidas publicaron un informe acerca de la integridad de la información en plataformas digitales, cuyo autor asegura que aunque las tecnologías digitales son una herr...",
+    "prediction": "real",
+    "confidence": 0.5238
+  },
+  {
+    "timestamp": "2026-02-12 19:39:25",
+    "model": "Random Forest",
+    "text": "En junio de este año, las Naciones Unidas publicaron un informe acerca de la integridad de la información en plataformas digitales, cuyo autor asegura que aunque las tecnologías digitales son una herr...",
+    "prediction": "real",
+    "confidence": 0.5622
+  },
+  {
+    "timestamp": "2026-02-12 19:39:32",
+    "model": "CNN",
+    "text": "En junio de este año, las Naciones Unidas publicaron un informe acerca de la integridad de la información en plataformas digitales, cuyo autor asegura que aunque las tecnologías digitales son una herr...",
+    "prediction": "real",
+    "confidence": 0.607
+  },
+  {
+    "timestamp": "2026-02-12 19:39:38",
+    "model": "Naive Bayes",
+    "text": "En junio de este año, las Naciones Unidas publicaron un informe acerca de la integridad de la información en plataformas digitales, cuyo autor asegura que aunque las tecnologías digitales son una herr...",
+    "prediction": "real",
+    "confidence": 0.7625
+  },
+  {
+    "timestamp": "2026-02-12 19:39:55",
+    "model": "Hibrido",
+    "text": "La ONU ha lanzado un nuevo curso en línea que proporciona a los usuarios de la plataforma wikiHow consejos vitales sobre cómo mantenerse a salvo de la peligrosa desinformación, que cada vez puebla más...",
+    "prediction": "fake",
+    "confidence": 0.5765
+  },
+  {
+    "timestamp": "2026-02-12 20:00:24",
+    "model": "Hibrido",
+    "text": "Cuando llegué a Venezuela hace diez meses, el acceso a los servicios y productos básicos, como alimentos y medicinas, ya era un desafío. La paciencia y el buen humor eran la fórmula para superar las l...",
+    "prediction": "real",
+    "confidence": 0.5094
+  },
+  {
+    "timestamp": "2026-02-12 20:00:32",
+    "model": "Random Forest",
+    "text": "Cuando llegué a Venezuela hace diez meses, el acceso a los servicios y productos básicos, como alimentos y medicinas, ya era un desafío. La paciencia y el buen humor eran la fórmula para superar las l...",
+    "prediction": "real",
+    "confidence": 0.5578
+  },
+  {
+    "timestamp": "2026-02-12 20:00:36",
+    "model": "CNN",
+    "text": "Cuando llegué a Venezuela hace diez meses, el acceso a los servicios y productos básicos, como alimentos y medicinas, ya era un desafío. La paciencia y el buen humor eran la fórmula para superar las l...",
+    "prediction": "real",
+    "confidence": 0.7076
+  },
+  {
+    "timestamp": "2026-02-12 20:00:43",
+    "model": "Naive Bayes",
+    "text": "Cuando llegué a Venezuela hace diez meses, el acceso a los servicios y productos básicos, como alimentos y medicinas, ya era un desafío. La paciencia y el buen humor eran la fórmula para superar las l...",
+    "prediction": "real",
+    "confidence": 0.815
+  },
+  {
+    "timestamp": "2026-02-12 20:01:02",
+    "model": "Hibrido",
+    "text": "Las Naciones Unidas piden a la gente que tomen la misma distancia de los rumores y las noticias falsa en las redes sociales que la que adoptan físicamente para no contagiarse del virus.\n\nEse es el últ...",
+    "prediction": "real",
+    "confidence": 0.9748
+  },
+  {
+    "timestamp": "2026-02-12 20:01:08",
+    "model": "Random Forest",
+    "text": "Las Naciones Unidas piden a la gente que tomen la misma distancia de los rumores y las noticias falsa en las redes sociales que la que adoptan físicamente para no contagiarse del virus.\n\nEse es el últ...",
+    "prediction": "real",
+    "confidence": 0.5574
+  },
+  {
+    "timestamp": "2026-02-12 20:01:14",
+    "model": "CNN",
+    "text": "Las Naciones Unidas piden a la gente que tomen la misma distancia de los rumores y las noticias falsa en las redes sociales que la que adoptan físicamente para no contagiarse del virus.\n\nEse es el últ...",
+    "prediction": "real",
+    "confidence": 0.9729
+  },
+  {
+    "timestamp": "2026-02-12 20:01:45",
+    "model": "CNN",
+    "text": "La Alta Comisionada de las Naciones Unidas para los Derechos Humanos ha hecho este miércoles un duro balance de una pandemia que ha expuesto todas nuestras debilidades como sociedad. Al acabar de most...",
+    "prediction": "real",
+    "confidence": 0.691
+  },
+  {
+    "timestamp": "2026-02-12 20:01:52",
+    "model": "Random Forest",
+    "text": "La Alta Comisionada de las Naciones Unidas para los Derechos Humanos ha hecho este miércoles un duro balance de una pandemia que ha expuesto todas nuestras debilidades como sociedad. Al acabar de most...",
+    "prediction": "real",
+    "confidence": 0.586
+  },
+  {
+    "timestamp": "2026-02-12 20:01:58",
+    "model": "Hibrido",
+    "text": "La Alta Comisionada de las Naciones Unidas para los Derechos Humanos ha hecho este miércoles un duro balance de una pandemia que ha expuesto todas nuestras debilidades como sociedad. Al acabar de most...",
+    "prediction": "real",
+    "confidence": 0.772
+  },
+  {
+    "timestamp": "2026-02-12 20:02:13",
+    "model": "Hibrido",
+    "text": "“En el Día Mundial de la Libertad de Prensa, ponemos el foco en la labor fundamental de los periodistas y otros trabajadores de los medios de comunicación que buscan la transparencia y la rendición de...",
+    "prediction": "real",
+    "confidence": 0.5703
+  },
+  {
+    "timestamp": "2026-02-12 20:02:27",
+    "model": "Hibrido",
+    "text": "La ONU ha lanzado un nuevo curso en línea que proporciona a los usuarios de la plataforma wikiHow consejos vitales sobre cómo mantenerse a salvo de la peligrosa desinformación, que cada vez puebla más...",
+    "prediction": "fake",
+    "confidence": 0.5765
+  },
+  {
+    "timestamp": "2026-02-12 20:02:36",
+    "model": "Random Forest",
+    "text": "La ONU ha lanzado un nuevo curso en línea que proporciona a los usuarios de la plataforma wikiHow consejos vitales sobre cómo mantenerse a salvo de la peligrosa desinformación, que cada vez puebla más...",
+    "prediction": "real",
+    "confidence": 0.524
+  },
+  {
+    "timestamp": "2026-02-12 20:02:40",
+    "model": "CNN",
+    "text": "La ONU ha lanzado un nuevo curso en línea que proporciona a los usuarios de la plataforma wikiHow consejos vitales sobre cómo mantenerse a salvo de la peligrosa desinformación, que cada vez puebla más...",
+    "prediction": "real",
+    "confidence": 0.6391
+  },
+  {
+    "timestamp": "2026-02-12 20:02:44",
+    "model": "CNN",
+    "text": "La ONU ha lanzado un nuevo curso en línea que proporciona a los usuarios de la plataforma wikiHow consejos vitales sobre cómo mantenerse a salvo de la peligrosa desinformación, que cada vez puebla más...",
+    "prediction": "real",
+    "confidence": 0.6391
+  },
+  {
+    "timestamp": "2026-02-12 20:02:50",
+    "model": "Naive Bayes",
+    "text": "La ONU ha lanzado un nuevo curso en línea que proporciona a los usuarios de la plataforma wikiHow consejos vitales sobre cómo mantenerse a salvo de la peligrosa desinformación, que cada vez puebla más...",
+    "prediction": "real",
+    "confidence": 0.621
+  },
+  {
+    "timestamp": "2026-02-12 20:03:07",
+    "model": "Hibrido",
+    "text": "En junio de este año, las Naciones Unidas publicaron un informe acerca de la integridad de la información en plataformas digitales, cuyo autor asegura que aunque las tecnologías digitales son una herr...",
+    "prediction": "real",
+    "confidence": 0.5238
+  },
+  {
+    "timestamp": "2026-02-12 20:03:14",
+    "model": "Random Forest",
+    "text": "En junio de este año, las Naciones Unidas publicaron un informe acerca de la integridad de la información en plataformas digitales, cuyo autor asegura que aunque las tecnologías digitales son una herr...",
+    "prediction": "real",
+    "confidence": 0.5622
+  },
+  {
+    "timestamp": "2026-02-12 20:03:18",
+    "model": "CNN",
+    "text": "En junio de este año, las Naciones Unidas publicaron un informe acerca de la integridad de la información en plataformas digitales, cuyo autor asegura que aunque las tecnologías digitales son una herr...",
+    "prediction": "real",
+    "confidence": 0.607
+  },
+  {
+    "timestamp": "2026-02-12 20:03:26",
+    "model": "Naive Bayes",
+    "text": "En junio de este año, las Naciones Unidas publicaron un informe acerca de la integridad de la información en plataformas digitales, cuyo autor asegura que aunque las tecnologías digitales son una herr...",
+    "prediction": "real",
+    "confidence": 0.7625
+  },
+  {
+    "timestamp": "2026-02-12 20:03:48",
+    "model": "Hibrido",
+    "text": "Con el objetivo de contrapesar las percepciones equivocadas y brindar información precisa y confiable sobre el coronavirus y el COVID-19, las Naciones Unidas lanzaron este jueves la iniciativa mundial...",
+    "prediction": "real",
+    "confidence": 0.6526
+  },
+  {
+    "timestamp": "2026-02-12 20:03:56",
+    "model": "Random Forest",
+    "text": "Con el objetivo de contrapesar las percepciones equivocadas y brindar información precisa y confiable sobre el coronavirus y el COVID-19, las Naciones Unidas lanzaron este jueves la iniciativa mundial...",
+    "prediction": "real",
+    "confidence": 0.5219
+  },
+  {
+    "timestamp": "2026-02-12 20:04:02",
+    "model": "CNN",
+    "text": "Con el objetivo de contrapesar las percepciones equivocadas y brindar información precisa y confiable sobre el coronavirus y el COVID-19, las Naciones Unidas lanzaron este jueves la iniciativa mundial...",
+    "prediction": "real",
+    "confidence": 0.8934
+  },
+  {
+    "timestamp": "2026-02-12 20:04:08",
+    "model": "Naive Bayes",
+    "text": "Con el objetivo de contrapesar las percepciones equivocadas y brindar información precisa y confiable sobre el coronavirus y el COVID-19, las Naciones Unidas lanzaron este jueves la iniciativa mundial...",
+    "prediction": "real",
+    "confidence": 0.6388
+  },
+  {
+    "timestamp": "2026-02-12 20:04:38",
+    "model": "Hibrido",
+    "text": "Enero de 1835. El New York Sun se inventa que un astrónomo inglés ha descubierto vida en la Luna a través de un telescopio. El hallazgo incluye unicornios y pájaros humanos. Para cuando la verdad sali...",
+    "prediction": "real",
+    "confidence": 0.991
+  },
+  {
+    "timestamp": "2026-02-12 20:04:45",
+    "model": "Random Forest",
+    "text": "Enero de 1835. El New York Sun se inventa que un astrónomo inglés ha descubierto vida en la Luna a través de un telescopio. El hallazgo incluye unicornios y pájaros humanos. Para cuando la verdad sali...",
+    "prediction": "real",
+    "confidence": 0.5953
+  },
+  {
+    "timestamp": "2026-02-12 20:04:49",
+    "model": "CNN",
+    "text": "Enero de 1835. El New York Sun se inventa que un astrónomo inglés ha descubierto vida en la Luna a través de un telescopio. El hallazgo incluye unicornios y pájaros humanos. Para cuando la verdad sali...",
+    "prediction": "real",
+    "confidence": 0.8904
+  },
+  {
+    "timestamp": "2026-02-12 20:04:55",
+    "model": "Naive Bayes",
+    "text": "Enero de 1835. El New York Sun se inventa que un astrónomo inglés ha descubierto vida en la Luna a través de un telescopio. El hallazgo incluye unicornios y pájaros humanos. Para cuando la verdad sali...",
+    "prediction": "real",
+    "confidence": 0.5095
+  },
+  {
+    "timestamp": "2026-02-12 20:05:28",
+    "model": "Hibrido",
+    "text": "Hacer gárgaras con agua y sal no elimina el coronavirus (Covid-19)\nPor Pablo Medina Uribe\nEl coronavirus SARS-CoV-2 no se \"queda cuatro días\" en la garganta y hacer gárgaras con agua y sal no es un mé...",
+    "prediction": "fake",
+    "confidence": 0.5186
+  },
+  {
+    "timestamp": "2026-02-12 20:05:36",
+    "model": "Random Forest",
+    "text": "Hacer gárgaras con agua y sal no elimina el coronavirus (Covid-19)\nPor Pablo Medina Uribe\nEl coronavirus SARS-CoV-2 no se \"queda cuatro días\" en la garganta y hacer gárgaras con agua y sal no es un mé...",
+    "prediction": "real",
+    "confidence": 0.5575
+  },
+  {
+    "timestamp": "2026-02-12 20:05:40",
+    "model": "CNN",
+    "text": "Hacer gárgaras con agua y sal no elimina el coronavirus (Covid-19)\nPor Pablo Medina Uribe\nEl coronavirus SARS-CoV-2 no se \"queda cuatro días\" en la garganta y hacer gárgaras con agua y sal no es un mé...",
+    "prediction": "fake",
+    "confidence": 0.7007
+  },
+  {
+    "timestamp": "2026-02-12 20:06:04",
+    "model": "CNN",
+    "text": "En Santa Marta no está anclado este buque proveniente de China\nPor Ana María Saavedra\nEl Yuan Shun Hai, de bandera panameña, estuvo en febrero en Barranquilla, proveniente de Estados Unidos. No ha par...",
+    "prediction": "real",
+    "confidence": 0.6026
+  },
+  {
+    "timestamp": "2026-02-12 20:06:25",
+    "model": "Hibrido",
+    "text": "En Santa Marta no está anclado este buque proveniente de China\nPor Ana María Saavedra\nEl Yuan Shun Hai, de bandera panameña, estuvo en febrero en Barranquilla, proveniente de Estados Unidos. No ha par...",
+    "prediction": "fake",
+    "confidence": 0.7309
+  },
+  {
+    "timestamp": "2026-02-12 20:06:33",
+    "model": "Random Forest",
+    "text": "En Santa Marta no está anclado este buque proveniente de China\nPor Ana María Saavedra\nEl Yuan Shun Hai, de bandera panameña, estuvo en febrero en Barranquilla, proveniente de Estados Unidos. No ha par...",
+    "prediction": "real",
+    "confidence": 0.6051
+  },
+  {
+    "timestamp": "2026-02-12 20:06:39",
+    "model": "Naive Bayes",
+    "text": "En Santa Marta no está anclado este buque proveniente de China\nPor Ana María Saavedra\nEl Yuan Shun Hai, de bandera panameña, estuvo en febrero en Barranquilla, proveniente de Estados Unidos. No ha par...",
+    "prediction": "real",
+    "confidence": 0.7611
+  },
+  {
+    "timestamp": "2026-02-12 20:07:01",
+    "model": "Hibrido",
+    "text": "No hay evidencia de que ‘el coronavirus venga de un laboratorio biológico de Wuhan’\nPor Ana María Saavedra\nEsta información, que un youtuber mexicano publicó basado en artículos falsos difundidos en E...",
+    "prediction": "real",
+    "confidence": 0.7283
+  },
+  {
+    "timestamp": "2026-02-12 20:07:08",
+    "model": "Random Forest",
+    "text": "No hay evidencia de que ‘el coronavirus venga de un laboratorio biológico de Wuhan’\nPor Ana María Saavedra\nEsta información, que un youtuber mexicano publicó basado en artículos falsos difundidos en E...",
+    "prediction": "real",
+    "confidence": 0.5596
+  },
+  {
+    "timestamp": "2026-02-12 20:07:12",
+    "model": "CNN",
+    "text": "No hay evidencia de que ‘el coronavirus venga de un laboratorio biológico de Wuhan’\nPor Ana María Saavedra\nEsta información, que un youtuber mexicano publicó basado en artículos falsos difundidos en E...",
+    "prediction": "fake",
+    "confidence": 0.5442
+  },
+  {
+    "timestamp": "2026-02-12 20:07:19",
+    "model": "Naive Bayes",
+    "text": "No hay evidencia de que ‘el coronavirus venga de un laboratorio biológico de Wuhan’\nPor Ana María Saavedra\nEsta información, que un youtuber mexicano publicó basado en artículos falsos difundidos en E...",
+    "prediction": "real",
+    "confidence": 0.6947
+  },
+  {
+    "timestamp": "2026-02-12 20:07:38",
+    "model": "Hibrido",
+    "text": "El audio falso sobre cuarentena en Cali\nPor Ana María Saavedra\nAl momento de esta publicación, no se había decretado cuarentena, ni cierre del comercio en la capital vallecaucana, como lo aseguraba un...",
+    "prediction": "fake",
+    "confidence": 0.5795
+  },
+  {
+    "timestamp": "2026-02-12 20:07:51",
+    "model": "CNN",
+    "text": "El audio falso sobre cuarentena en Cali\nPor Ana María Saavedra\nAl momento de esta publicación, no se había decretado cuarentena, ni cierre del comercio en la capital vallecaucana, como lo aseguraba un...",
+    "prediction": "fake",
+    "confidence": 0.6681
+  },
+  {
+    "timestamp": "2026-02-12 20:07:58",
+    "model": "Naive Bayes",
+    "text": "El audio falso sobre cuarentena en Cali\nPor Ana María Saavedra\nAl momento de esta publicación, no se había decretado cuarentena, ni cierre del comercio en la capital vallecaucana, como lo aseguraba un...",
+    "prediction": "real",
+    "confidence": 0.839
+  },
+  {
+    "timestamp": "2026-02-12 20:08:28",
+    "model": "Hibrido",
+    "text": "Los rastros de los asesinatos: el hallazgo de los investigadores\nEl ataque armado generó momentos de pánico e incertidumbre en el barrio La Cabrera, en el norte de Bogotá, frente a un gimnasio ubicado...",
+    "prediction": "fake",
+    "confidence": 0.5263
+  },
+  {
+    "timestamp": "2026-02-12 20:08:55",
+    "model": "Hibrido",
+    "text": "El presidente de Estados Unidos, Donald Trump, derogó un dictamen de la era Obama basado en un hallazgo científico clave que sustenta todas las medidas federales para reducir los gases que contribuyen...",
+    "prediction": "real",
+    "confidence": 0.511
+  },
+  {
+    "timestamp": "2026-02-12 20:09:02",
+    "model": "Random Forest",
+    "text": "El presidente de Estados Unidos, Donald Trump, derogó un dictamen de la era Obama basado en un hallazgo científico clave que sustenta todas las medidas federales para reducir los gases que contribuyen...",
+    "prediction": "real",
+    "confidence": 0.5701
+  },
+  {
+    "timestamp": "2026-02-12 20:09:06",
+    "model": "CNN",
+    "text": "El presidente de Estados Unidos, Donald Trump, derogó un dictamen de la era Obama basado en un hallazgo científico clave que sustenta todas las medidas federales para reducir los gases que contribuyen...",
+    "prediction": "real",
+    "confidence": 0.9409
+  },
+  {
+    "timestamp": "2026-02-12 20:09:12",
+    "model": "Naive Bayes",
+    "text": "El presidente de Estados Unidos, Donald Trump, derogó un dictamen de la era Obama basado en un hallazgo científico clave que sustenta todas las medidas federales para reducir los gases que contribuyen...",
+    "prediction": "real",
+    "confidence": 0.643
+  },
+  {
+    "timestamp": "2026-02-12 20:09:28",
+    "model": "Hibrido",
+    "text": "Trabajar de lunes a sábado ha sido para varias generaciones de mexicanos lo habitual.\n\nLas leyes laborales que rigen en el país tienen más de un siglo, ya que fueron elaboradas tras la Revolución Mexi...",
+    "prediction": "real",
+    "confidence": 0.7201
+  },
+  {
+    "timestamp": "2026-02-12 20:09:34",
+    "model": "Random Forest",
+    "text": "Trabajar de lunes a sábado ha sido para varias generaciones de mexicanos lo habitual.\n\nLas leyes laborales que rigen en el país tienen más de un siglo, ya que fueron elaboradas tras la Revolución Mexi...",
+    "prediction": "real",
+    "confidence": 0.5572
+  },
+  {
+    "timestamp": "2026-02-12 20:09:39",
+    "model": "CNN",
+    "text": "Trabajar de lunes a sábado ha sido para varias generaciones de mexicanos lo habitual.\n\nLas leyes laborales que rigen en el país tienen más de un siglo, ya que fueron elaboradas tras la Revolución Mexi...",
+    "prediction": "real",
+    "confidence": 0.948
+  },
+  {
+    "timestamp": "2026-02-12 20:09:45",
+    "model": "Naive Bayes",
+    "text": "Trabajar de lunes a sábado ha sido para varias generaciones de mexicanos lo habitual.\n\nLas leyes laborales que rigen en el país tienen más de un siglo, ya que fueron elaboradas tras la Revolución Mexi...",
+    "prediction": "real",
+    "confidence": 0.6456
+  },
+  {
+    "timestamp": "2026-02-12 20:10:23",
+    "model": "Hibrido",
+    "text": "Las autoridades identificaron a la joven de 18 años sospechosa por el tiroteo que causó la muerte de ocho personas y decenas de heridos en la provincia canadiense de Columbia Británica.\n\nSu nombre es ...",
+    "prediction": "fake",
+    "confidence": 0.903
+  },
+  {
+    "timestamp": "2026-02-12 20:10:30",
+    "model": "Random Forest",
+    "text": "Las autoridades identificaron a la joven de 18 años sospechosa por el tiroteo que causó la muerte de ocho personas y decenas de heridos en la provincia canadiense de Columbia Británica.\n\nSu nombre es ...",
+    "prediction": "real",
+    "confidence": 0.6459
+  },
+  {
+    "timestamp": "2026-02-12 20:10:34",
+    "model": "CNN",
+    "text": "Las autoridades identificaron a la joven de 18 años sospechosa por el tiroteo que causó la muerte de ocho personas y decenas de heridos en la provincia canadiense de Columbia Británica.\n\nSu nombre es ...",
+    "prediction": "real",
+    "confidence": 0.9703
+  },
+  {
+    "timestamp": "2026-02-12 20:10:40",
+    "model": "Naive Bayes",
+    "text": "Las autoridades identificaron a la joven de 18 años sospechosa por el tiroteo que causó la muerte de ocho personas y decenas de heridos en la provincia canadiense de Columbia Británica.\n\nSu nombre es ...",
+    "prediction": "real",
+    "confidence": 0.8438
+  },
+  {
+    "timestamp": "2026-02-12 20:11:26",
+    "model": "Hibrido",
+    "text": "El líder norcoreano Kim Jong-un parece estar tomando medidas para consolidar la posición de su hija Kim Ju-ae como sucesora, informó este jueves la Agencia Nacional de Inteligencia de Corea del Sur (N...",
+    "prediction": "fake",
+    "confidence": 0.5071
+  },
+  {
+    "timestamp": "2026-02-12 20:11:34",
+    "model": "Random Forest",
+    "text": "El líder norcoreano Kim Jong-un parece estar tomando medidas para consolidar la posición de su hija Kim Ju-ae como sucesora, informó este jueves la Agencia Nacional de Inteligencia de Corea del Sur (N...",
+    "prediction": "real",
+    "confidence": 0.5712
+  },
+  {
+    "timestamp": "2026-02-12 20:11:38",
+    "model": "CNN",
+    "text": "El líder norcoreano Kim Jong-un parece estar tomando medidas para consolidar la posición de su hija Kim Ju-ae como sucesora, informó este jueves la Agencia Nacional de Inteligencia de Corea del Sur (N...",
+    "prediction": "fake",
+    "confidence": 0.5238
+  },
+  {
+    "timestamp": "2026-02-12 20:11:43",
+    "model": "Naive Bayes",
+    "text": "El líder norcoreano Kim Jong-un parece estar tomando medidas para consolidar la posición de su hija Kim Ju-ae como sucesora, informó este jueves la Agencia Nacional de Inteligencia de Corea del Sur (N...",
+    "prediction": "real",
+    "confidence": 0.7762
+  },
+  {
+    "timestamp": "2026-02-12 20:12:29",
+    "model": "Hibrido",
+    "text": "El presidente de Estados Unidos, Donald Trump, derogó un dictamen de la era Obama basado en un hallazgo científico clave que sustenta todas las medidas federales para reducir los gases que contribuyen...",
+    "prediction": "fake",
+    "confidence": 0.5161
+  },
+  {
+    "timestamp": "2026-02-12 20:12:35",
+    "model": "Random Forest",
+    "text": "El presidente de Estados Unidos, Donald Trump, derogó un dictamen de la era Obama basado en un hallazgo científico clave que sustenta todas las medidas federales para reducir los gases que contribuyen...",
+    "prediction": "real",
+    "confidence": 0.5624
+  },
+  {
+    "timestamp": "2026-02-12 20:12:39",
+    "model": "CNN",
+    "text": "El presidente de Estados Unidos, Donald Trump, derogó un dictamen de la era Obama basado en un hallazgo científico clave que sustenta todas las medidas federales para reducir los gases que contribuyen...",
+    "prediction": "real",
+    "confidence": 0.5217
+  },
+  {
+    "timestamp": "2026-02-12 20:12:46",
+    "model": "Naive Bayes",
+    "text": "El presidente de Estados Unidos, Donald Trump, derogó un dictamen de la era Obama basado en un hallazgo científico clave que sustenta todas las medidas federales para reducir los gases que contribuyen...",
+    "prediction": "real",
+    "confidence": 0.7251
+  },
+  {
+    "timestamp": "2026-02-12 20:13:08",
+    "model": "Hibrido",
+    "text": "El presidente de Estados Unidos, Donald Trump, derogó un dictamen de la era Obama basado en un hallazgo científico clave que sustenta todas las medidas federales para reducir los gases que contribuyen...",
+    "prediction": "fake",
+    "confidence": 0.5161
+  },
+  {
+    "timestamp": "2026-02-13 16:34:09",
+    "model": "Hibrido",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "fake",
+    "confidence": 0.826
+  },
+  {
+    "timestamp": "2026-02-13 16:34:24",
+    "model": "Random Forest",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "real",
+    "confidence": 0.5406
+  },
+  {
+    "timestamp": "2026-02-13 16:34:33",
+    "model": "CNN",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "real",
+    "confidence": 0.9
+  },
+  {
+    "timestamp": "2026-02-13 16:34:44",
+    "model": "Naive Bayes",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "real",
+    "confidence": 0.6146
+  },
+  {
+    "timestamp": "2026-02-13 16:35:20",
+    "model": "Hibrido",
+    "text": "La información publicada por el medio El Nuevo Siglo bajo el titular “Investigarán alcaldesa López por supuesto gasto un billón en publicidad” es falsa.\n\nEn vista de que la Secretaría General de la Al...",
+    "prediction": "fake",
+    "confidence": 0.9766
+  },
+  {
+    "timestamp": "2026-02-16 17:00:17",
+    "model": "Hibrido",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "fake",
+    "confidence": 0.826
+  },
+  {
+    "timestamp": "2026-02-16 17:01:27",
+    "model": "CNN",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "real",
+    "confidence": 0.9
+  },
+  {
+    "timestamp": "2026-02-16 17:01:48",
+    "model": "Random Forest",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "real",
+    "confidence": 0.5406
+  },
+  {
+    "timestamp": "2026-02-16 17:02:03",
+    "model": "Naive Bayes",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "real",
+    "confidence": 0.6146
+  },
+  {
+    "timestamp": "2026-02-16 17:03:34",
+    "model": "Hibrido",
+    "text": "Hacer gárgaras con agua y sal no elimina el coronavirus (Covid-19)\nPor Pablo Medina Uribe\nEl coronavirus SARS-CoV-2 no se \"queda cuatro días\" en la garganta y hacer gárgaras con agua y sal no es un mé...",
+    "prediction": "fake",
+    "confidence": 0.5186
+  },
+  {
+    "timestamp": "2026-02-16 17:04:17",
+    "model": "Hibrido",
+    "text": "En Santa Marta no está anclado este buque proveniente de China\nPor Ana María Saavedra\nEl Yuan Shun Hai, de bandera panameña, estuvo en febrero en Barranquilla, proveniente de Estados Unidos. No ha par...",
+    "prediction": "fake",
+    "confidence": 0.7309
+  },
+  {
+    "timestamp": "2026-02-16 17:05:08",
+    "model": "Hibrido",
+    "text": "\"Cuéntame una mentira\", le pedí a Earle Havens apenas empezamos nuestra conversación.\n\nSe incomodó, y no porque se sintiera insultado. Después de todo, él es un eminente experto en falacias.\n\nNo sólo ...",
+    "prediction": "fake",
+    "confidence": 0.826
+  },
+  {
+    "timestamp": "2026-02-16 17:06:08",
+    "model": "Hibrido",
+    "text": "Después de que lanzó en enero la operación para la detención del gobernante venezolano Nicolás Maduro, el presidente de EE.UU., Donald Trump, prometió explotar las reservas petroleras del país sudamer...",
+    "prediction": "real",
+    "confidence": 0.8432
   }
 ]

@@ -7,37 +7,28 @@ export function Resultado() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Extraer datos iniciales
     const {
         result: initialResult,
         newsText: initialText,
         model: initialModel,
     } = location.state || {};
 
-    // Estados locales
     const [texto, setTexto] = useState(initialText || "");
     const [modelo, setModelo] = useState(initialModel || "hibrido-mejor-fake");
     const [result, setResult] = useState(initialResult || null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // Datos de la API
+    // ✅ USAR LAS PROBABILIDADES DIRECTAS DE LA API
+    const fake = result?.prob_fake !== undefined ? result.prob_fake * 100 : 50;
+
+    const real = result?.prob_real !== undefined ? result.prob_real * 100 : 50;
+
     const prediction = result?.prediction || "desconocido";
-    const confidence = result?.confidence || 0;
 
-    // Calcular porcentajes (probabilidad de clase)
-    let fake = 50,
-        real = 50;
+    const confidence =
+        result?.confidence !== undefined ? result.confidence * 100 : 0;
 
-    if (prediction === "fake") {
-        fake = confidence * 100;
-        real = (1 - confidence) * 100;
-    } else if (prediction === "real") {
-        real = confidence * 100;
-        fake = (1 - confidence) * 100;
-    }
-
-    // Envío del formulario
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -72,18 +63,14 @@ export function Resultado() {
         }
     };
 
-    // Evitar acceso directo sin datos
     useEffect(() => {
         if (!initialResult && !initialText) navigate("/");
     }, [initialResult, initialText, navigate]);
 
     return (
-        <div
-            className="container-resultado d-flex justify-content-center align-items-center"
-            role="region"
-        >
-            <main className="main-resultado text-center" role="main">
-                <h1 className="titulo-resultado mb-4 fw-bold" tabIndex="0">
+        <div className="container-resultado d-flex justify-content-center align-items-center">
+            <main className="main-resultado text-center">
+                <h1 className="titulo-resultado mb-4 fw-bold">
                     Analizador de noticias basado en PLN
                 </h1>
 
@@ -95,7 +82,6 @@ export function Resultado() {
                 </button>
 
                 <section className="grid-resultado">
-                    {/* Columna 1: formulario */}
                     <form className="form-resultado" onSubmit={handleSubmit}>
                         <textarea
                             id="noticia"
@@ -149,7 +135,6 @@ export function Resultado() {
                         {error && <p className="text-danger mt-2">{error}</p>}
                     </form>
 
-                    {/* Columna 2: gráfico */}
                     <div className="grafico-resultado">
                         <PieChart
                             colors={["#ff4d4d", "#4dabf7"]}
@@ -174,7 +159,6 @@ export function Resultado() {
                         />
                     </div>
 
-                    {/* Columna 3: resultados */}
                     <div className="datos-resultado text-start">
                         <h2 className="fw-bold mb-3">
                             Resultados del análisis lingüístico
@@ -183,14 +167,9 @@ export function Resultado() {
                         {result ? (
                             <>
                                 <p className="probabilidad-principal">
-                                    <strong>
-                                        {prediction === "fake"
-                                            ? fake.toFixed(1)
-                                            : real.toFixed(1)}
-                                        %
-                                    </strong>{" "}
-                                    de mayor coincidencia con patrones de
-                                    noticias{" "}
+                                    El modelo detectó{" "}
+                                    <strong>{confidence.toFixed(1)}%</strong> de
+                                    coincidencia con patrones de noticias{" "}
                                     <strong>
                                         {prediction === "fake"
                                             ? "potencialmente falsas"
@@ -214,16 +193,12 @@ export function Resultado() {
                                 </div>
 
                                 <p className="text-muted small mt-2 mb-0">
-                                    Este resultado es orientativo y se basa solo
-                                    en el análisis del texto. El modelo no
-                                    verifica hechos ni fuentes externas. La
-                                    decisión final no depende únicamente del
-                                    porcentaje más alto, sino del peso que el
-                                    modelo asigna a distintos patrones
-                                    aprendidos, lo que puede hacer que una
-                                    noticia se clasifique como falsa aunque
-                                    tenga mayor coincidencia con patrones
-                                    reales.
+                                    Este resultado es orientativo y se basa en
+                                    el análisis de patrones lingüísticos. El
+                                    modelo no verifica hechos ni fuentes
+                                    externas. Los porcentajes representan las
+                                    probabilidades estimadas según los patrones
+                                    aprendidos durante el entrenamiento.
                                 </p>
                             </>
                         ) : (

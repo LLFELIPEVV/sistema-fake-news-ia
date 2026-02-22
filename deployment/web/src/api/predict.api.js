@@ -14,6 +14,7 @@ export const fetchPrediction = async (newsText, model) => {
         const response = await api.post("/predict", payload);
         console.log(response);
         console.log(response.data.confidence);
+        console.log("FULL DATA:", response.data);
         return response.data;
     } catch (error) {
         console.error("Error en la predicción:", error);

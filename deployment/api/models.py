@@ -2,7 +2,8 @@ import os
 import time
 import spacy
 import joblib
-import numpy as np
+
+# import numpy as np
 import pandas as pd
 import tensorflow as tf
 
@@ -144,7 +145,7 @@ def predict_text(texts, model_name):
         model_name: Nombre del modelo a usar
 
     Returns:
-        dict: Resultado de la predicción con confianza, etiqueta y métricas
+        dict: Resultado de la predicción con probabilidades correctas
     """
     start_time = time.time()
 
@@ -160,18 +161,16 @@ def predict_text(texts, model_name):
             X = preprocess_for_keras(texts, modelo)
             y_pred = modelo.modelo.predict(X, verbose=0)
 
-            # Extraer confianza según arquitectura del modelo
+            # Extraer probabilidades según arquitectura del modelo
             if y_pred.shape[-1] == 1:
-                # Salida binaria (sigmoid)
-                confidence = float(y_pred[0][0])
+                # Salida binaria (sigmoid): devuelve P(real)
+                prob_real = float(y_pred[0][0])
+                prob_fake = 1 - prob_real
             else:
                 # Salida multi-clase (softmax)
                 # Asumiendo que clase 0 = fake, clase 1 = real
-                confidence = (
-                    float(y_pred[0][1])
-                    if y_pred.shape[-1] == 2
-                    else float(np.max(y_pred[0]))
-                )
+                prob_fake = float(y_pred[0][0])
+                prob_real = float(y_pred[0][1])
 
         else:
             # Preprocesar mínimamente el texto (sin re-vectorizar)
@@ -183,21 +182,21 @@ def predict_text(texts, model_name):
             # El pipeline interno se encarga de lematizar + vectorizar
             y_pred = modelo.modelo.predict_proba([texto_limpio])
 
-            confidence = (
-                float(y_pred[0][1])
-                if y_pred.shape[1] == 2
-                else float(np.max(y_pred[0]))
-            )
+            # y_pred[0][0] = P(fake), y_pred[0][1] = P(real)
+            prob_fake = float(y_pred[0][0])
+            prob_real = float(y_pred[0][1])
 
-        # Determinar etiqueta según confianza
-        # Si confianza >= 0.5, clasificamos como "real", sino "fake"
-        pred_label = "real" if confidence >= 0.5 else "fake"
+        # Determinar etiqueta según probabilidad más alta
+        pred_label = "real" if prob_real > prob_fake else "fake"
+        confidence = max(prob_real, prob_fake)
 
         inference_time = time.time() - start_time
 
         return {
             "prediction": pred_label,
             "confidence": round(confidence, 4),
+            "prob_fake": round(prob_fake, 4),  # ✅ NUEVO
+            "prob_real": round(prob_real, 4),  # ✅ NUEVO
             "model_used": model_name,
             "inference_time_ms": round(inference_time * 1000, 3),
             "tokens_count": len(texts.split()),

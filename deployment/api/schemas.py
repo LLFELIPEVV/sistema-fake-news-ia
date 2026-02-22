@@ -38,6 +38,8 @@ class PredictResponse(BaseModel):
             "example": {
                 "prediction": "real",
                 "confidence": 0.923,
+                "prob_fake": 0.077,
+                "prob_real": 0.923,
                 "model_used": "CNN",
                 "inference_time_ms": 45.678,
                 "tokens_count": 12,
@@ -45,12 +47,19 @@ class PredictResponse(BaseModel):
             }
         }
     )
-
     prediction: Literal["real", "fake"] = Field(
         description="Clasificación de la noticia"
     )
     confidence: float = Field(
-        ge=0.0, le=1.0, description="Nivel de confianza de la predicción (0-1)"
+        ge=0.0,
+        le=1.0,
+        description="Nivel de confianza (probabilidad de la clase predicha)",
+    )
+    prob_fake: float = Field(
+        ge=0.0, le=1.0, description="Probabilidad estimada de que la noticia sea falsa"
+    )
+    prob_real: float = Field(
+        ge=0.0, le=1.0, description="Probabilidad estimada de que la noticia sea real"
     )
     model_used: str = Field(description="Modelo utilizado para la predicción")
     inference_time_ms: float = Field(description="Tiempo de inferencia en milisegundos")

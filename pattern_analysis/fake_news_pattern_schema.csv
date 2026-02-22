@@ -1,0 +1,327 @@
+modelo_fuente,tipo_patron,descripcion_patron,palabras_clave,peso_o_confianza,longitud_tipica_texto,tipo_titular,intensidad_emocional,uso_puntuacion,estructura_narrativa,etiqueta
+naive_bayes,lexico,palabra_alta_prob_fake,vers,4.304220927733863,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,vers per,4.304220927733863,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,iniciativo vers,4.29678093221303,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,per catalunya,3.938992611578727,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,iniciativo,3.7616647770437748,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,eajpnv,3.7462418260488564,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,equo,3.7055056223509757,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,per,3.4893502936051,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,david cruz,2.9898369546392365,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,boluarte,2.9489341180025193,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,coalicion canario,2.882634782528842,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,unidas eajpnv,2.860010583709916,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,bng,2.792467216179899,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,unidas pp,2.780074937737859,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,narbona,2.748740314494393,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,cristina narbona,2.5924123674671513,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,carlos prieto,2.532023945386607,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,catalunya equo,2.525331392987275,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,lider iniciativo,2.5245816121051448,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,pablo monico,2.465954925772677,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,canario,2.4261872527313866,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,pablo boluarte,2.394326464514939,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,prieto,2.3400697460159146,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,jordi sevilla,2.3177901844130755,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,lider equo,2.316077020122602,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,pnc,2.298065969349807,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,monico garcia,2.2484596868883067,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,narbonar,2.226067599066475,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,david,2.2186339000239075,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,monico,2.1648883870557416,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,mes per,2.1304820151139463,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,canarias,2.111734808684119,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,per mallorca,2.102219416750419,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,minón,2.0948401473176137,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,alfonso guerra,2.0911969424626573,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,jo minón,2.0881155273208876,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,cristina narbonar,2.0535116472577144,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,cristín narbona,1.9951816321612021,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,soledad murillo,1.9934663248449418,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,campoamor,1.9723624378368712,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,gallardo,1.9433422439745751,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,antonio grinar,1.9342912010180129,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,republicano catalunya,1.918694382001478,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,cristina,1.914943206692051,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,presidente bng,1.9061330862497066,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,cruz,1.9051035374940213,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,diaz carlos,1.9016072838525844,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,unidos pp,1.8890877462556368,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,canarias unidas,1.8457421662918634,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,lider bng,1.8409303910035302,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,pablo santiago,1.8158344084561282,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,catalunya cs,1.8093561993453715,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,presidente iniciativo,1.8060049445355428,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,pedro cura,1.805389467829885,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,equo unidas,1.7963837939039173,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,diaz pablo,1.7957807794087461,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,equo equo,1.7798036565320228,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,bng eajpnv,1.7605483966348388,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,fraile,1.7548586461198088,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,soledad,1.7501120817182887,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,roberto fraile,1.7423577692161771,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,lluis rabell,1.728201128568827,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,santiago jo,1.7257064042996273,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,catalunya coalicion,1.7125209407660211,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,equo iniciativo,1.686353675484579,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,coalicion canaria,1.6828010514273775,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,maestre,1.6823564492992915,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,rabell,1.6818474834852193,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,unidas iniciativo,1.6761648535165623,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,cristín,1.670395292565523,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,gobierno juan,1.6697509775992891,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,rita maestre,1.6414297438220693,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,esquerra republicano,1.638520878370521,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,canaria,1.633304229028166,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,jesus campoamor,1.6268395595415015,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,jo primo,1.6162175122862514,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,albert noguera,1.6047128378627402,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,murillo,1.5947679768925482,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,rita,1.5945764247136456,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,grinar,1.5815944035856546,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,eduardo rubino,1.5805037346539823,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,gobierno david,1.5705018514886504,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,portavoz equo,1.5646413041887453,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,carrero blanco,1.556011294239065,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,jordi xucla,1.5538222942698283,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,fac,1.5537035892154663,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,josep pujol,1.5453935118254876,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,rubino,1.542588970553723,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,portavoz iniciativo,1.5385215466918893,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,vallejo,1.5260268448036456,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,catalunya,1.5108957036771207,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,rodriguez rubio,1.4979065527375255,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,ionir albert,1.4891424690154853,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,francisco vazquez,1.485548545898471,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,xucla,1.4735604703924992,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,manolo mata,1.4517099566390144,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,noguera,1.45091355467083,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,pau ricoma,1.424595481287426,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,ricoma,1.424595481287426,,,,,,FAKE
+naive_bayes,lexico,palabra_alta_prob_fake,carrero,1.4223976696476797,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,iniciativo vers,40524899.55227231,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,iniciativo,29138645.253923565,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,coalicion canario,10014761.831182996,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,monico garcia,9057015.896285972,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,monico,6161553.34599817,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,pablo monico,4106019.5834399113,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,narbonar,2978790.0888537066,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,pablo iglesia,2966825.409178415,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,cristina narbonar,2897803.705347029,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,lider iniciativo,2633066.4652371802,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,jo minón,2549223.642883291,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,minón,2509877.9901791476,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,cristín narbona,2440941.587287521,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,republicano catalunya,2207899.0524472496,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,pp ciudadano,2015994.8140244684,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,antonio grinar,1966887.6514514214,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,esquerra republicano,1801283.729644394,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,gabriel rufiar,1686819.195768338,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,cristín,1522960.4464574773,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,jesus campoamor,1438514.7207122925,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,grinar,1395093.2814411153,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,jo primo,1249857.1425048334,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,jo antonio,1202841.0705616747,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,rufiar,1190537.5110902267,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,santiago jo,947037.6320378553,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,ionir albert,879630.5765293818,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,david luca,811532.2108007884,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,presidente iniciativo,796214.6349718806,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,gobierno anunciar,716162.7123688816,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,unidas iniciativo,614053.6614954334,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,equo iniciativo,602228.3901111069,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,iir duque,593444.9956699177,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,ín arrimada,570763.0183957182,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,esquerra unido,551036.0010808466,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,robl,545058.4883689352,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,antonio bano,535430.8034530932,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,portavoz iniciativo,518172.48496492463,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,ín,510507.4550791654,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,gobierno iniciativo,468167.45104862755,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,echenicar,445450.67349794024,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,rito maestre,437319.8228062953,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,pablo echenicar,423415.22974008706,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,iir,395473.68466570333,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,unido alternativo,364454.4620437805,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,quim torrir,356116.6284815729,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,javier zarzalejo,339166.61765123135,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,rufiar jordi,334325.10026380036,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,cristín narbonar,327788.9375506336,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,millón,309930.37700787565,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,anunciar plan,298427.06756955804,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,elia bendodo,295401.4638264355,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,elección,280651.11350174446,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,diana ribo,278970.61923063424,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,aragón,272100.344401269,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,irenir montero,267773.1870012999,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,adema,266458.79438822495,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,extesorero iniciativo,258307.4563414673,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,lider ciudadano,247045.14577748315,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,lapuertar,244747.2165790667,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,malversacion fondo,231838.94791134435,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,zarzalejo,229388.92388855663,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,elia,209951.61514577465,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,santiago elia,208329.29739047293,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,negociación,206797.39398959815,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,torrir,204321.97107151293,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,illueco,202058.89998218793,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,tania varelo,195702.66791484627,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,monicar garcia,193242.39028901895,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,generar intenso,187394.6908380087,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,ionir belarra,187270.69073940467,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,jo maria,187233.5773502628,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,cifuent,182203.8602583486,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,unida eajpnv,180845.99871642014,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,alvaro lapuertar,178047.15057134675,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,juan jo,177818.67770242624,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,num millón,175917.3727868471,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,catalunya asegurar,169411.3098591484,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,generar indignacion,167490.85476885783,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,catalán,164105.76184813696,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,dolor cospedal,164051.76043211974,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,millón euros,163327.65040910736,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,despu,160373.22127800208,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,monicar,155376.4575370697,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,dirigente iniciativo,154204.29266815522,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,gobierno jo,148847.4940160698,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,portavoz jo,147740.39071485455,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,felix rivero,145110.3488103838,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,hector illueco,140838.66349214647,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,esperar acción,138723.87258047512,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,oriol junquera,137795.31547878686,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,proz,136065.45585069119,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,miercol,135192.99805945222,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,irenir,135124.75390282332,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,mario jesus,127978.21054340599,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,varelo,122627.94507959066,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,generar fuerte,121768.97433375612,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,retar,120568.12214147093,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,candidata iniciativo,119620.09550613377,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,formación,118689.83873228524,,,,,,FAKE
+random_forest,lexico,feature_importance_alto,luis barcena,117877.1887290062,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,falaz,1.0,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,boxear,0.9999999403953552,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,hebreo,0.9999998807907104,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,arengar,0.9999998807907104,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,gaza,0.9999998807907104,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,netanyahu,0.9999998807907104,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,amago,0.9999998807907104,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,desolador,0.9999998211860656,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,valedor,0.9999998211860656,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,negacion,0.9999998211860656,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,revisionismo,0.9999997615814208,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,madure,0.9999997615814208,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,contrarresta,0.9999996423721312,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,abstener,0.9999996423721312,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,inflado,0.9999995231628418,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,ascendente,0.999999463558197,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,pedralbe,0.999999463558197,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,decimonovena,0.9999994039535522,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,tranquilizador,0.9999993443489076,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,isofoton,0.9999993443489076,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,moralmente,0.9999992847442628,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,empenado,0.9999992847442628,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,aventajar,0.999999225139618,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,refranero,0.999999225139618,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,jeronimo,0.999999225139618,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,naufrago,0.9999991655349731,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,simultanear,0.9999991655349731,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,escrutar,0.9999991655349731,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,resistiria,0.9999991655349731,,,,,,FAKE
+cnn,lexico,saliency_gradiente_alto,mentar,0.9999991655349731,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,catalunya,6.475091254873362,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,per,44.87595353985024,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,iniciativa,18.690671622545338,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,vers,3137161.2952725193,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,equo,149.32481548551903,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,bng,28.37578804399256,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,coalicion,4.032526161069735,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,eajpnv,1406607.6459781677,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,nueva,2.7927532149896703,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,jose,2.3821586651929074,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,unidas,1.6047754466842503,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,pablo,1.687112394613911,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,canaria,34.4869075590833,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,garcia,3.1373870969349404,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,canarias,18.844379987324754,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,carlos,2.5641441864610575,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,cristina,22.103860380010477,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,narbona,210.80715347496923,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,socialistas,1.5522034104158577,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,partidos,1.588377438193907,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,socialista,1.779808862161024,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,monica,14.260555083877724,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,david,10.342877209294926,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,izquierda,1.5400753607760649,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,boluarte,123.22543753850857,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,cruz,10.186151344499867,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,estas,1.5353292286586775,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,jordi,3.617882195549578,,,,,,FAKE
+text_analysis,lexico,palabra_distintiva_fake,antonio,4.115247758833672,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,de la,1094.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,en el,529.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,a la,413.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,en la,375.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,de los,370.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,iniciativa vers,278.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,vers per,278.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,per catalunya,277.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,que el,263.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,que se,226.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,de las,212.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,que la,185.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,del gobierno,184.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,de que,168.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,a los,161.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,que no,160.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,con el,159.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,de <num>,159.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,el presidente,156.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,el gobierno,147.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,y el,140.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,y la,138.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,del iniciativa,137.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,<num> de,137.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,por el,131.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,por la,131.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,a las,128.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,presidente del,125.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,en las,117.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,la formacion,113.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,con la,107.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,de madrid,107.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,en un,99.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,coalicion canaria,97.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,lo que,97.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,se ha,95.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,en los,93.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,de un,91.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,el partido,90.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,del partido,86.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,en una,86.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,del bng,86.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,y que,85.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,de su,85.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,nueva canarias,82.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,el lider,81.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,el que,80.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,gobierno de,79.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,el congreso,78.0,,,,,,FAKE
+text_analysis,lexico,bigrama_frecuente_fake,de coalicion,78.0,,,,,,FAKE
+structural_analysis,estadistico,longitud_texto_promedio,,48.92945479043357,30-49,,,,,FAKE
+structural_analysis,estadistico,longitud_texto_mediana,,38.0,30-49,,,,,FAKE
+structural_analysis,estadistico,uso_exclamaciones,,0.0,,,,!=0.00,,FAKE
+structural_analysis,estadistico,uso_interrogaciones,,0.0,,,,?=0.00,,FAKE
+structural_analysis,estadistico,porcentaje_mayusculas,,0.3993346409931063,,,,MAYUS=0.40%,,FAKE
+structural_analysis,estructural,patron_inicio_frecuente,el lider del iniciativa vers,5.0,,,,,inicio,FAKE
+structural_analysis,estructural,patron_inicio_frecuente,el iniciativa vers per catalunya,4.0,,,,,inicio,FAKE
+structural_analysis,estructural,patron_inicio_frecuente,el presidente del gobierno y,3.0,,,,,inicio,FAKE
+structural_analysis,estructural,patron_inicio_frecuente,el secretario general de pp,3.0,,,,,inicio,FAKE
+structural_analysis,estructural,patron_inicio_frecuente,el vicepresidente segundo del gobierno,3.0,,,,,inicio,FAKE
+structural_analysis,estructural,patron_inicio_frecuente,el portavoz del iniciativa vers,3.0,,,,,inicio,FAKE
+structural_analysis,estructural,patron_inicio_frecuente,nueva canarias y unidas eajpnv,3.0,,,,,inicio,FAKE
+structural_analysis,estructural,patron_inicio_frecuente,el presidente del gobierno ha,3.0,,,,,inicio,FAKE
+structural_analysis,estructural,patron_inicio_frecuente,la candidata del iniciativa vers,3.0,,,,,inicio,FAKE
+structural_analysis,estructural,patron_inicio_frecuente,la audiencia provincial de madrid,3.0,,,,,inicio,FAKE
+emotional_analysis,emocional,intensidad_emocional_alta,"urgente, alerta, peligro, grave, terrible, escandaloso, impactante, increíble, devastador",0.019,,alarmista-sensacionalista,alta,,,FAKE
+emotional_analysis,emocional,intensidad_emocional_media,"importante, serio, preocupante, crítico, significativo",0.021,,clickbait,media,,,FAKE
